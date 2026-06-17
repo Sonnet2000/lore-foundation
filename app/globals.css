@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: #0b1f33;
+  background-color: #f5f8fc;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html.dark body {
+  color: #f5f8fc;
+  background-color: #0b1b2e;
+}
+
+::selection {
+  background-color: #f4b400;
+  color: #052238;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f5f8fc;
+}
+
+html.dark ::-webkit-scrollbar-track {
+  background: #0b1b2e;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #0f98ff;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0a3d62;
+}
+
+/* Signature "tab corner" shape used across cards, framed images and CTAs */
+.tab-corner {
+  --tab-cut: 28px;
+  clip-path: polygon(
+    0% 0%,
+    calc(100% - var(--tab-cut)) 0%,
+    100% var(--tab-cut),
+    100% 100%,
+    0% 100%
+  );
+}
+
+.tab-corner-lg {
+  --tab-cut: 48px;
+}
+
+.tab-corner-sm {
+  --tab-cut: 18px;
+}
+
+/* Reverse tab on the bottom-left, used for framing portraits */
+.tab-corner-alt {
+  --tab-cut: 36px;
+  clip-path: polygon(
+    0% 0%,
+    100% 0%,
+    100% 100%,
+    var(--tab-cut) 100%,
+    0% calc(100% - var(--tab-cut))
+  );
+}
+
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  transition: outline-color 0.15s ease;
+}
+
+.focus-ring:focus-visible {
+  outline-color: #f4b400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Briefly highlight a portfolio item when deep-linked from a service card */
+[id^="portfolio-"]:target {
+  animation: highlight-pulse 2s ease-out 1;
+}
+
+@keyframes highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 4px rgba(244, 180, 0, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(244, 180, 0, 0);
+  }
+}
