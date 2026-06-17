@@ -204,3 +204,4 @@ supabase/schema.sql     # tables + contenu de départ pour Supabase
 - `prefers-reduced-motion` respecté (animations désactivées si demandé).
 - Polices chargées via `next/font` (auto-hébergées, pas de requête externe).
 - Sections découpées en composants pour un rendu et une maintenance optimisés.
+"# lore-foundation" 
