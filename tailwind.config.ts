@@ -13,7 +13,9 @@ const config: Config = {
         "lore-darker": "#052238",
         "lore-emerald": "#0F98FF",
         "lore-emerald-light": "#5AC8FF",
-        "lore-gold": "#F4B400",
+        "lore-gold": "#D4AF37",
+        "lore-gold-light": "#F2D272",
+        "lore-gold-dark": "#9C7A1F",
         "lore-cream": "#F5F8FC",
         "lore-ink": "#0B1F33",
         "lore-night": "#0B1B2E",
@@ -30,13 +32,16 @@ const config: Config = {
       boxShadow: {
         soft: "0 20px 60px -15px rgba(10, 61, 98, 0.25)",
         card: "0 10px 40px -10px rgba(10, 61, 98, 0.15)",
-        gold: "0 10px 30px -8px rgba(244, 180, 0, 0.45)",
+        gold: "0 12px 32px -8px rgba(212, 175, 55, 0.5)",
+        "gold-lg": "0 18px 45px -10px rgba(212, 175, 55, 0.55)",
       },
       backgroundImage: {
         "lore-gradient":
-          "radial-gradient(circle at 30% 20%, rgba(244,180,0,0.18), transparent 55%), linear-gradient(135deg, #0A3D62 0%, #0E5C99 50%, #0F98FF 100%)",
+          "radial-gradient(circle at 30% 20%, rgba(212,175,55,0.18), transparent 55%), linear-gradient(135deg, #0A3D62 0%, #0E5C99 50%, #0F98FF 100%)",
         "lore-gradient-dark":
-          "radial-gradient(circle at 30% 20%, rgba(244,180,0,0.18), transparent 55%), linear-gradient(135deg, #051a2b 0%, #0a3554 50%, #0c6cc4 100%)",
+          "radial-gradient(circle at 30% 20%, rgba(212,175,55,0.18), transparent 55%), linear-gradient(135deg, #051a2b 0%, #0a3554 50%, #0c6cc4 100%)",
+        "lore-gold-gradient":
+          "linear-gradient(135deg, #F2D272 0%, #D4AF37 55%, #B8860B 100%)",
       },
       animation: {
         "spin-slow": "spin 14s linear infinite",

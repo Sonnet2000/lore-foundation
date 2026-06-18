@@ -7,6 +7,7 @@ html {
 }
 
 body {
+  overflow-x: hidden;
   color: #0b1f33;
   background-color: #f5f8fc;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -18,7 +19,7 @@ html.dark body {
 }
 
 ::selection {
-  background-color: #f4b400;
+  background-color: #d4af37;
   color: #052238;
 }
 
@@ -82,7 +83,23 @@ html.dark ::-webkit-scrollbar-track {
 }
 
 .focus-ring:focus-visible {
-  outline-color: #f4b400;
+  outline-color: #d4af37;
+}
+
+/* Premium CTA button: metallic gold gradient with a soft inner highlight,
+   used for the main "Démarrer un projet" / "Commencer" actions. */
+.btn-gold {
+  background-image: linear-gradient(135deg, #f2d272 0%, #d4af37 55%, #b8860b 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 12px 32px -8px rgba(212, 175, 55, 0.5);
+  color: #1a1206;
+}
+
+.btn-gold:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 18px 45px -10px rgba(212, 175, 55, 0.6);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -103,9 +120,9 @@ html.dark ::-webkit-scrollbar-track {
 
 @keyframes highlight-pulse {
   0% {
-    box-shadow: 0 0 0 4px rgba(244, 180, 0, 0.6);
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.6);
   }
   100% {
-    box-shadow: 0 0 0 4px rgba(244, 180, 0, 0);
+    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0);
   }
 }

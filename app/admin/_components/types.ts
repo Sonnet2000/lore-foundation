@@ -34,3 +34,43 @@ export type TestimonialRow = {
   initials: string;
   sort_order: number;
 };
+
+export type AnnouncementRow = {
+  id: string;
+  message: string;
+  link_url: string | null;
+  link_label: string | null;
+  is_active: boolean;
+  notified_at: string | null;
+  created_at: string;
+};
+
+export type SeminarMediaItem = { url: string; type: "image" | "video" };
+
+export type SeminarRow = {
+  id: string;
+  title: string;
+  description: string;
+  starts_at: string | null;
+  location: string;
+  registration_open: boolean;
+  is_published: boolean;
+  media: SeminarMediaItem[];
+  sort_order: number;
+  notified_at: string | null;
+};
+
+export type RegistrationRow = {
+  id: string;
+  seminar_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  created_at: string;
+};
+
+export type SubscriberRow = {
+  id: string;
+  email: string;
+  created_at: string;
+};

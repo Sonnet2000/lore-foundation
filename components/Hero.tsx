@@ -27,7 +27,7 @@ export default function Hero() {
           className="flex flex-col items-start gap-6 text-left"
         >
           <div className="flex items-center gap-3 rounded-full bg-white/10 px-4 py-2 backdrop-blur-sm">
-            <div className="flex items-center gap-1 text-lore-gold">
+            <div className="flex items-center gap-1 text-lore-gold-light">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="h-3.5 w-3.5 fill-current" />
               ))}
@@ -37,13 +37,13 @@ export default function Hero() {
             </span>
           </div>
 
-          <span className="font-display text-xs font-bold uppercase tracking-[0.3em] text-lore-gold">
+          <span className="font-display text-xs font-bold uppercase tracking-[0.3em] text-lore-gold-light">
             {siteInfo.slogan}
           </span>
 
           <h1 className="font-display text-4xl font-extrabold leading-[1.1] tracking-tight text-white sm:text-5xl md:text-6xl">
             Transformez vos idées en{" "}
-            <span className="text-lore-gold">solutions numériques</span>
+            <span className="text-lore-gold-light">solutions numériques</span>
           </h1>
 
           <p className="max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
@@ -56,7 +56,7 @@ export default function Hero() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
             <a
               href="#contact"
-              className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full bg-lore-gold px-7 py-3.5 text-sm font-bold text-lore-dark shadow-gold transition-transform duration-200 hover:scale-105"
+              className="btn-gold focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-105"
             >
               Démarrer un projet
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -65,7 +65,7 @@ export default function Hero() {
               href="#services"
               className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/10"
             >
-              <PlayCircle className="h-5 w-5 text-lore-gold" />
+              <PlayCircle className="h-5 w-5 text-lore-gold-light" />
               Voir nos services
             </a>
           </div>
@@ -80,7 +80,7 @@ export default function Hero() {
                 transition={{ duration: 0.5, delay: 0.3 + i * 0.08 }}
                 className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-sm"
               >
-                <stat.icon className="mb-2 h-5 w-5 text-lore-gold" strokeWidth={2} />
+                <stat.icon className="mb-2 h-5 w-5 text-lore-gold-light" strokeWidth={2} />
                 <p className="font-display text-xl font-bold text-white sm:text-2xl">
                   {stat.value}
                 </p>
@@ -131,7 +131,7 @@ export default function Hero() {
               animate={{ y: [0, 12, 0] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-lore-gold/15 text-lore-gold">
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-lore-gold/15 text-lore-gold-light">
                 <Sparkle size={18} />
               </span>
               <div>

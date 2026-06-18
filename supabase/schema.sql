@@ -53,6 +53,55 @@ create table if not exists testimonials (
   sort_order int not null default 0
 );
 
+create table if not exists announcements (
+  id uuid primary key default gen_random_uuid(),
+  message text not null,
+  link_url text,
+  link_label text,
+  is_active boolean not null default true,
+  notified_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists seminars (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  description text not null default '',
+  starts_at timestamptz,
+  location text not null default '',
+  registration_open boolean not null default true,
+  is_published boolean not null default true,
+  media jsonb not null default '[]'::jsonb,
+  sort_order int not null default 0,
+  notified_at timestamptz,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists seminar_registrations (
+  id uuid primary key default gen_random_uuid(),
+  seminar_id uuid not null references seminars(id) on delete cascade,
+  name text not null,
+  email text not null,
+  phone text not null default '',
+  created_at timestamptz not null default now()
+);
+
+create table if not exists subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  created_at timestamptz not null default now()
+);
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- Migrations pour les projets déjà existants : "create table if not exists"
+-- ne modifie pas une table qui existe déjà, donc ces colonnes ajoutées dans
+-- une version plus récente du site doivent être ajoutées explicitement ici.
+-- Sans danger à rejouer plusieurs fois.
+-- ─────────────────────────────────────────────────────────────────────────
+
+alter table announcements add column if not exists notified_at timestamptz;
+alter table seminars add column if not exists notified_at timestamptz;
+
 -- ─────────────────────────────────────────────────────────────────────────
 -- Sécurité : Row Level Security activée, mais sans aucune policy.
 -- Cela bloque tout accès via la clé publique "anon" — seule la clé
@@ -64,6 +113,10 @@ alter table portfolio_items enable row level security;
 alter table services enable row level security;
 alter table team_members enable row level security;
 alter table testimonials enable row level security;
+alter table announcements enable row level security;
+alter table seminars enable row level security;
+alter table seminar_registrations enable row level security;
+alter table subscribers enable row level security;
 
 -- ─────────────────────────────────────────────────────────────────────────
 -- Contenu de départ (reprend le contenu actuel du site)

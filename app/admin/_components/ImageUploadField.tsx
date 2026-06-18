@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ImagePlus, Loader2, X } from "lucide-react";
-import { useImageUpload } from "./useImageUpload";
+import { useFileUpload } from "./useFileUpload";
 
 type ImageUploadFieldProps = {
   label: string;
@@ -12,7 +12,7 @@ type ImageUploadFieldProps = {
 };
 
 export default function ImageUploadField({ label, value, onChange, folder }: ImageUploadFieldProps) {
-  const { inputRef, uploading, error, upload } = useImageUpload(folder);
+  const { inputRef, uploading, error, upload } = useFileUpload(folder);
 
   async function handleFile(file: File | undefined) {
     if (!file) return;

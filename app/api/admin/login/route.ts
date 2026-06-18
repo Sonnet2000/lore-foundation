@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { createSessionToken, SESSION_COOKIE } from "@/lib/auth";
 
 export async function POST(request: Request) {
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  const secret = process.env.SESSION_SECRET;
+  const adminPassword = process.env.ADMIN_PASSWORD?.trim();
+  const secret = process.env.SESSION_SECRET?.trim();
 
   if (!adminPassword || !secret) {
     return NextResponse.json(
@@ -15,7 +15,7 @@ export async function POST(request: Request) {
   let password: string | undefined;
   try {
     const body = await request.json();
-    password = body?.password;
+    password = typeof body?.password === "string" ? body.password.trim() : undefined;
   } catch {
     return NextResponse.json({ error: "Requête invalide." }, { status: 400 });
   }

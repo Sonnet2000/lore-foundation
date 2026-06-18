@@ -70,13 +70,23 @@ type RowCardProps = {
   title: string;
   subtitle?: string;
   thumbnail?: ReactNode;
+  extraAction?: ReactNode;
   onEdit: () => void;
   onDelete: () => void;
   onMoveUp?: () => void;
   onMoveDown?: () => void;
 };
 
-export function RowCard({ title, subtitle, thumbnail, onEdit, onDelete, onMoveUp, onMoveDown }: RowCardProps) {
+export function RowCard({
+  title,
+  subtitle,
+  thumbnail,
+  extraAction,
+  onEdit,
+  onDelete,
+  onMoveUp,
+  onMoveDown,
+}: RowCardProps) {
   return (
     <div className="flex items-center gap-3 rounded-2xl border border-lore-dark/5 bg-white p-3 dark:border-white/5 dark:bg-lore-night-surface">
       {(onMoveUp || onMoveDown) && (
@@ -110,6 +120,8 @@ export function RowCard({ title, subtitle, thumbnail, onEdit, onDelete, onMoveUp
           <p className="truncate text-xs text-lore-ink/50 dark:text-white/50">{subtitle}</p>
         )}
       </div>
+
+      {extraAction}
 
       <button
         type="button"

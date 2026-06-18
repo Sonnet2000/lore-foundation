@@ -100,7 +100,7 @@ export default function Contact() {
                 href={siteInfo.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="focus-ring mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-lore-gold px-6 py-3 text-sm font-bold text-lore-dark shadow-gold transition-transform duration-200 hover:scale-[1.02]"
+                className="btn-gold focus-ring mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-transform duration-200 hover:scale-[1.02]"
               >
                 <MessageCircle className="h-4 w-4" />
                 Discuter sur WhatsApp

@@ -6,6 +6,7 @@ type TabCardProps = {
   size?: "sm" | "md" | "lg";
   variant?: "light" | "dark" | "emerald";
   accent?: boolean;
+  noPadding?: boolean;
 };
 
 const sizeClass: Record<NonNullable<TabCardProps["size"]>, string> = {
@@ -32,6 +33,7 @@ export default function TabCard({
   size = "md",
   variant = "light",
   accent = true,
+  noPadding = false,
 }: TabCardProps) {
   return (
     <div className={`relative ${className}`}>
@@ -42,7 +44,9 @@ export default function TabCard({
         />
       )}
       <div
-        className={`relative h-full w-full p-6 transition-transform duration-300 sm:p-8 ${sizeClass[size]} ${variantClass[variant]}`}
+        className={`relative h-full w-full transition-transform duration-300 ${
+          noPadding ? "p-0" : "p-6 sm:p-8"
+        } ${sizeClass[size]} ${variantClass[variant]}`}
       >
         {children}
       </div>

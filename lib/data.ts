@@ -330,3 +330,30 @@ export const siteInfo = {
    *  /message/<code> short link does not reliably support on its own. */
   whatsappNumber: "50941559094",
 };
+
+export type Announcement = {
+  id: string;
+  message: string;
+  linkUrl: string | null;
+  linkLabel: string | null;
+};
+
+// No fallback announcement — the banner simply doesn't render until one is
+// created in the admin panel.
+export const fallbackAnnouncement: Announcement | null = null;
+
+export type SeminarMediaItem = { url: string; type: "image" | "video" };
+
+export type Seminar = {
+  id: string;
+  title: string;
+  description: string;
+  startsAt: string | null;
+  location: string;
+  registrationOpen: boolean;
+  media: SeminarMediaItem[];
+};
+
+// No fallback seminars — the section only appears once a seminar is
+// published from the admin panel.
+export const fallbackSeminars: Seminar[] = [];

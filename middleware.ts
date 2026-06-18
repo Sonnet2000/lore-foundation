@@ -13,7 +13,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const secret = process.env.SESSION_SECRET;
+  const secret = process.env.SESSION_SECRET?.trim();
   const token = request.cookies.get(SESSION_COOKIE)?.value;
   const valid = secret ? await verifySessionToken(token, secret) : false;
 

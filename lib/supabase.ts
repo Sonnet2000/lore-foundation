@@ -1,5 +1,8 @@
 import "server-only";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { MEDIA_BUCKET } from "@/lib/supabase-bucket";
+
+export { MEDIA_BUCKET };
 
 let cached: SupabaseClient | null = null;
 
@@ -30,6 +33,3 @@ export function getSupabase(): SupabaseClient {
 
   return cached;
 }
-
-/** Public bucket used to store uploaded images (portfolio, team photos, etc). */
-export const MEDIA_BUCKET = "media";

@@ -2,17 +2,33 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { FolderKanban, Layers, Users, Quote, LogOut, ExternalLink } from "lucide-react";
+import {
+  FolderKanban,
+  Layers,
+  Users,
+  Quote,
+  LogOut,
+  ExternalLink,
+  Megaphone,
+  Calendar,
+  Mail,
+} from "lucide-react";
 import PortfolioPanel from "./PortfolioPanel";
 import ServicesPanel from "./ServicesPanel";
 import TeamPanel from "./TeamPanel";
 import TestimonialsPanel from "./TestimonialsPanel";
+import AnnouncementsPanel from "./AnnouncementsPanel";
+import SeminarsPanel from "./SeminarsPanel";
+import SubscribersPanel from "./SubscribersPanel";
 
 const tabs = [
   { id: "portfolio", label: "Portfolio", icon: FolderKanban },
   { id: "services", label: "Services", icon: Layers },
   { id: "team", label: "Équipe", icon: Users },
   { id: "testimonials", label: "Témoignages", icon: Quote },
+  { id: "announcements", label: "Annonces", icon: Megaphone },
+  { id: "seminars", label: "Séminaires", icon: Calendar },
+  { id: "subscribers", label: "Abonnés", icon: Mail },
 ] as const;
 
 type TabId = (typeof tabs)[number]["id"];
@@ -83,6 +99,9 @@ export default function Dashboard() {
         {active === "services" && <ServicesPanel />}
         {active === "team" && <TeamPanel />}
         {active === "testimonials" && <TestimonialsPanel />}
+        {active === "announcements" && <AnnouncementsPanel />}
+        {active === "seminars" && <SeminarsPanel />}
+        {active === "subscribers" && <SubscribersPanel />}
       </main>
     </div>
   );

@@ -1,25 +1,27 @@
 "use client";
 
 import Image from "next/image";
-import { ImagePlus, Loader2, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ImagePlus, Loader2, X, ChevronLeft, ChevronRight, Play, Film } from "lucide-react";
 import { useFileUpload } from "./useFileUpload";
 
-type ImageListFieldProps = {
+export type MediaItem = { url: string; type: "image" | "video" };
+
+type MediaListFieldProps = {
   label: string;
-  values: string[];
-  onChange: (urls: string[]) => void;
+  values: MediaItem[];
+  onChange: (items: MediaItem[]) => void;
   folder: string;
 };
 
-export default function ImageListField({ label, values, onChange, folder }: ImageListFieldProps) {
+export default function MediaListField({ label, values, onChange, folder }: MediaListFieldProps) {
   const { inputRef, uploading, error, upload } = useFileUpload(folder);
 
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
-    const uploaded: string[] = [];
+    const uploaded: MediaItem[] = [];
     for (const file of Array.from(files)) {
       const url = await upload(file);
-      if (url) uploaded.push(url);
+      if (url) uploaded.push({ url, type: file.type.startsWith("video/") ? "video" : "image" });
     }
     if (uploaded.length) onChange([...values, ...uploaded]);
   }
@@ -39,19 +41,31 @@ export default function ImageListField({ label, values, onChange, folder }: Imag
   return (
     <div>
       <p className="mb-1.5 text-sm font-medium text-lore-ink/70 dark:text-white/70">{label}</p>
+      <p className="mb-2.5 text-xs text-lore-ink/40 dark:text-white/40">
+        Photos (JPG, PNG, WEBP) ou courtes vidéos (MP4, WEBM, MOV — 80 Mo max).
+      </p>
 
       <div className="flex flex-wrap gap-3">
-        {values.map((src, i) => (
+        {values.map((item, i) => (
           <div
-            key={src + i}
+            key={item.url + i}
             className="group relative h-20 w-20 shrink-0 overflow-hidden rounded-2xl bg-lore-dark/5 dark:bg-white/5"
           >
-            <Image src={src} alt="" fill className="object-cover" unoptimized />
+            {item.type === "video" ? (
+              <>
+                <video src={item.url} muted playsInline className="h-full w-full object-cover" />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                  <Play className="h-6 w-6 fill-white text-white" />
+                </div>
+              </>
+            ) : (
+              <Image src={item.url} alt="" fill className="object-cover" unoptimized />
+            )}
 
             <button
               type="button"
               onClick={() => remove(i)}
-              aria-label="Retirer cette image"
+              aria-label="Retirer ce média"
               className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white opacity-0 transition-opacity group-hover:opacity-100"
             >
               <X className="h-3 w-3" />
@@ -62,7 +76,7 @@ export default function ImageListField({ label, values, onChange, folder }: Imag
                 type="button"
                 onClick={() => move(i, -1)}
                 disabled={i === 0}
-                aria-label="Déplacer à gauche"
+                aria-label="Déplacer avant"
                 className="text-white disabled:opacity-30"
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
@@ -71,7 +85,7 @@ export default function ImageListField({ label, values, onChange, folder }: Imag
                 type="button"
                 onClick={() => move(i, 1)}
                 disabled={i === values.length - 1}
-                aria-label="Déplacer à droite"
+                aria-label="Déplacer après"
                 className="text-white disabled:opacity-30"
               >
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -90,7 +104,10 @@ export default function ImageListField({ label, values, onChange, folder }: Imag
             <Loader2 className="h-5 w-5 animate-spin" />
           ) : (
             <>
-              <ImagePlus className="h-5 w-5" />
+              <div className="flex items-center gap-0.5">
+                <ImagePlus className="h-4 w-4" />
+                <Film className="h-4 w-4" />
+              </div>
               <span className="text-[10px] font-semibold">Ajouter</span>
             </>
           )}
@@ -99,7 +116,7 @@ export default function ImageListField({ label, values, onChange, folder }: Imag
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept="image/*,video/*"
           multiple
           className="hidden"
           onChange={(e) => handleFiles(e.target.files)}
