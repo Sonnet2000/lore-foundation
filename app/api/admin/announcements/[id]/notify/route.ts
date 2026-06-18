@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server";
+import { validateId } from "@/lib/validate-id";
 import { getSupabase } from "@/lib/supabase";
 import { sendBulkNotification, emailLayout } from "@/lib/email";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(_request: Request, { params }: { params: { id: string } }) {
+  const invalid = validateId(params.id);
+  if (invalid) return invalid;
+
   const supabase = getSupabase();
 
   const { data: announcement, error: fetchError } = await supabase

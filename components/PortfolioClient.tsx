@@ -12,7 +12,7 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
   const [activeItem, setActiveItem] = useState<PortfolioItem | null>(null);
 
   return (
-    <section id="portfolio" className="bg-white px-5 py-20 sm:px-8 sm:py-24 lg:px-12 dark:bg-lore-night">
+    <section id="portfolio" className="bg-white px-5 py-16 sm:px-8 sm:py-24 lg:px-12 dark:bg-lore-night">
       <div className="mx-auto max-w-7xl">
         <AnimatedSection>
           <SectionHeading
@@ -22,7 +22,7 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
           />
         </AnimatedSection>
 
-        <div className="mt-12 grid gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {portfolio.map((item, i) => {
             const cover = item.images?.[0];
 
@@ -32,8 +32,15 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
                   type="button"
                   id={`portfolio-${item.id}`}
                   onClick={() => setActiveItem(item)}
-                  className="focus-ring group relative block aspect-[4/3] w-full scroll-mt-28 overflow-hidden rounded-3xl border-2 border-dashed border-lore-dark/15 bg-gradient-to-br from-lore-emerald/15 via-lore-cream to-lore-dark/10 text-left dark:border-white/10 dark:from-lore-emerald/10 dark:via-lore-night-surface dark:to-lore-dark/20"
+                  className="focus-ring group relative block w-full scroll-mt-28 overflow-hidden rounded-2xl text-left"
+                  style={{ aspectRatio: "16/10" }}
                 >
+                  {/* Background */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-lore-dark/80 via-lore-night-surface to-lore-darker" />
+
+                  {/* Subtle border */}
+                  <div className="absolute inset-0 rounded-2xl ring-1 ring-white/8" />
+
                   {cover ? (
                     <Image
                       src={cover}
@@ -45,22 +52,23 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <FolderKanban
-                        className="h-12 w-12 text-lore-dark/20 transition-transform duration-500 group-hover:scale-90 dark:text-white/20"
-                        strokeWidth={1.5}
+                        className="h-8 w-8 text-white/15 transition-transform duration-500 group-hover:scale-90"
+                        strokeWidth={1.25}
                       />
                     </div>
                   )}
 
-                  <div className="absolute inset-x-0 bottom-0 translate-y-2 bg-lore-dark/0 p-5 transition-all duration-300 group-hover:translate-y-0 group-hover:bg-gradient-to-t group-hover:from-lore-dark/85 group-hover:via-lore-dark/40 group-hover:to-transparent">
-                    <p className="text-xs font-semibold uppercase tracking-[0.15em] text-lore-gold opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                  {/* Always-visible title bar */}
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-lore-darker/95 via-lore-darker/60 to-transparent px-4 pb-3.5 pt-8">
+                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-lore-gold/80">
                       {item.category}
                     </p>
-                    <div className="mt-1 flex items-center justify-between">
-                      <h3 className="font-display text-lg font-bold text-lore-ink transition-colors duration-300 group-hover:text-white dark:text-white">
+                    <div className="mt-0.5 flex items-center justify-between gap-2">
+                      <h3 className="font-display text-sm font-bold leading-tight text-white">
                         {item.title}
                       </h3>
-                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-lore-gold text-lore-dark opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                        <ArrowUpRight className="h-4 w-4" />
+                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lore-gold text-lore-darker opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        <ArrowUpRight className="h-3 w-3" />
                       </span>
                     </div>
                   </div>

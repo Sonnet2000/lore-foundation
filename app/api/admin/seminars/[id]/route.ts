@@ -1,18 +1,22 @@
 import { NextResponse } from "next/server";
+import { validateId } from "@/lib/validate-id";
 import { getSupabase } from "@/lib/supabase";
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const invalid = validateId(params.id);
+  if (invalid) return invalid;
+
   const supabase = getSupabase();
-  const body = await request.json();
+  const body = await request.json().catch(() => ({}));
 
   const updates: Record<string, unknown> = {};
-  if (typeof body.title === "string") updates.title = body.title;
-  if (typeof body.description === "string") updates.description = body.description;
+  if (typeof body.title === "string") updates.title = body.title.slice(0, 200);
+  if (typeof body.description === "string") updates.description = body.description.slice(0, 2000);
   if ("starts_at" in body) updates.starts_at = body.starts_at || null;
-  if (typeof body.location === "string") updates.location = body.location;
+  if (typeof body.location === "string") updates.location = body.location.slice(0, 300);
   if (typeof body.registration_open === "boolean") updates.registration_open = body.registration_open;
   if (typeof body.is_published === "boolean") updates.is_published = body.is_published;
-  if (Array.isArray(body.media)) updates.media = body.media;
+  if (Array.isArray(body.media)) updates.media = body.media.slice(0, 20);
   if (typeof body.sort_order === "number") updates.sort_order = body.sort_order;
 
   const { data, error } = await supabase
@@ -27,6 +31,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 }
 
 export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+  const invalid = validateId(params.id);
+  if (invalid) return invalid;
+
   const supabase = getSupabase();
   const { error } = await supabase.from("seminars").delete().eq("id", params.id);
 

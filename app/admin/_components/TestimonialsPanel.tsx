@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Plus, Loader2, Quote } from "lucide-react";
 import { FieldLabel, TextInput, TextArea, PrimaryButton, GhostButton, RowCard } from "./ui";
+import ConfirmModal from "./ConfirmModal";
 import type { TestimonialRow } from "./types";
 
 const emptyForm = { name: "", role: "", quote: "", initials: "" };
@@ -13,6 +14,8 @@ export default function TestimonialsPanel() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TestimonialRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     refresh();
@@ -66,9 +69,14 @@ export default function TestimonialsPanel() {
     refresh();
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Supprimer ce témoignage ?")) return;
-    await fetch(`/api/admin/testimonials/${id}`, { method: "DELETE" });
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    await fetch(`/api/admin/testimonials/${deleteTarget.id}`, { method: "DELETE" });
+    setDeleting(false);
+    setDeleteTarget(null);
+    refresh();
+  }`, { method: "DELETE" });
     refresh();
   }
 
@@ -81,7 +89,18 @@ export default function TestimonialsPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Supprimer ce témoignage ?"
+        message="Ce témoignage sera supprimé définitivement."
+        confirmLabel="Supprimer"
+        danger
+        loading={deleting}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+      <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-lg font-bold text-lore-ink dark:text-white">
           Témoignages ({items.length})
@@ -160,7 +179,7 @@ export default function TestimonialsPanel() {
               </div>
             }
             onEdit={() => startEdit(item)}
-            onDelete={() => handleDelete(item.id)}
+            onDelete={() => setDeleteTarget(item)}
           />
         ))}
 
@@ -171,5 +190,6 @@ export default function TestimonialsPanel() {
         )}
       </div>
     </div>
+    </>
   );
 }

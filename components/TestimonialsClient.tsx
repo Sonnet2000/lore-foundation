@@ -82,7 +82,7 @@ export default function TestimonialsClient({ items: testimonials }: { items: Tes
                 className="flex flex-col gap-7"
               >
                 {/* Quote text */}
-                <p className="max-w-2xl text-xl leading-relaxed text-white/85 sm:text-2xl font-light italic">
+                <p className="max-w-2xl text-lg leading-relaxed text-white/90 sm:text-xl font-medium">
                   « {current.quote} »
                 </p>
 

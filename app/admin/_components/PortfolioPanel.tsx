@@ -12,6 +12,7 @@ import {
   RowCard,
 } from "./ui";
 import ImageListField from "./ImageListField";
+import ConfirmModal from "./ConfirmModal";
 import type { PortfolioRow } from "./types";
 
 const emptyForm = { title: "", category: "", description: "", images: [] as string[] };
@@ -22,6 +23,8 @@ export default function PortfolioPanel() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<PortfolioRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     refresh();
@@ -77,9 +80,14 @@ export default function PortfolioPanel() {
     refresh();
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Supprimer ce projet du portfolio ?")) return;
-    await fetch(`/api/admin/portfolio/${id}`, { method: "DELETE" });
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    await fetch(`/api/admin/portfolio/${deleteTarget.id}`, { method: "DELETE" });
+    setDeleting(false);
+    setDeleteTarget(null);
+    refresh();
+  }`, { method: "DELETE" });
     refresh();
   }
 
@@ -92,7 +100,18 @@ export default function PortfolioPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Supprimer ce projet ?"
+        message="Ce projet sera supprimé du portfolio définitivement."
+        confirmLabel="Supprimer"
+        danger
+        loading={deleting}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+      <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-lg font-bold text-lore-ink dark:text-white">
           Portfolio ({items.length})
@@ -177,7 +196,7 @@ export default function PortfolioPanel() {
               </div>
             }
             onEdit={() => startEdit(item)}
-            onDelete={() => handleDelete(item.id)}
+            onDelete={() => setDeleteTarget(item)}
           />
         ))}
 
@@ -188,5 +207,6 @@ export default function PortfolioPanel() {
         )}
       </div>
     </div>
+    </>
   );
 }

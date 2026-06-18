@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { validateId } from "@/lib/validate-id";
 import { getSupabase } from "@/lib/supabase";
 import { sendBulkNotification, emailLayout } from "@/lib/email";
 
@@ -16,6 +17,9 @@ function formatDate(iso: string | null) {
 }
 
 export async function POST(_request: Request, { params }: { params: { id: string } }) {
+  const invalid = validateId(params.id);
+  if (invalid) return invalid;
+
   const supabase = getSupabase();
 
   const { data: seminar, error: fetchError } = await supabase

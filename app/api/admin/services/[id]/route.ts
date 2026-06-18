@@ -1,14 +1,18 @@
 import { NextResponse } from "next/server";
+import { validateId } from "@/lib/validate-id";
 import { getSupabase } from "@/lib/supabase";
 
 export async function PATCH(request: Request, { params }: { params: { id: string } }) {
+  const invalid = validateId(params.id);
+  if (invalid) return invalid;
+
   const supabase = getSupabase();
-  const body = await request.json();
+  const body = await request.json().catch(() => ({}));
 
   const updates: Record<string, unknown> = {};
-  if (typeof body.title === "string") updates.title = body.title;
-  if (typeof body.icon === "string") updates.icon = body.icon;
-  if (typeof body.description === "string") updates.description = body.description;
+  if (typeof body.title === "string") updates.title = body.title.slice(0, 200);
+  if (typeof body.icon === "string") updates.icon = body.icon.slice(0, 50);
+  if (typeof body.description === "string") updates.description = body.description.slice(0, 1000);
   if ("related_portfolio_id" in body) updates.related_portfolio_id = body.related_portfolio_id || null;
   if (typeof body.sort_order === "number") updates.sort_order = body.sort_order;
 
@@ -24,6 +28,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 }
 
 export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+  const invalid = validateId(params.id);
+  if (invalid) return invalid;
+
   const supabase = getSupabase();
   const { error } = await supabase.from("services").delete().eq("id", params.id);
 

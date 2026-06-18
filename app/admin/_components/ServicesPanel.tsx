@@ -12,6 +12,7 @@ import {
   RowCard,
 } from "./ui";
 import { iconNames, resolveIcon } from "@/lib/icon-map";
+import ConfirmModal from "./ConfirmModal";
 import type { ServiceRow, PortfolioRow } from "./types";
 
 const emptyForm = { title: "", icon: "Sparkles", description: "", related_portfolio_id: "" };
@@ -23,6 +24,8 @@ export default function ServicesPanel() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<ServiceRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     refresh();
@@ -81,9 +84,14 @@ export default function ServicesPanel() {
     refresh();
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Supprimer ce service ?")) return;
-    await fetch(`/api/admin/services/${id}`, { method: "DELETE" });
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    await fetch(`/api/admin/services/${deleteTarget.id}`, { method: "DELETE" });
+    setDeleting(false);
+    setDeleteTarget(null);
+    refresh();
+  }`, { method: "DELETE" });
     refresh();
   }
 
@@ -96,7 +104,18 @@ export default function ServicesPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Supprimer ce service ?"
+        message="Ce service sera supprimé définitivement."
+        confirmLabel="Supprimer"
+        danger
+        loading={deleting}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+      <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-lg font-bold text-lore-ink dark:text-white">
           Services ({items.length})
@@ -187,7 +206,7 @@ export default function ServicesPanel() {
                 </div>
               }
               onEdit={() => startEdit(item)}
-              onDelete={() => handleDelete(item.id)}
+              onDelete={() => setDeleteTarget(item)}
             />
           );
         })}
@@ -199,5 +218,6 @@ export default function ServicesPanel() {
         )}
       </div>
     </div>
+    </>
   );
 }

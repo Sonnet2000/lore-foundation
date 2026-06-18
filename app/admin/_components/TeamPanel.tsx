@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Plus, Loader2, User } from "lucide-react";
 import { FieldLabel, TextInput, PrimaryButton, GhostButton, RowCard } from "./ui";
 import ImageUploadField from "./ImageUploadField";
+import ConfirmModal from "./ConfirmModal";
 import type { TeamRow } from "./types";
 
 const emptyForm = { name: "", role: "", initials: "", photo_url: null as string | null, show_social: false };
@@ -15,6 +16,8 @@ export default function TeamPanel() {
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<TeamRow | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     refresh();
@@ -71,9 +74,14 @@ export default function TeamPanel() {
     refresh();
   }
 
-  async function handleDelete(id: string) {
-    if (!confirm("Retirer ce membre de l'équipe ?")) return;
-    await fetch(`/api/admin/team/${id}`, { method: "DELETE" });
+  async function confirmDelete() {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    await fetch(`/api/admin/team/${deleteTarget.id}`, { method: "DELETE" });
+    setDeleting(false);
+    setDeleteTarget(null);
+    refresh();
+  }`, { method: "DELETE" });
     refresh();
   }
 
@@ -86,7 +94,18 @@ export default function TeamPanel() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <>
+      <ConfirmModal
+        open={!!deleteTarget}
+        title="Retirer ce membre ?"
+        message="Ce membre sera retiré de l'équipe définitivement."
+        confirmLabel="Retirer"
+        danger
+        loading={deleting}
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
+      <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2 className="font-display text-lg font-bold text-lore-ink dark:text-white">
           Équipe ({items.length})
@@ -182,7 +201,7 @@ export default function TeamPanel() {
               </div>
             }
             onEdit={() => startEdit(item)}
-            onDelete={() => handleDelete(item.id)}
+            onDelete={() => setDeleteTarget(item)}
           />
         ))}
 
@@ -193,5 +212,6 @@ export default function TeamPanel() {
         )}
       </div>
     </div>
+    </>
   );
 }
