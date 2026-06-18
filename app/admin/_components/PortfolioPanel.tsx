@@ -87,8 +87,6 @@ export default function PortfolioPanel() {
     setDeleting(false);
     setDeleteTarget(null);
     refresh();
-  }`, { method: "DELETE" });
-    refresh();
   }
 
   if (items === null) {
