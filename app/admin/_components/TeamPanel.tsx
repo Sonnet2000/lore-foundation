@@ -81,8 +81,6 @@ export default function TeamPanel() {
     setDeleting(false);
     setDeleteTarget(null);
     refresh();
-  }`, { method: "DELETE" });
-    refresh();
   }
 
   if (items === null) {

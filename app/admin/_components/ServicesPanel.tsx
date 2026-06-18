@@ -91,8 +91,6 @@ export default function ServicesPanel() {
     setDeleting(false);
     setDeleteTarget(null);
     refresh();
-  }`, { method: "DELETE" });
-    refresh();
   }
 
   if (items === null) {
