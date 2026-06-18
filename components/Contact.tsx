@@ -13,7 +13,6 @@ export default function Contact() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     const formData = new FormData(e.currentTarget);
     const name = formData.get("name") as string;
     const email = formData.get("email") as string;
@@ -36,13 +35,25 @@ export default function Contact() {
   };
 
   const inputClasses =
-    "focus-ring rounded-xl border border-lore-dark/10 bg-lore-cream px-4 py-3 text-sm text-lore-ink placeholder:text-lore-ink/40 focus:border-lore-emerald dark:border-white/10 dark:bg-lore-night dark:text-white dark:placeholder:text-white/30 dark:focus:border-lore-emerald-light";
+    "focus-ring input-premium w-full rounded-xl border border-lore-dark/10 bg-white px-4 py-3.5 text-sm text-lore-ink placeholder:text-lore-ink/35 transition-colors focus:border-lore-emerald dark:border-white/10 dark:bg-lore-night-card dark:text-white dark:placeholder:text-white/30 dark:focus:border-lore-emerald-light";
 
-  const labelClasses = "text-sm font-semibold text-lore-ink dark:text-white";
+  const labelClasses = "block text-xs font-bold uppercase tracking-[0.15em] text-lore-ink/70 dark:text-white/60 mb-1.5";
 
   return (
-    <section id="contact" className="bg-lore-cream px-5 py-20 sm:px-8 sm:py-24 lg:px-12 dark:bg-lore-night">
-      <div className="mx-auto max-w-7xl">
+    <section
+      id="contact"
+      className="relative px-5 py-20 sm:px-8 sm:py-28 lg:px-12 bg-lore-cream dark:bg-lore-night overflow-hidden"
+    >
+      {/* Subtle background gradient */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 100% 100%, rgba(15,152,255,0.05) 0%, transparent 50%), radial-gradient(ellipse at 0% 0%, rgba(212,175,55,0.04) 0%, transparent 40%)",
+        }}
+      />
+
+      <div className="mx-auto max-w-7xl relative">
         <AnimatedSection>
           <SectionHeading
             eyebrow="Contact"
@@ -51,108 +62,107 @@ export default function Contact() {
           />
         </AnimatedSection>
 
-        <div className="mt-12 grid gap-8 sm:mt-16 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
-          {/* Contact info */}
+        <div className="mt-14 grid gap-8 sm:mt-18 lg:grid-cols-[0.85fr_1.15fr] lg:gap-12">
+          {/* Info panel */}
           <AnimatedSection direction="left" className="flex flex-col gap-6">
-            <div className="rounded-4xl bg-lore-dark p-8 text-white shadow-soft sm:p-10">
-              <h3 className="font-display text-2xl font-bold">
-                Informations de contact
-              </h3>
-              <p className="mt-2 text-sm text-white/60">
+            {/* Contact card */}
+            <div
+              className="rounded-3xl p-8 text-white sm:p-10 relative overflow-hidden"
+              style={{ background: "linear-gradient(135deg, #0A3D62 0%, #052238 100%)" }}
+            >
+              {/* Inner gold accent */}
+              <div
+                className="absolute top-0 left-8 right-8 h-px"
+                style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)" }}
+              />
+
+              <h3 className="font-display text-2xl font-bold">Informations de contact</h3>
+              <p className="mt-2 text-sm text-white/55">
                 Une question avant de commencer ? Contactez-nous directement.
               </p>
 
               <div className="mt-8 flex flex-col gap-5">
-                <div className="flex items-start gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lore-gold/15 text-lore-gold">
-                    <MapPin className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-white">Adresse</p>
-                    <p className="text-sm text-white/60">{siteInfo.address}</p>
+                {[
+                  { icon: MapPin, label: "Adresse", value: siteInfo.address },
+                  { icon: Phone, label: "Téléphone", value: siteInfo.phones.join(" · ") },
+                  { icon: Mail, label: "Email", value: siteInfo.email },
+                ].map(({ icon: Icon, label, value }) => (
+                  <div key={label} className="flex items-start gap-4">
+                    <span
+                      className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                      style={{ background: "rgba(212,175,55,0.12)" }}
+                    >
+                      <Icon className="h-5 w-5 text-lore-gold" />
+                    </span>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-white/50">{label}</p>
+                      <p className="text-sm text-white/80 mt-0.5">{value}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lore-gold/15 text-lore-gold">
-                    <Phone className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-white">Téléphone</p>
-                    {siteInfo.phones.map((phone) => (
-                      <p key={phone} className="text-sm text-white/60">
-                        {phone}
-                      </p>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-lore-gold/15 text-lore-gold">
-                    <Mail className="h-5 w-5" />
-                  </span>
-                  <div>
-                    <p className="text-sm font-semibold text-white">Email</p>
-                    <p className="text-sm text-white/60">{siteInfo.email}</p>
-                  </div>
-                </div>
+                ))}
               </div>
 
               <a
                 href={siteInfo.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-gold focus-ring mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition-transform duration-200 hover:scale-[1.02]"
+                className="btn-gold focus-ring mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-[1.02]"
               >
                 <MessageCircle className="h-4 w-4" />
                 Discuter sur WhatsApp
               </a>
             </div>
 
-            <div className="rounded-4xl border border-lore-dark/10 bg-white p-8 shadow-card sm:p-10 dark:border-white/10 dark:bg-lore-night-surface dark:shadow-none">
-              <h4 className="font-display text-lg font-bold text-lore-ink dark:text-white">
-                Horaires
+            {/* Hours card */}
+            <div className="rounded-3xl border border-lore-dark/8 bg-white p-8 dark:border-white/8 dark:bg-lore-night-card">
+              <h4 className="font-display text-base font-bold text-lore-ink dark:text-white">
+                Horaires d'ouverture
               </h4>
-              <div className="mt-4 flex flex-col gap-2 text-sm text-lore-ink/60 dark:text-white/60">
-                <div className="flex justify-between">
-                  <span>Lundi – Vendredi</span>
-                  <span className="font-semibold text-lore-ink dark:text-white">8h00 – 18h00</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Samedi</span>
-                  <span className="font-semibold text-lore-ink dark:text-white">9h00 – 14h00</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Dimanche</span>
-                  <span className="font-semibold text-lore-ink dark:text-white">Fermé</span>
-                </div>
+              <div className="mt-5 flex flex-col gap-3 text-sm">
+                {[
+                  { day: "Lundi – Vendredi", hours: "8h00 – 18h00" },
+                  { day: "Samedi", hours: "9h00 – 14h00" },
+                  { day: "Dimanche", hours: "Fermé" },
+                ].map(({ day, hours }) => (
+                  <div key={day} className="flex justify-between items-center border-b border-lore-dark/5 pb-3 last:border-0 last:pb-0 dark:border-white/5">
+                    <span className="text-lore-ink/55 dark:text-white/50">{day}</span>
+                    <span className="font-semibold text-lore-ink dark:text-white">{hours}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </AnimatedSection>
 
           {/* Form */}
           <AnimatedSection direction="right">
-            <div className="relative rounded-4xl bg-white p-8 shadow-card sm:p-10 dark:bg-lore-night-surface dark:shadow-none dark:ring-1 dark:ring-white/5">
+            <div className="rounded-3xl bg-white p-8 shadow-card sm:p-10 dark:bg-lore-night-card dark:shadow-none dark:ring-1 dark:ring-white/6 relative overflow-hidden">
+              {/* Gold top accent */}
+              <div
+                className="absolute top-0 left-0 right-0 h-0.5"
+                style={{ background: "linear-gradient(90deg, #d4af37, #f2d272, #d4af37)" }}
+              />
+
               {submitted ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex min-h-[360px] flex-col items-center justify-center gap-4 text-center"
+                  className="flex min-h-[360px] flex-col items-center justify-center gap-5 text-center"
                 >
                   <span className="flex h-16 w-16 items-center justify-center rounded-full bg-lore-emerald/10 text-lore-emerald dark:bg-lore-emerald/15 dark:text-lore-emerald-light">
                     <MessageCircle className="h-8 w-8" />
                   </span>
                   <h3 className="font-display text-2xl font-bold text-lore-ink dark:text-white">
-                    Redirection vers WhatsApp...
+                    Redirection vers WhatsApp…
                   </h3>
-                  <p className="max-w-sm text-sm text-lore-ink/60 dark:text-white/60">
+                  <p className="max-w-sm text-sm text-lore-ink/55 dark:text-white/55">
                     Votre message est prêt. Si WhatsApp ne s&apos;est pas ouvert
-                    automatiquement, cliquez sur le bouton ci-dessous pour
-                    l&apos;envoyer à Loré Foundation.
+                    automatiquement, cliquez ci-dessous.
                   </p>
                   <a
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="focus-ring inline-flex items-center gap-2 rounded-full bg-lore-emerald px-6 py-3 text-sm font-bold text-white shadow-gold transition-transform duration-200 hover:scale-105"
+                    className="focus-ring inline-flex items-center gap-2 rounded-full bg-lore-emerald px-6 py-3 text-sm font-bold text-white transition-transform duration-200 hover:scale-105"
                   >
                     <MessageCircle className="h-4 w-4" />
                     Ouvrir WhatsApp
@@ -160,97 +170,59 @@ export default function Contact() {
                   <button
                     type="button"
                     onClick={() => setSubmitted(false)}
-                    className="focus-ring mt-2 rounded-full border border-lore-dark/10 px-6 py-2.5 text-sm font-semibold text-lore-ink transition-colors hover:bg-lore-cream dark:border-white/10 dark:text-white dark:hover:bg-lore-night"
+                    className="focus-ring mt-1 rounded-full border border-lore-dark/10 px-6 py-2.5 text-sm font-semibold text-lore-ink transition-colors hover:bg-lore-cream dark:border-white/10 dark:text-white dark:hover:bg-lore-night"
                   >
                     Envoyer un autre message
                   </button>
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="grid gap-5 sm:grid-cols-2">
-                  <div className="flex flex-col gap-1.5 sm:col-span-1">
-                    <label htmlFor="name" className={labelClasses}>
-                      Nom complet
-                    </label>
-                    <input
-                      id="name"
-                      name="name"
-                      type="text"
-                      required
-                      placeholder="Votre nom"
-                      className={inputClasses}
-                    />
+                  <div className="sm:col-span-1">
+                    <label htmlFor="name" className={labelClasses}>Nom complet</label>
+                    <input id="name" name="name" type="text" required placeholder="Votre nom" className={inputClasses} />
                   </div>
 
-                  <div className="flex flex-col gap-1.5 sm:col-span-1">
-                    <label htmlFor="email" className={labelClasses}>
-                      Email
-                    </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="vous@exemple.com"
-                      className={inputClasses}
-                    />
+                  <div className="sm:col-span-1">
+                    <label htmlFor="email" className={labelClasses}>Email</label>
+                    <input id="email" name="email" type="email" required placeholder="vous@exemple.com" className={inputClasses} />
                   </div>
 
-                  <div className="flex flex-col gap-1.5 sm:col-span-1">
-                    <label htmlFor="phone" className={labelClasses}>
-                      Téléphone
-                    </label>
-                    <input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      placeholder={siteInfo.phones[0]}
-                      className={inputClasses}
-                    />
+                  <div className="sm:col-span-1">
+                    <label htmlFor="phone" className={labelClasses}>Téléphone</label>
+                    <input id="phone" name="phone" type="tel" placeholder={siteInfo.phones[0]} className={inputClasses} />
                   </div>
 
-                  <div className="flex flex-col gap-1.5 sm:col-span-1">
-                    <label htmlFor="service" className={labelClasses}>
-                      Service souhaité
-                    </label>
-                    <select
-                      id="service"
-                      name="service"
-                      defaultValue=""
-                      required
-                      className={inputClasses}
-                    >
-                      <option value="" disabled>
-                        Choisir un service
-                      </option>
+                  <div className="sm:col-span-1">
+                    <label htmlFor="service" className={labelClasses}>Service souhaité</label>
+                    <select id="service" name="service" defaultValue="" required className={inputClasses}>
+                      <option value="" disabled>Choisir un service</option>
                       {services.map((s) => (
-                        <option key={s.title} value={s.title}>
-                          {s.title}
-                        </option>
+                        <option key={s.title} value={s.title}>{s.title}</option>
                       ))}
                     </select>
                   </div>
 
-                  <div className="flex flex-col gap-1.5 sm:col-span-2">
-                    <label htmlFor="message" className={labelClasses}>
-                      Message
-                    </label>
+                  <div className="sm:col-span-2">
+                    <label htmlFor="message" className={labelClasses}>Message</label>
                     <textarea
                       id="message"
                       name="message"
                       required
                       rows={5}
-                      placeholder="Parlez-nous de votre projet..."
+                      placeholder="Parlez-nous de votre projet…"
                       className={`resize-none ${inputClasses}`}
                     />
                   </div>
 
-                  <button
-                    type="submit"
-                    className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full bg-lore-dark px-8 py-3.5 text-sm font-bold text-white shadow-soft transition-transform duration-200 hover:scale-[1.02] sm:col-span-2 sm:w-fit dark:bg-lore-emerald"
-                  >
-                    Envoyer via WhatsApp
-                    <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </button>
+                  <div className="sm:col-span-2">
+                    <button
+                      type="submit"
+                      className="btn-gold focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-8 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-[1.02]"
+                    >
+                      Envoyer via WhatsApp
+                      <Send className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                    </button>
+                  </div>
                 </form>
               )}
             </div>

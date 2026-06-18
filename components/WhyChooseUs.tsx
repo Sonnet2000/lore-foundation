@@ -14,8 +14,17 @@ export default function WhyChooseUs() {
   const active = openIndex !== null ? whyChooseUs[openIndex] : null;
 
   return (
-    <section className="bg-lore-cream px-5 py-20 sm:px-8 sm:py-24 lg:px-12 dark:bg-lore-night">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative px-5 py-20 sm:px-8 sm:py-28 lg:px-12 bg-lore-cream dark:bg-lore-night overflow-hidden">
+      {/* Subtle radial glow top-center */}
+      <div
+        className="absolute left-1/2 top-0 -translate-x-1/2 h-72 w-[600px] pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at 50% 0%, rgba(15,152,255,0.06) 0%, transparent 70%)",
+        }}
+      />
+
+      <div className="mx-auto max-w-7xl relative">
         <AnimatedSection>
           <SectionHeading
             eyebrow="Pourquoi nous choisir"
@@ -24,26 +33,34 @@ export default function WhyChooseUs() {
           />
         </AnimatedSection>
 
-        <div className="mt-12 grid gap-6 sm:mt-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8">
+        <div className="mt-14 grid gap-7 sm:mt-18 sm:grid-cols-2 lg:grid-cols-3 lg:gap-9">
           {whyChooseUs.map((card, i) => (
-            <AnimatedSection key={card.title} delay={i * 0.1}>
-              <TabCard className="h-full transition-transform duration-300 hover:-translate-y-1.5">
-                <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-lore-emerald/10 text-lore-emerald dark:bg-lore-emerald/15 dark:text-lore-emerald-light">
+            <AnimatedSection key={card.title} delay={i * 0.12}>
+              <TabCard className="h-full card-lift">
+                {/* Icon with ring */}
+                <span className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-lore-emerald/8 text-lore-emerald ring-1 ring-lore-emerald/15 dark:bg-lore-emerald/10 dark:text-lore-emerald-light dark:ring-lore-emerald/20">
                   <card.icon className="h-7 w-7" strokeWidth={1.75} />
                 </span>
+
+                {/* Number accent */}
+                <span className="mb-3 block font-display text-xs font-bold uppercase tracking-[0.25em] text-lore-gold/70">
+                  0{i + 1}
+                </span>
+
                 <h3 className="font-display text-xl font-bold text-lore-ink dark:text-white">
                   {card.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-lore-ink/60 dark:text-white/60">
+                <p className="mt-3 text-sm leading-relaxed text-lore-ink/55 dark:text-white/55">
                   {card.description}
                 </p>
+
                 <button
                   type="button"
                   onClick={() => setOpenIndex(i)}
-                  className="focus-ring mt-5 inline-flex items-center gap-1.5 rounded text-sm font-semibold text-lore-emerald transition-colors hover:text-lore-dark dark:text-lore-emerald-light dark:hover:text-white"
+                  className="focus-ring mt-6 inline-flex items-center gap-1.5 rounded text-sm font-semibold text-lore-emerald transition-colors hover:text-lore-dark dark:text-lore-emerald-light dark:hover:text-white group"
                 >
                   En savoir plus
-                  <span aria-hidden="true">→</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </TabCard>
             </AnimatedSection>
@@ -55,26 +72,23 @@ export default function WhyChooseUs() {
         {active && (
           <div>
             <ServiceIllustration icon={active.icon} satelliteIcons={active.satelliteIcons} />
-
             <div className="p-6 sm:p-8">
               <h3 className="font-display text-2xl font-bold text-lore-ink sm:text-3xl dark:text-white">
                 {active.title}
               </h3>
-              <p className="mt-4 text-sm leading-relaxed text-lore-ink/70 sm:text-base dark:text-white/70">
+              <p className="mt-4 text-sm leading-relaxed text-lore-ink/65 sm:text-base dark:text-white/65">
                 {active.extendedDescription}
               </p>
-
               <ul className="mt-6 flex flex-col gap-3">
                 {active.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
                     <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-lore-emerald dark:text-lore-emerald-light" />
-                    <span className="text-sm leading-relaxed text-lore-ink/80 sm:text-base dark:text-white/80">
+                    <span className="text-sm leading-relaxed text-lore-ink/75 sm:text-base dark:text-white/75">
                       {feature}
                     </span>
                   </li>
                 ))}
               </ul>
-
               <a
                 href="#contact"
                 onClick={() => setOpenIndex(null)}

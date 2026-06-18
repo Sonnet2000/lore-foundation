@@ -44,17 +44,11 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => { document.body.style.overflow = ""; };
   }, [open]);
 
-  // Close the menu automatically if the viewport grows into the desktop
-  // breakpoint (e.g. rotating a tablet), so it can never get stuck open.
   useEffect(() => {
-    const onResize = () => {
-      if (window.innerWidth >= 1024) setOpen(false);
-    };
+    const onResize = () => { if (window.innerWidth >= 1024) setOpen(false); };
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
@@ -63,12 +57,21 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
     <header
       className={`fixed left-0 right-0 top-0 z-50 transition-all duration-300 ${
         scrolled || open
-          ? "bg-lore-dark/80 shadow-soft backdrop-blur-xl"
+          ? "shadow-soft backdrop-blur-xl"
           : "bg-transparent"
       }`}
+      style={
+        scrolled || open
+          ? { background: "rgba(5, 34, 56, 0.85)" }
+          : undefined
+      }
     >
+      {/* Announcement banner */}
       {showBanner && announcement && (
-        <div className="flex items-center justify-center gap-2 bg-lore-gold-gradient px-4 py-2 text-center text-xs font-semibold text-[#1a1206] sm:text-sm">
+        <div
+          className="flex items-center justify-center gap-2 px-4 py-2 text-center text-xs font-semibold text-[#1a1206] sm:text-sm"
+          style={{ background: "linear-gradient(90deg, #F2D272, #D4AF37, #B8860B)" }}
+        >
           <Megaphone className="h-4 w-4 shrink-0" />
           <span className="truncate">{announcement.message}</span>
           {announcement.linkUrl && (
@@ -87,9 +90,21 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
         </div>
       )}
 
+      {/* Bottom gold line when scrolled */}
+      {scrolled && (
+        <motion.div
+          initial={{ scaleX: 0, opacity: 0 }}
+          animate={{ scaleX: 1, opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="absolute bottom-0 left-0 right-0 h-px origin-left"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(212,175,55,0.5), transparent)" }}
+        />
+      )}
+
       <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
-        <a href="#accueil" className="flex items-center gap-2 focus-ring rounded-lg">
-          <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
+        {/* Logo */}
+        <a href="#accueil" className="flex items-center gap-2.5 focus-ring rounded-lg group">
+          <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10 transition-all group-hover:ring-lore-gold/40">
             <Image
               src="/logo.png"
               alt="Loré Foundation"
@@ -103,18 +118,20 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
           </span>
         </a>
 
-        <div className="hidden items-center gap-8 lg:flex">
+        {/* Desktop nav links */}
+        <div className="hidden items-center gap-7 lg:flex">
           {links.map((link) => (
             <a
               key={link.href}
               href={link.href}
-              className="focus-ring rounded text-sm font-medium text-white/80 transition-colors hover:text-lore-gold-light"
+              className="focus-ring reveal-line rounded text-sm font-medium text-white/75 transition-colors hover:text-white"
             >
               {link.label}
             </a>
           ))}
         </div>
 
+        {/* Desktop CTA */}
         <div className="hidden items-center gap-3 lg:flex">
           <ThemeToggle />
           <a
@@ -125,6 +142,7 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
           </a>
         </div>
 
+        {/* Mobile controls */}
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle />
           <button
@@ -139,9 +157,7 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
         </div>
       </nav>
 
-      {/* Full-screen, fully opaque mobile menu — deliberately NOT a translucent
-          dropdown, so page content underneath can never bleed through or
-          intercept taps on the links. */}
+      {/* Mobile fullscreen menu */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -149,28 +165,33 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-x-0 top-0 z-0 h-[100dvh] bg-lore-night lg:hidden"
+            className="fixed inset-x-0 top-0 z-0 h-[100dvh] lg:hidden"
+            style={{ background: "#080f1a" }}
           >
+            {/* Ambient decoration */}
+            <div className="absolute top-1/4 right-1/4 h-64 w-64 rounded-full bg-lore-gold/5 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-1/4 left-1/4 h-48 w-48 rounded-full bg-lore-emerald/8 blur-3xl pointer-events-none" />
+
             <div className="flex h-full flex-col px-6 pb-10 pt-24">
-              <div className="flex flex-1 flex-col justify-center gap-1.5">
+              <div className="flex flex-1 flex-col justify-center gap-1">
                 {links.map((link, i) => (
                   <motion.a
                     key={link.href}
                     href={link.href}
                     onClick={() => setOpen(false)}
-                    initial={{ opacity: 0, x: -16 }}
+                    initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.05 + i * 0.05 }}
-                    className="focus-ring group flex items-center justify-between rounded-2xl border-b border-white/5 px-3 py-4 text-2xl font-bold text-white/90 transition-colors hover:text-lore-gold-light"
+                    transition={{ duration: 0.35, delay: 0.05 + i * 0.06 }}
+                    className="focus-ring group flex items-center justify-between border-b border-white/5 py-4 px-3 text-2xl font-bold text-white/85 transition-colors hover:text-lore-gold-light"
                   >
                     {link.label}
-                    <ArrowRight className="h-5 w-5 text-white/30 transition-all duration-200 group-hover:translate-x-1 group-hover:text-lore-gold-light" />
+                    <ArrowRight className="h-5 w-5 text-white/25 transition-all duration-200 group-hover:translate-x-1 group-hover:text-lore-gold-light" />
                   </motion.a>
                 ))}
               </div>
 
               <motion.div
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: 0.3 }}
                 className="flex flex-col gap-4"
@@ -182,7 +203,7 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
                 >
                   Démarrer un projet
                 </a>
-                <p className="text-center text-xs text-white/40">
+                <p className="text-center text-xs text-white/35">
                   Loré Foundation — Votre partenaire en innovation numérique
                 </p>
               </motion.div>
