@@ -116,7 +116,7 @@ export default function Contact() {
             {/* Hours card */}
             <div className="rounded-3xl border border-lore-dark/8 bg-white p-8 dark:border-white/8 dark:bg-lore-night-card">
               <h4 className="font-display text-base font-bold text-lore-ink dark:text-white">
-                Horaires d'ouverture
+                Horaires d&apos;ouverture
               </h4>
               <div className="mt-5 flex flex-col gap-3 text-sm">
                 {[
