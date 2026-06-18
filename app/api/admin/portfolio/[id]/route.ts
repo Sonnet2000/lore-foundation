@@ -17,7 +17,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (typeof body.sort_order === "number") updates.sort_order = body.sort_order;
 
   const { data, error } = await supabase
-    .from("portfolio")
+    .from("portfolio_items")
     .update(updates)
     .eq("id", params.id)
     .select()
@@ -32,7 +32,7 @@ export async function DELETE(_request: Request, { params }: { params: { id: stri
   if (invalid) return invalid;
 
   const supabase = getSupabase();
-  const { error } = await supabase.from("portfolio").delete().eq("id", params.id);
+  const { error } = await supabase.from("portfolio_items").delete().eq("id", params.id);
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ ok: true });
