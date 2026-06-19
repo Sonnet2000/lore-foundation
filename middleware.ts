@@ -7,8 +7,13 @@ export async function middleware(request: NextRequest) {
   // These endpoints must remain public
   const isLoginPage = pathname === "/admin/login";
   const isLoginApi  = pathname === "/api/admin/login";
+  const isPublicApi = pathname === "/api/pay"
+    || pathname === "/api/sponsor-apply"
+    || pathname.startsWith("/paiement")
+    || pathname.startsWith("/partenaire")
+    || pathname.startsWith("/soutenir");
 
-  if (isLoginPage || isLoginApi) {
+  if (isLoginPage || isLoginApi || isPublicApi) {
     return NextResponse.next();
   }
 

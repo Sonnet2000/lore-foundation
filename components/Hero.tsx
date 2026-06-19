@@ -71,21 +71,21 @@ export default function Hero() {
           {/* CTAs */}
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
             <a
-              href="#contact"
+              href="/partenaire"
               className="btn-gold focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-105"
             >
               Rejoindre notre mission
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
             <a
-              href="#sponsors"
+              href="/partenaire"
               className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/25"
             >
               <Heart className="h-4 w-4" />
               Devenir partenaire
             </a>
             <a
-              href="/paiement"
+              href="/soutenir"
               className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-blue-300/20 bg-blue-400/10 px-7 py-3.5 text-sm font-semibold text-blue-200 backdrop-blur-sm transition-all hover:bg-blue-400/20"
             >
               <Globe className="h-4 w-4" />

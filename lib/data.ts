@@ -325,13 +325,13 @@ export const socialLinks = [
 ];
 
 export const navLinks = [
-  { label: "Accueil",     href: "#accueil" },
-  { label: "Impact",      href: "#a-propos" },
-  { label: "Programmes",  href: "#services" },
-  { label: "Réalisations",href: "#portfolio" },
-  { label: "Sponsors",    href: "#sponsors" },
-  { label: "Paiement",    href: "/paiement" },
-  { label: "Contact",     href: "#contact" },
+  { label: "Accueil",      href: "#accueil" },
+  { label: "Impact",       href: "#a-propos" },
+  { label: "Programmes",   href: "#services" },
+  { label: "Réalisations", href: "#portfolio" },
+  { label: "Partenaires",  href: "#sponsors" },
+  { label: "Soutenir",     href: "/soutenir" },
+  { label: "Contact",      href: "#contact" },
 ];
 
 export const siteInfo = {
