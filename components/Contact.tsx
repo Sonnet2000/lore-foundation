@@ -22,7 +22,7 @@ export default function Contact() {
 
     const lines = [
       `Bonjour Loré Foundation, je m'appelle ${name}.`,
-      service ? `Service souhaité : ${service}` : "",
+      service ? `Objet : ${service}` : "",
       message ? `Message : ${message}` : "",
       email ? `Email : ${email}` : "",
       phone ? `Téléphone : ${phone}` : "",
@@ -56,9 +56,9 @@ export default function Contact() {
       <div className="mx-auto max-w-7xl relative">
         <AnimatedSection>
           <SectionHeading
-            eyebrow="Contact"
-            title="Discutons de votre prochain projet"
-            description="Remplissez le formulaire ci-dessous et notre équipe vous répondra dans les plus brefs délais."
+            eyebrow="Contact & Engagement"
+            title="Rejoignez le mouvement"
+            description="Que vous souhaitiez faire du bénévolat, devenir partenaire ou soutenir nos projets, nous serions ravis d'échanger avec vous. Ensemble, nous pouvons faire davantage."
           />
         </AnimatedSection>
 
@@ -193,9 +193,12 @@ export default function Contact() {
                   </div>
 
                   <div className="sm:col-span-1">
-                    <label htmlFor="service" className={labelClasses}>Service souhaité</label>
+                    <label htmlFor="service" className={labelClasses}>Je souhaite</label>
                     <select id="service" name="service" defaultValue="" required className={inputClasses}>
-                      <option value="" disabled>Choisir un service</option>
+                      <option value="" disabled>Choisir une option</option>
+                      <option value="Bénévolat / Volontariat">🤝 Bénévolat / Volontariat</option>
+                      <option value="Devenir partenaire">🌐 Devenir partenaire</option>
+                      <option value="Soutenir financièrement">💙 Soutenir financièrement</option>
                       {services.map((s) => (
                         <option key={s.title} value={s.title}>{s.title}</option>
                       ))}

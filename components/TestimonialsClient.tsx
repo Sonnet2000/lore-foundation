@@ -47,8 +47,8 @@ export default function TestimonialsClient({ items: testimonials }: { items: Tes
       <div className="mx-auto max-w-4xl relative">
         <AnimatedSection>
           <SectionHeading
-            eyebrow="Témoignages"
-            title="Ce que nos clients disent de nous"
+            eyebrow="Témoignages & Histoires d'Impact"
+            title="Des vies transformées, des communautés qui grandissent"
             light
           />
         </AnimatedSection>

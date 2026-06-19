@@ -47,8 +47,7 @@ export default function Footer() {
             </p>
 
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/45">
-              {siteInfo.tagline}. Nous concevons des solutions digitales sur
-              mesure pour faire grandir votre activité en Haïti et au-delà.
+              {siteInfo.mission}
             </p>
 
             {/* Social links */}

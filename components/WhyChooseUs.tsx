@@ -27,9 +27,9 @@ export default function WhyChooseUs() {
       <div className="mx-auto max-w-7xl relative">
         <AnimatedSection>
           <SectionHeading
-            eyebrow="Pourquoi nous choisir"
-            title="Trois raisons de nous faire confiance"
-            description="Une équipe locale, des outils modernes et un accompagnement pensé pour la réalité des entreprises et créateurs en Haïti."
+            eyebrow="Notre Impact"
+            title="Les piliers de notre engagement"
+            description="Loré Foundation agit sur trois fronts essentiels pour transformer durablement les communautés haïtiennes et préparer la prochaine génération de leaders."
           />
         </AnimatedSection>
 
@@ -59,7 +59,7 @@ export default function WhyChooseUs() {
                   onClick={() => setOpenIndex(i)}
                   className="focus-ring mt-6 inline-flex items-center gap-1.5 rounded text-sm font-semibold text-lore-emerald transition-colors hover:text-lore-dark dark:text-lore-emerald-light dark:hover:text-white group"
                 >
-                  En savoir plus
+                  Découvrir
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </button>
               </TabCard>

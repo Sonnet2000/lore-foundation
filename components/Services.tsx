@@ -59,9 +59,9 @@ export default async function Services() {
       <div className="mx-auto max-w-7xl relative">
         <AnimatedSection>
           <SectionHeading
-            eyebrow="Nos services"
-            title="Des solutions complètes pour votre transformation digitale"
-            description="De la conception à la mise en ligne, nous couvrons tous les aspects de votre présence numérique. Cliquez sur un service pour voir un projet associé."
+            eyebrow="Nos Programmes"
+            title="Des actions concrètes pour changer des vies"
+            description="Chaque programme de Loré Foundation est pensé pour répondre à un besoin réel, former des compétences durables et créer un impact mesurable dans les communautés haïtiennes."
           />
         </AnimatedSection>
 

@@ -46,9 +46,9 @@ export default async function Team() {
       <div className="mx-auto max-w-7xl relative">
         <AnimatedSection>
           <SectionHeading
-            eyebrow="À propos de nous"
-            title="L'équipe derrière Loré Foundation"
-            description="Une équipe haïtienne passionnée par la technologie, déterminée à offrir des outils digitaux accessibles, fiables et adaptés aux réalités locales."
+            eyebrow="Notre Équipe"
+            title="Bénévoles, formateurs & ambassadeurs"
+            description="Loré Foundation est portée par des femmes et des hommes engagés — coordinateurs, formateurs, bénévoles et ambassadeurs — qui croient profondément que chaque jeune haïtien mérite une chance de s'épanouir."
           />
         </AnimatedSection>
 
