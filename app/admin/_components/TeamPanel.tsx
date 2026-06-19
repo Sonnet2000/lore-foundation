@@ -24,9 +24,11 @@ export default function TeamPanel() {
   }, []);
 
   async function refresh() {
-    const res = await fetch("/api/admin/team");
-    const data = await res.json();
-    setItems(data.items ?? []);
+    try {
+      const res = await fetch("/api/admin/team", { credentials: "include" });
+      const data = await res.json();
+      setItems(data.items ?? []);
+    } catch { setItems([]); }
   }
 
   function startNew() {
@@ -56,7 +58,7 @@ export default function TeamPanel() {
     setError(null);
 
     const isNew = editingId === "new";
-    const res = await fetch(isNew ? "/api/admin/team" : `/api/admin/team/${editingId}`, {
+    const res = await fetch(isNew ? "/api/admin/team" : `/api/admin/team/${editingId}`, { credentials: "include", 
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -77,7 +79,7 @@ export default function TeamPanel() {
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    await fetch(`/api/admin/team/${deleteTarget.id}`, { method: "DELETE" });
+    await fetch(`/api/admin/team/${deleteTarget.id}`, { credentials: "include", method: "DELETE" });
     setDeleting(false);
     setDeleteTarget(null);
     refresh();

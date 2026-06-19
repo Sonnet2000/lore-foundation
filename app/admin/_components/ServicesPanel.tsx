@@ -29,15 +29,17 @@ export default function ServicesPanel() {
 
   useEffect(() => {
     refresh();
-    fetch("/api/admin/portfolio")
+    fetch("/api/admin/portfolio", { credentials: "include" })
       .then((r) => r.json())
       .then((data) => setPortfolioOptions(data.items ?? []));
   }, []);
 
   async function refresh() {
-    const res = await fetch("/api/admin/services");
-    const data = await res.json();
-    setItems(data.items ?? []);
+    try {
+      const res = await fetch("/api/admin/services", { credentials: "include" });
+      const data = await res.json();
+      setItems(data.items ?? []);
+    } catch { setItems([]); }
   }
 
   function startNew() {
@@ -66,7 +68,7 @@ export default function ServicesPanel() {
     setError(null);
 
     const isNew = editingId === "new";
-    const res = await fetch(isNew ? "/api/admin/services" : `/api/admin/services/${editingId}`, {
+    const res = await fetch(isNew ? "/api/admin/services" : `/api/admin/services/${editingId}`, { credentials: "include", 
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -87,7 +89,7 @@ export default function ServicesPanel() {
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    await fetch(`/api/admin/services/${deleteTarget.id}`, { method: "DELETE" });
+    await fetch(`/api/admin/services/${deleteTarget.id}`, { credentials: "include", method: "DELETE" });
     setDeleting(false);
     setDeleteTarget(null);
     refresh();

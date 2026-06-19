@@ -26,9 +26,11 @@ export default function AnnouncementsPanel() {
   useEffect(() => { refresh(); }, []);
 
   async function refresh() {
-    const res = await fetch("/api/admin/announcements");
-    const data = await res.json();
-    setItems(data.items ?? []);
+    try {
+      const res = await fetch("/api/admin/announcements", { credentials: "include" });
+      const data = await res.json();
+      setItems(data.items ?? []);
+    } catch { setItems([]); }
   }
 
   function startNew() { setForm(emptyForm); setEditingId("new"); setError(null); }
@@ -42,7 +44,7 @@ export default function AnnouncementsPanel() {
     if (!form.message.trim()) { setError("Le message est requis."); return; }
     setSaving(true); setError(null);
     const isNew = editingId === "new";
-    const res = await fetch(isNew ? "/api/admin/announcements" : `/api/admin/announcements/${editingId}`, {
+    const res = await fetch(isNew ? "/api/admin/announcements" : `/api/admin/announcements/${editingId}`, { credentials: "include", 
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -54,8 +56,7 @@ export default function AnnouncementsPanel() {
   }
 
   async function toggleActive(item: AnnouncementRow) {
-    await fetch(`/api/admin/announcements/${item.id}`, {
-      method: "PATCH",
+    await fetch(`/api/admin/announcements/${item.id}`, { credentials: "include", method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ is_active: !item.is_active }),
     });
@@ -65,7 +66,7 @@ export default function AnnouncementsPanel() {
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    await fetch(`/api/admin/announcements/${deleteTarget.id}`, { method: "DELETE" });
+    await fetch(`/api/admin/announcements/${deleteTarget.id}`, { credentials: "include", method: "DELETE" });
     setDeleting(false); setDeleteTarget(null); refresh();
   }
 
@@ -73,7 +74,7 @@ export default function AnnouncementsPanel() {
     if (!notifyTarget) return;
     const id = notifyTarget.id;
     setNotifyTarget(null); setNotifyingId(id); setNotifyResult(null);
-    const res = await fetch(`/api/admin/announcements/${id}/notify`, { method: "POST" });
+    const res = await fetch(`/api/admin/announcements/${id}/notify`, { credentials: "include", method: "POST" });
     const data = await res.json();
     setNotifyingId(null);
     setNotifyResult({ id, text: res.ok ? `Envoyé à ${data.sent} abonné(e)${data.sent === 1 ? "" : "s"} !` : data.error || "Échec de l'envoi." });

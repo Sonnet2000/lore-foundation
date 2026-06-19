@@ -73,9 +73,11 @@ export default function SeminarsPanel() {
   useEffect(() => { refresh(); }, []);
 
   async function refresh() {
-    const res = await fetch("/api/admin/seminars");
-    const data = await res.json();
-    setItems(data.items ?? []);
+    try {
+      const res = await fetch("/api/admin/seminars", { credentials: "include" });
+      const data = await res.json();
+      setItems(data.items ?? []);
+    } catch { setItems([]); }
   }
 
   function startNew() { setForm(emptyForm); setEditingId("new"); setError(null); }
@@ -99,7 +101,7 @@ export default function SeminarsPanel() {
     setSaving(true); setError(null);
     const isNew = editingId === "new";
     const payload = { ...form, starts_at: localInputToIso(form.starts_at) };
-    const res = await fetch(isNew ? "/api/admin/seminars" : `/api/admin/seminars/${editingId}`, {
+    const res = await fetch(isNew ? "/api/admin/seminars" : `/api/admin/seminars/${editingId}`, { credentials: "include", 
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload),
@@ -114,7 +116,7 @@ export default function SeminarsPanel() {
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    await fetch(`/api/admin/seminars/${deleteTarget.id}`, { method: "DELETE" });
+    await fetch(`/api/admin/seminars/${deleteTarget.id}`, { credentials: "include", method: "DELETE" });
     setDeleting(false);
     setDeleteTarget(null);
     if (registrationsFor === deleteTarget.id) setRegistrationsFor(null);
@@ -124,7 +126,7 @@ export default function SeminarsPanel() {
   async function toggleRegistrations(id: string) {
     if (registrationsFor === id) { setRegistrationsFor(null); return; }
     setRegistrationsFor(id); setRegistrations(null);
-    const res = await fetch(`/api/admin/seminars/${id}/registrations`);
+    const res = await fetch(`/api/admin/seminars/${id}/registrations`, { credentials: "include" });
     const data = await res.json();
     setRegistrations(data.items ?? []);
   }
@@ -134,7 +136,7 @@ export default function SeminarsPanel() {
     const id = notifyTarget.id;
     setNotifyTarget(null);
     setNotifyingId(id); setNotifyResult(null);
-    const res = await fetch(`/api/admin/seminars/${id}/notify`, { method: "POST" });
+    const res = await fetch(`/api/admin/seminars/${id}/notify`, { credentials: "include", method: "POST" });
     const data = await res.json();
     setNotifyingId(null);
     setNotifyResult({

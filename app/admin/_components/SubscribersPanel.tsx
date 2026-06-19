@@ -18,9 +18,11 @@ export default function SubscribersPanel() {
   }, []);
 
   async function refresh() {
-    const res = await fetch("/api/admin/subscribers");
-    const data = await res.json();
-    setItems(data.items ?? []);
+    try {
+      const res = await fetch("/api/admin/subscribers", { credentials: "include" });
+      const data = await res.json();
+      setItems(data.items ?? []);
+    } catch { setItems([]); }
   }
 
   async function copyAll() {
@@ -34,6 +36,7 @@ export default function SubscribersPanel() {
     if (!deleteTarget) return;
     setDeleting(true);
     await fetch("/api/admin/subscribers", {
+      credentials: "include",
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: deleteTarget.id }),

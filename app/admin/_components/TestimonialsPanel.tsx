@@ -22,9 +22,11 @@ export default function TestimonialsPanel() {
   }, []);
 
   async function refresh() {
-    const res = await fetch("/api/admin/testimonials");
-    const data = await res.json();
-    setItems(data.items ?? []);
+    try {
+      const res = await fetch("/api/admin/testimonials", { credentials: "include" });
+      const data = await res.json();
+      setItems(data.items ?? []);
+    } catch { setItems([]); }
   }
 
   function startNew() {
@@ -51,6 +53,7 @@ export default function TestimonialsPanel() {
     const res = await fetch(
       isNew ? "/api/admin/testimonials" : `/api/admin/testimonials/${editingId}`,
       {
+        credentials: "include",
         method: isNew ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -72,7 +75,7 @@ export default function TestimonialsPanel() {
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    await fetch(`/api/admin/testimonials/${deleteTarget.id}`, { method: "DELETE" });
+    await fetch(`/api/admin/testimonials/${deleteTarget.id}`, { credentials: "include", method: "DELETE" });
     setDeleting(false);
     setDeleteTarget(null);
     refresh();

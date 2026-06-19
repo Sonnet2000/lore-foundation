@@ -31,9 +31,11 @@ export default function PortfolioPanel() {
   }, []);
 
   async function refresh() {
-    const res = await fetch("/api/admin/portfolio");
-    const data = await res.json();
-    setItems(data.items ?? []);
+    try {
+      const res = await fetch("/api/admin/portfolio", { credentials: "include" });
+      const data = await res.json();
+      setItems(data.items ?? []);
+    } catch { setItems([]); }
   }
 
   function startNew() {
@@ -62,7 +64,7 @@ export default function PortfolioPanel() {
     setError(null);
 
     const isNew = editingId === "new";
-    const res = await fetch(isNew ? "/api/admin/portfolio" : `/api/admin/portfolio/${editingId}`, {
+    const res = await fetch(isNew ? "/api/admin/portfolio" : `/api/admin/portfolio/${editingId}`, { credentials: "include", 
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
@@ -83,7 +85,7 @@ export default function PortfolioPanel() {
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
-    await fetch(`/api/admin/portfolio/${deleteTarget.id}`, { method: "DELETE" });
+    await fetch(`/api/admin/portfolio/${deleteTarget.id}`, { credentials: "include", method: "DELETE" });
     setDeleting(false);
     setDeleteTarget(null);
     refresh();
