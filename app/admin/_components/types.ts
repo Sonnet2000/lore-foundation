@@ -74,3 +74,40 @@ export type SubscriberRow = {
   email: string;
   created_at: string;
 };
+
+export type SponsorTier = "bronze" | "silver" | "gold";
+export type SponsorStatus = "pending" | "approved" | "rejected";
+export type PaymentMethod = "moncash" | "natcash" | "sogebank" | "autre";
+export type PaymentStatus = "pending" | "confirmed" | "rejected";
+export type PaymentPurpose = "sponsor" | "service" | "seminar" | "autre";
+
+export type SponsorRow = {
+  id: string;
+  name: string;
+  organization: string;
+  email: string;
+  phone: string;
+  tier: SponsorTier;
+  message: string;
+  logo_url: string | null;
+  website_url: string | null;
+  status: SponsorStatus;
+  is_public: boolean;
+  created_at: string;
+};
+
+export type PaymentRow = {
+  id: string;
+  sponsor_id: string | null;
+  purpose: PaymentPurpose;
+  amount: number;
+  currency: string;
+  method: PaymentMethod;
+  sender_name: string;
+  sender_phone: string;
+  reference: string;
+  proof_url: string | null;
+  status: PaymentStatus;
+  note: string;
+  created_at: string;
+};
