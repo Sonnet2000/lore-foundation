@@ -44,12 +44,12 @@ const PAYMENT_METHODS = [
     icon: Building2,
     color: "from-emerald-400/20 to-emerald-300/10 border-emerald-400/40",
     iconBg: "bg-emerald-400/20 text-emerald-600 dark:text-emerald-300",
-    number: "Kont #: XXXX-XXXX-XXXX",  // ← Chanje ak vrè nimewo kont ou a
+    number: "Titulaire : LORÉ FOUNDATION\nCompte : 2470-0541-6317-0003\nBanque : Sogebank",
     instructions: [
       "Ale nan nenpòt branch Sogebank",
       'Oswa itilize aplikasyon "Sogexpress"',
-      "Fè yon vèsman nan kont: XXXX-XXXX-XXXX",
-      "Non kont: LORÉ FOUNDATION",
+      "Fè yon vèsman nan kont : 2470-0541-6317-0003",
+      "Non kont : LORÉ FOUNDATION",
       "Konsève resi oswa nimewo tranzaksyon an",
       "Ranpli fòm anba a avèk enfòmasyon yo",
     ],
@@ -188,7 +188,11 @@ export default function PaiementClient() {
                   <m.icon className="h-5 w-5" />
                 </div>
                 <p className="font-display font-bold text-lore-ink dark:text-white">{m.name}</p>
-                <p className="mt-1 text-xs font-mono text-lore-ink/60 dark:text-white/60">{m.number}</p>
+                <div className="mt-1">
+                  {m.number.split("\n").map((line: string, i: number) => (
+                    <p key={i} className="text-xs font-mono text-lore-ink/60 dark:text-white/60 leading-relaxed">{line}</p>
+                  ))}
+                </div>
               </button>
             ))}
           </div>
@@ -201,8 +205,10 @@ export default function PaiementClient() {
               2. Fè Paieman via {method.name}
             </h2>
             <div className="mb-4 rounded-xl bg-white/60 dark:bg-black/20 px-5 py-3">
-              <p className="text-xs text-lore-ink/50 dark:text-white/50">Nimewo / Kont</p>
-              <p className="font-mono font-bold text-lore-ink dark:text-white text-lg">{method.number}</p>
+              <p className="text-xs text-lore-ink/50 dark:text-white/50 mb-1">Coordonnées</p>
+              {method.number.split("\n").map((line: string, i: number) => (
+                <p key={i} className="font-mono font-bold text-lore-ink dark:text-white text-sm leading-relaxed">{line}</p>
+              ))}
             </div>
             <ol className="flex flex-col gap-2">
               {method.instructions.map((step, i) => (

@@ -50,8 +50,8 @@ const SUPPORT_WAYS = [
     iconBg: "bg-emerald-400/15 text-emerald-600 dark:text-emerald-300",
     highlight: true,
     description: "Virement bancaire via Sogebank ou Sogexpress.",
-    detail: "Idéal pour les montants plus importants.",
-    number: "Kont: XXXX-XXXX-XXXX",
+    detail: "Idéal pour les montants importants. Reçu officiel disponible.",
+    number: "Titulaire : LORÉ FOUNDATION\nCompte : 2470-0541-6317-0003\nBanque : Sogebank",
     action: "Payer via Sogebank",
     actionHref: "/paiement",
   },
@@ -317,8 +317,14 @@ export default function SoutenirClient() {
                   <p className="font-display font-bold text-lore-ink dark:text-white">{w.label}</p>
                   <p className="mt-1 text-sm text-lore-ink/60 dark:text-white/60 leading-relaxed">{w.description}</p>
                   {w.number && (
-                    <p className="mt-2 font-mono text-xs font-semibold text-lore-blue">{w.number}</p>
-                  )}
+                  <div className="mt-2 rounded-xl bg-white/40 dark:bg-black/20 px-3 py-2">
+                    {w.number.split("\n").map((line, i) => (
+                      <p key={i} className="font-mono text-xs font-semibold text-lore-blue leading-relaxed">
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                )}
                   <p className="mt-1 text-xs text-lore-ink/40 dark:text-white/40">{w.detail}</p>
                 </div>
                 <div className="mt-auto flex items-center gap-1 text-xs font-semibold text-lore-blue">
@@ -432,9 +438,18 @@ export default function SoutenirClient() {
                 {(isFinancial || !selectedWay) && (
                   <Field label="Montant (optionnel)">
                     <div className="flex gap-2">
-                      <input type="number" value={form.amount}
-                        onChange={e => setForm(f => ({ ...f, amount: e.target.value }))}
-                        placeholder="5000" className={`${INPUT} flex-1`} />
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={form.amount}
+                        onChange={e => {
+                          const val = e.target.value.replace(/[^0-9]/g, "");
+                          setForm(f => ({ ...f, amount: val }));
+                        }}
+                        placeholder="ex: 5000"
+                        className={`${INPUT} flex-1`}
+                      />
                       <select value={form.currency}
                         onChange={e => setForm(f => ({ ...f, currency: e.target.value as "HTG" | "USD" }))}
                         className={`${INPUT} w-24`}>
@@ -442,6 +457,11 @@ export default function SoutenirClient() {
                         <option value="USD">USD</option>
                       </select>
                     </div>
+                    {form.amount && (
+                      <p className="mt-1 text-xs text-lore-blue font-semibold">
+                        Montant : {parseInt(form.amount).toLocaleString("fr-FR")} {form.currency}
+                      </p>
+                    )}
                   </Field>
                 )}
 
