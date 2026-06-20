@@ -14,15 +14,16 @@ type MediaListFieldProps = {
 };
 
 export default function MediaListField({ label, values, onChange, folder }: MediaListFieldProps) {
-  const { inputRef, uploading, error, upload } = useFileUpload(folder);
+  const { inputRef, uploading, error, progress, uploadMany } = useFileUpload(folder);
 
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
-    const uploaded: MediaItem[] = [];
-    for (const file of Array.from(files)) {
-      const url = await upload(file);
-      if (url) uploaded.push({ url, type: file.type.startsWith("video/") ? "video" : "image" });
-    }
+    const fileArr = Array.from(files);
+    const urls = await uploadMany(fileArr);
+    const uploaded: MediaItem[] = urls.map((url, i) => ({
+      url,
+      type: fileArr[i]?.type.startsWith("video/") ? "video" : "image",
+    }));
     if (uploaded.length) onChange([...values, ...uploaded]);
   }
 
@@ -101,7 +102,12 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
           className="focus-ring flex h-20 w-20 shrink-0 flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed border-lore-emerald/30 text-lore-emerald transition-colors hover:bg-lore-emerald/10 disabled:opacity-50 dark:text-lore-emerald-light"
         >
           {uploading ? (
-            <Loader2 className="h-5 w-5 animate-spin" />
+            <div className="flex flex-col items-center gap-1">
+              <Loader2 className="h-5 w-5 animate-spin" />
+              {progress && (
+                <span className="text-[10px] font-semibold">{progress}</span>
+              )}
+            </div>
           ) : (
             <>
               <div className="flex items-center gap-0.5">
