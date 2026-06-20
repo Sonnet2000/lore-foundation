@@ -75,9 +75,17 @@ export default function SeminarsPanel() {
   async function refresh() {
     try {
       const res = await fetch("/api/admin/seminars", { credentials: "include" });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        console.error("SeminarsPanel GET error:", res.status, data.error);
+        setItems([]);
+        return;
+      }
       setItems(data.items ?? []);
-    } catch { setItems([]); }
+    } catch (e) {
+      console.error("SeminarsPanel fetch failed:", e);
+      setItems([]);
+    }
   }
 
   function startNew() { setForm(emptyForm); setEditingId("new"); setError(null); }

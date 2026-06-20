@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, CreditCard,
-  LayoutDashboard, ChevronRight,
+  LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
 } from "lucide-react";
 import PortfolioPanel    from "./PortfolioPanel";
 import ServicesPanel     from "./ServicesPanel";
@@ -188,6 +188,7 @@ export default function Dashboard() {
 
         {/* Content */}
         <main className="flex-1 px-5 py-6 sm:px-8">
+          <AdminStatusBanner />
           {active === "portfolio"     && <PortfolioPanel />}
           {active === "services"      && <ServicesPanel />}
           {active === "team"          && <TeamPanel />}
@@ -228,6 +229,66 @@ function SideGroup({
             {tab.label}
           </button>
         ))}
+      </div>
+    </div>
+  );
+}
+
+// ── Bannière de statut système ─────────────────────────────────────────────
+function AdminStatusBanner() {
+  const [status, setStatus] = useState<{
+    ok: boolean;
+    env: Record<string, boolean | string>;
+    supabase: { connected: boolean; error: string | null };
+  } | null>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/admin/debug", { credentials: "include" })
+      .then(r => r.json())
+      .then(d => {
+        setStatus(d);
+        // Montre bannye sèlman si gen yon pwoblèm
+        const hasIssue = !d.supabase?.connected
+          || !d.env?.SUPABASE_URL
+          || !d.env?.SUPABASE_SERVICE_ROLE_KEY
+          || !d.env?.ADMIN_PASSWORD
+          || !d.env?.SESSION_SECRET;
+        setVisible(hasIssue);
+      })
+      .catch(() => setVisible(false));
+  }, []);
+
+  if (!visible || !status) return null;
+
+  const missing = Object.entries(status.env)
+    .filter(([k, v]) => v === false && k !== "RESEND_API_KEY")
+    .map(([k]) => k);
+
+  return (
+    <div className="mb-6 rounded-2xl border border-amber-400/30 bg-amber-400/10 px-5 py-4">
+      <div className="flex items-start gap-3">
+        <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-amber-500" />
+        <div className="flex-1 min-w-0">
+          <p className="font-semibold text-sm text-amber-700 dark:text-amber-300">
+            Problème de configuration détecté
+          </p>
+          {missing.length > 0 && (
+            <p className="mt-1 text-xs text-amber-600/80 dark:text-amber-400/80">
+              Variables manquantes sur Vercel : <strong>{missing.join(", ")}</strong>
+            </p>
+          )}
+          {!status.supabase.connected && (
+            <p className="mt-1 text-xs text-amber-600/80 dark:text-amber-400/80">
+              Supabase : {status.supabase.error || "non connecté"}
+            </p>
+          )}
+          <p className="mt-2 text-xs text-amber-600/70 dark:text-amber-400/70">
+            → Allez dans <strong>Vercel → Settings → Environment Variables</strong> et vérifiez ces clés.
+          </p>
+        </div>
+        <button type="button" onClick={() => setVisible(false)}
+          className="text-amber-500/50 hover:text-amber-500 text-lg leading-none">✕</button>
       </div>
     </div>
   );

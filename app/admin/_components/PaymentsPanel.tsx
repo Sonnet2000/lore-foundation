@@ -34,9 +34,17 @@ export default function PaymentsPanel() {
   async function refresh() {
     try {
       const res = await fetch("/api/admin/payments", { credentials: "include" });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        console.error("PaymentsPanel GET error:", res.status, data.error);
+        setItems([]);
+        return;
+      }
       setItems(data.items ?? []);
-    } catch { setItems([]); }
+    } catch (e) {
+      console.error("PaymentsPanel fetch failed:", e);
+      setItems([]);
+    }
   }
 
   async function updateStatus(id: string, status: PaymentStatus) {

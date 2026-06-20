@@ -20,9 +20,17 @@ export default function SubscribersPanel() {
   async function refresh() {
     try {
       const res = await fetch("/api/admin/subscribers", { credentials: "include" });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        console.error("SubscribersPanel GET error:", res.status, data.error);
+        setItems([]);
+        return;
+      }
       setItems(data.items ?? []);
-    } catch { setItems([]); }
+    } catch (e) {
+      console.error("SubscribersPanel fetch failed:", e);
+      setItems([]);
+    }
   }
 
   async function copyAll() {

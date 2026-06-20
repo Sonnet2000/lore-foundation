@@ -24,9 +24,17 @@ export default function TestimonialsPanel() {
   async function refresh() {
     try {
       const res = await fetch("/api/admin/testimonials", { credentials: "include" });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        console.error("TestimonialsPanel GET error:", res.status, data.error);
+        setItems([]);
+        return;
+      }
       setItems(data.items ?? []);
-    } catch { setItems([]); }
+    } catch (e) {
+      console.error("TestimonialsPanel fetch failed:", e);
+      setItems([]);
+    }
   }
 
   function startNew() {

@@ -26,9 +26,17 @@ export default function TeamPanel() {
   async function refresh() {
     try {
       const res = await fetch("/api/admin/team", { credentials: "include" });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        console.error("TeamPanel GET error:", res.status, data.error);
+        setItems([]);
+        return;
+      }
       setItems(data.items ?? []);
-    } catch { setItems([]); }
+    } catch (e) {
+      console.error("TeamPanel fetch failed:", e);
+      setItems([]);
+    }
   }
 
   function startNew() {

@@ -37,9 +37,17 @@ export default function ServicesPanel() {
   async function refresh() {
     try {
       const res = await fetch("/api/admin/services", { credentials: "include" });
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        console.error("ServicesPanel GET error:", res.status, data.error);
+        setItems([]);
+        return;
+      }
       setItems(data.items ?? []);
-    } catch { setItems([]); }
+    } catch (e) {
+      console.error("ServicesPanel fetch failed:", e);
+      setItems([]);
+    }
   }
 
   function startNew() {
