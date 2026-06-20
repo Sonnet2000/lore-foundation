@@ -6,15 +6,6 @@ export { MEDIA_BUCKET };
 
 let cached: SupabaseClient | null = null;
 
-/**
- * Server-only Supabase client authenticated with the service-role key.
- * This bypasses Row Level Security, so it must only ever be used in:
- *  - Server Components (no "use client" directive)
- *  - Route Handlers (app/api/**\/route.ts)
- *
- * It must never be imported into a Client Component or otherwise reach
- * the browser bundle.
- */
 export function getSupabase(): SupabaseClient {
   if (cached) return cached;
 
@@ -23,7 +14,7 @@ export function getSupabase(): SupabaseClient {
 
   if (!url || !key) {
     throw new Error(
-      "SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY must be set (see .env.local.example)."
+      "Variables d'environnement Supabase manquantes. Vérifiez SUPABASE_URL et SUPABASE_SERVICE_ROLE_KEY dans les paramètres Vercel."
     );
   }
 
@@ -32,4 +23,10 @@ export function getSupabase(): SupabaseClient {
   });
 
   return cached;
+}
+
+/** Retourne null si les variables sont manquantes */
+export function tryGetSupabase(): SupabaseClient | null {
+  try { return getSupabase(); }
+  catch { return null; }
 }

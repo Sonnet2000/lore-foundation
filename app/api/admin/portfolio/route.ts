@@ -1,39 +1,69 @@
 import { NextResponse } from "next/server";
-import { validateId } from "@/lib/validate-id";
 import { getSupabase } from "@/lib/supabase";
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
-  const invalid = validateId(params.id);
-  if (invalid) return invalid;
+function slugify(input: string) {
+  return input
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+    .slice(0, 60);
+}
 
+export async function GET() {
+  try {
   const supabase = getSupabase();
-  const body = await request.json().catch(() => ({}));
+  const { data, error } = await supabase
+    .from("portfolio_items")
+    .select("*")
+    .order("sort_order", { ascending: true });
 
-  const updates: Record<string, unknown> = {};
-  if (typeof body.title === "string") updates.title = body.title.slice(0, 200);
-  if (typeof body.category === "string") updates.category = body.category.slice(0, 100);
-  if (typeof body.description === "string") updates.description = body.description.slice(0, 1000);
-  if (Array.isArray(body.images)) updates.images = body.images.slice(0, 20);
-  if (typeof body.sort_order === "number") updates.sort_order = body.sort_order;
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  return NextResponse.json({ items: data });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : String(e);
+    return NextResponse.json({ error: msg, items: [] }, { status: 500 });
+  }
+}
+
+export async function POST(request: Request) {
+  const supabase = getSupabase();
+  const body = await request.json();
+
+  const title = (body.title ?? "").trim();
+  if (!title) {
+    return NextResponse.json({ error: "Le titre est requis." }, { status: 400 });
+  }
+
+  const { data: maxRow } = await supabase
+    .from("portfolio_items")
+    .select("sort_order")
+    .order("sort_order", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  let id = slugify(title) || `projet-${Date.now()}`;
+  const { data: existing } = await supabase
+    .from("portfolio_items")
+    .select("id")
+    .eq("id", id)
+    .maybeSingle();
+  if (existing) id = `${id}-${Date.now().toString().slice(-4)}`;
 
   const { data, error } = await supabase
     .from("portfolio_items")
-    .update(updates)
-    .eq("id", params.id)
+    .insert({
+      id,
+      title,
+      category: body.category ?? "",
+      description: body.description ?? "",
+      images: Array.isArray(body.images) ? body.images : [],
+      sort_order: (maxRow?.sort_order ?? -1) + 1,
+    })
     .select()
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ item: data });
-}
-
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
-  const invalid = validateId(params.id);
-  if (invalid) return invalid;
-
-  const supabase = getSupabase();
-  const { error } = await supabase.from("portfolio_items").delete().eq("id", params.id);
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-  return NextResponse.json({ ok: true });
+  return NextResponse.json({ item: data }, { status: 201 });
 }

@@ -12,11 +12,11 @@ const PAYMENT_METHODS = [
     icon: Smartphone,
     color: "from-yellow-400/20 to-amber-300/10 border-yellow-400/40",
     iconBg: "bg-yellow-400/20 text-yellow-600 dark:text-yellow-300",
-    number: "+509 37 XX XXXX",       // ← Chanje ak vrè nimewo ou a
+    number: "+509 34 83 3501",
     instructions: [
       "Ouvri aplikasyon MonCash ou a",
       'Klike sou "Transfert" oswa "Paiement"',
-      "Antre nimewo a: +509 37 XX XXXX",
+      "Antre nimewo a: +509 34 83 3501",
       "Mete montan an epi konfime",
       "Konsève referans tranzaksyon an (8 chif)",
       "Ranpli fòm anba a avèk referans la",
@@ -28,11 +28,11 @@ const PAYMENT_METHODS = [
     icon: Smartphone,
     color: "from-blue-400/20 to-blue-300/10 border-blue-400/40",
     iconBg: "bg-blue-400/20 text-blue-600 dark:text-blue-300",
-    number: "+509 38 XX XXXX",       // ← Chanje ak vrè nimewo ou a
+    number: "+509 41 55 9094",
     instructions: [
       "Ouvri aplikasyon NatCash ou a",
       'Chwazi "Transfert Lajan"',
-      "Antre nimewo a: +509 38 XX XXXX",
+      "Antre nimewo a: +509 41 55 9094",
       "Antre montan an epi valide",
       "Kopye kòd konfirmasyon an",
       "Ranpli fòm anba a avèk kòd la",
