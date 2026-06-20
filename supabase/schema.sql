@@ -179,3 +179,65 @@ select * from (values
    'Grâce à leur expertise, notre boutique en ligne tourne parfaitement et nos ventes ont augmenté. Un vrai partenaire de confiance pour notre croissance digitale.', 'NB', 2)
 ) as v(name, role, quote, initials, sort_order)
 where not exists (select 1 from testimonials);
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- Sponsors & Paiements
+-- ─────────────────────────────────────────────────────────────────────────
+
+create table if not exists sponsors (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  organization text not null default '',
+  email text not null,
+  phone text not null default '',
+  tier text not null default 'bronze' check (tier in ('bronze','silver','gold')),
+  message text not null default '',
+  logo_url text,
+  website_url text,
+  status text not null default 'pending' check (status in ('pending','approved','rejected')),
+  is_public boolean not null default false,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists payments (
+  id uuid primary key default gen_random_uuid(),
+  sponsor_id uuid references sponsors(id) on delete set null,
+  purpose text not null default 'sponsor' check (purpose in ('sponsor','service','seminar','autre')),
+  amount numeric(10,2) not null default 0,
+  currency text not null default 'HTG',
+  method text not null check (method in ('moncash','natcash','sogebank','autre')),
+  sender_name text not null,
+  sender_phone text not null default '',
+  reference text not null default '',
+  proof_url text,
+  status text not null default 'pending' check (status in ('pending','confirmed','rejected')),
+  note text not null default '',
+  created_at timestamptz not null default now()
+);
+
+alter table sponsors enable row level security;
+alter table payments enable row level security;
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- Méthodes de paiement configurables par l'admin
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists payment_methods (
+  id uuid primary key default gen_random_uuid(),
+  type text not null check (type in ('moncash','natcash','sogebank','autre')),
+  label text not null,
+  number text not null default '',
+  details text not null default '',
+  instructions text not null default '',
+  is_active boolean not null default true,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now()
+);
+
+alter table payment_methods enable row level security;
+
+-- Données initiales
+insert into payment_methods (type, label, number, details, instructions, is_active, sort_order) values
+  ('moncash',  'MonCash',  '+509 34 83 3501', 'Transfert rapide 24h/24', 'Ouvri MonCash → Transfert → Antre nimewo a → Konfime → Voye referans la', true, 1),
+  ('natcash',  'NatCash',  '+509 41 55 9094', 'Transfert instantané sans frais', 'Ouvri NatCash → Transfert Lajan → Antre nimewo a → Valide → Kopye kòd la', true, 2),
+  ('sogebank', 'Sogebank', 'Titulaire : LORÉ FOUNDATION' || chr(10) || 'Compte : 2470-0541-6317-0003' || chr(10) || 'Banque : Sogebank', 'Idéal pour les montants importants', 'Ale nan branch Sogebank → Fè vèsman → Non : LORÉ FOUNDATION → Kont : 2470-0541-6317-0003 → Konsève resi a', true, 3)
+on conflict do nothing;

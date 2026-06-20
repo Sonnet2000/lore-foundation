@@ -111,3 +111,15 @@ export type PaymentRow = {
   note: string;
   created_at: string;
 };
+
+export type PaymentMethodRow = {
+  id: string;
+  type: "moncash" | "natcash" | "sogebank" | "autre";
+  label: string;
+  number: string;
+  details: string;
+  instructions: string;
+  is_active: boolean;
+  sort_order: number;
+  created_at: string;
+};

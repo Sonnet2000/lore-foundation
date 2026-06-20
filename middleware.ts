@@ -9,6 +9,7 @@ export async function middleware(request: NextRequest) {
   const isLoginApi  = pathname === "/api/admin/login";
   const isPublicApi = pathname === "/api/pay"
     || pathname === "/api/sponsor-apply"
+    || pathname === "/api/payment-methods"
     || pathname.startsWith("/paiement")
     || pathname.startsWith("/partenaire")
     || pathname.startsWith("/soutenir");

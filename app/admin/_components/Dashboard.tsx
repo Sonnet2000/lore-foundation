@@ -6,16 +6,18 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
+  Settings,
 } from "lucide-react";
-import PortfolioPanel    from "./PortfolioPanel";
-import ServicesPanel     from "./ServicesPanel";
-import TeamPanel         from "./TeamPanel";
-import TestimonialsPanel from "./TestimonialsPanel";
-import AnnouncementsPanel from "./AnnouncementsPanel";
-import SeminarsPanel     from "./SeminarsPanel";
-import SubscribersPanel  from "./SubscribersPanel";
-import SponsorsPanel     from "./SponsorsPanel";
-import PaymentsPanel     from "./PaymentsPanel";
+import PortfolioPanel       from "./PortfolioPanel";
+import ServicesPanel        from "./ServicesPanel";
+import TeamPanel            from "./TeamPanel";
+import TestimonialsPanel    from "./TestimonialsPanel";
+import AnnouncementsPanel   from "./AnnouncementsPanel";
+import SeminarsPanel        from "./SeminarsPanel";
+import SubscribersPanel     from "./SubscribersPanel";
+import SponsorsPanel        from "./SponsorsPanel";
+import PaymentsPanel        from "./PaymentsPanel";
+import PaymentMethodsPanel  from "./PaymentMethodsPanel";
 
 const TABS = [
   { id: "portfolio",     label: "Réalisations",  icon: FolderKanban,   group: "Contenu" },
@@ -24,9 +26,10 @@ const TABS = [
   { id: "testimonials",  label: "Témoignages",   icon: Quote,          group: "Contenu" },
   { id: "announcements", label: "Annonces",      icon: Megaphone,      group: "Contenu" },
   { id: "seminars",      label: "Séminaires",    icon: Calendar,       group: "Contenu" },
-  { id: "sponsors",      label: "Partenaires",   icon: HandHeart,      group: "Engagement" },
-  { id: "payments",      label: "Contributions", icon: CreditCard,     group: "Engagement" },
-  { id: "subscribers",   label: "Abonnés",       icon: Mail,           group: "Engagement" },
+  { id: "sponsors",        label: "Partenaires",   icon: HandHeart,   group: "Engagement" },
+  { id: "payments",        label: "Contributions", icon: CreditCard,  group: "Engagement" },
+  { id: "payment-methods", label: "Méthodes paiem",icon: Settings,    group: "Engagement" },
+  { id: "subscribers",     label: "Abonnés",       icon: Mail,        group: "Engagement" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -38,9 +41,10 @@ const TAB_META: Record<TabId, { desc: string }> = {
   testimonials:  { desc: "Histoires d'impact et témoignages" },
   announcements: { desc: "Annonces visibles en haut du site" },
   seminars:      { desc: "Séminaires et formations à venir" },
-  sponsors:      { desc: "Partenaires, sponsors et organisations collaboratrices" },
-  payments:      { desc: "Contributions et soutiens financiers reçus" },
-  subscribers:   { desc: "Personnes inscrites à la newsletter" },
+  sponsors:          { desc: "Partenaires, sponsors et organisations collaboratrices" },
+  payments:          { desc: "Contributions et soutiens financiers reçus" },
+  "payment-methods": { desc: "Configurez MonCash, NatCash, Sogebank et autres méthodes" },
+  subscribers:       { desc: "Personnes inscrites à la newsletter" },
 };
 
 export default function Dashboard() {
@@ -195,9 +199,10 @@ export default function Dashboard() {
           {active === "testimonials"  && <TestimonialsPanel />}
           {active === "announcements" && <AnnouncementsPanel />}
           {active === "seminars"      && <SeminarsPanel />}
-          {active === "sponsors"      && <SponsorsPanel />}
-          {active === "payments"      && <PaymentsPanel />}
-          {active === "subscribers"   && <SubscribersPanel />}
+          {active === "sponsors"         && <SponsorsPanel />}
+          {active === "payments"         && <PaymentsPanel />}
+          {active === "payment-methods"  && <PaymentMethodsPanel />}
+          {active === "subscribers"      && <SubscribersPanel />}
         </main>
       </div>
     </div>
