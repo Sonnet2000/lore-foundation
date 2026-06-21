@@ -85,11 +85,11 @@ export default function Hero() {
               Devenir partenaire
             </a>
             <a
-              href="/soutenir"
+              href="/don"
               className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-blue-300/20 bg-blue-400/10 px-7 py-3.5 text-sm font-semibold text-blue-200 backdrop-blur-sm transition-all hover:bg-blue-400/20"
             >
-              <Globe className="h-4 w-4" />
-              Soutenir nos projets
+              <Heart className="h-4 w-4" />
+              Faire un don
             </a>
           </div>
 

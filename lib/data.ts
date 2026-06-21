@@ -327,11 +327,10 @@ export const socialLinks = [
 export const navLinks = [
   { label: "Accueil",      href: "#accueil" },
   { label: "À propos",     href: "/a-propos" },
-  { label: "Impact",       href: "#a-propos" },
   { label: "Programmes",   href: "#services" },
   { label: "Réalisations", href: "#portfolio" },
   { label: "Partenaires",  href: "#sponsors" },
-  { label: "Soutenir",     href: "/soutenir" },
+  { label: "Faire un don", href: "/don" },
   { label: "Contact",      href: "#contact" },
 ];
 

@@ -10,10 +10,12 @@ export async function middleware(request: NextRequest) {
   const isPublicApi = pathname === "/api/pay"
     || pathname === "/api/sponsor-apply"
     || pathname === "/api/payment-methods"
+    || pathname.startsWith("/api/stripe")
     || pathname.startsWith("/paiement")
     || pathname.startsWith("/partenaire")
     || pathname.startsWith("/soutenir")
-    || pathname.startsWith("/a-propos");
+    || pathname.startsWith("/a-propos")
+    || pathname.startsWith("/don");
 
   if (isLoginPage || isLoginApi || isPublicApi) {
     return NextResponse.next();
