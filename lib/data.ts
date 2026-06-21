@@ -326,6 +326,7 @@ export const socialLinks = [
 
 export const navLinks = [
   { label: "Accueil",      href: "#accueil" },
+  { label: "À propos",     href: "/a-propos" },
   { label: "Impact",       href: "#a-propos" },
   { label: "Programmes",   href: "#services" },
   { label: "Réalisations", href: "#portfolio" },

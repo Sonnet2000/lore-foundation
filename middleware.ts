@@ -12,7 +12,8 @@ export async function middleware(request: NextRequest) {
     || pathname === "/api/payment-methods"
     || pathname.startsWith("/paiement")
     || pathname.startsWith("/partenaire")
-    || pathname.startsWith("/soutenir");
+    || pathname.startsWith("/soutenir")
+    || pathname.startsWith("/a-propos");
 
   if (isLoginPage || isLoginApi || isPublicApi) {
     return NextResponse.next();
