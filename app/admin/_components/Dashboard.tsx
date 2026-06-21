@@ -6,7 +6,7 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
-  Settings,
+  Settings, BookOpen,
 } from "lucide-react";
 import PortfolioPanel       from "./PortfolioPanel";
 import ServicesPanel        from "./ServicesPanel";
@@ -18,14 +18,16 @@ import SubscribersPanel     from "./SubscribersPanel";
 import SponsorsPanel        from "./SponsorsPanel";
 import PaymentsPanel        from "./PaymentsPanel";
 import PaymentMethodsPanel  from "./PaymentMethodsPanel";
+import BlogPanel            from "./BlogPanel";
 
 const TABS = [
-  { id: "portfolio",     label: "Réalisations",  icon: FolderKanban,   group: "Contenu" },
-  { id: "services",      label: "Programmes",    icon: Layers,         group: "Contenu" },
-  { id: "team",          label: "Équipe",        icon: Users,          group: "Contenu" },
-  { id: "testimonials",  label: "Témoignages",   icon: Quote,          group: "Contenu" },
-  { id: "announcements", label: "Annonces",      icon: Megaphone,      group: "Contenu" },
-  { id: "seminars",      label: "Séminaires",    icon: Calendar,       group: "Contenu" },
+  { id: "portfolio",        label: "Réalisations",   icon: FolderKanban, group: "Contenu" },
+  { id: "services",         label: "Programmes",     icon: Layers,       group: "Contenu" },
+  { id: "team",             label: "Équipe",         icon: Users,        group: "Contenu" },
+  { id: "testimonials",     label: "Témoignages",    icon: Quote,        group: "Contenu" },
+  { id: "blog",             label: "Blog",           icon: BookOpen,     group: "Contenu" },
+  { id: "announcements",    label: "Annonces",       icon: Megaphone,    group: "Contenu" },
+  { id: "seminars",         label: "Séminaires",     icon: Calendar,     group: "Contenu" },
   { id: "sponsors",        label: "Partenaires",   icon: HandHeart,   group: "Engagement" },
   { id: "payments",        label: "Contributions", icon: CreditCard,  group: "Engagement" },
   { id: "payment-methods", label: "Méthodes paiem",icon: Settings,    group: "Engagement" },
@@ -35,12 +37,13 @@ const TABS = [
 type TabId = (typeof TABS)[number]["id"];
 
 const TAB_META: Record<TabId, { desc: string }> = {
-  portfolio:     { desc: "Gérez les actions et réalisations de la fondation" },
-  services:      { desc: "Gérez les programmes et initiatives" },
-  team:          { desc: "Bénévoles, formateurs et coordinateurs" },
-  testimonials:  { desc: "Histoires d'impact et témoignages" },
-  announcements: { desc: "Annonces visibles en haut du site" },
-  seminars:      { desc: "Séminaires et formations à venir" },
+  portfolio:         { desc: "Gérez les actions et réalisations de la fondation" },
+  services:          { desc: "Gérez les programmes et initiatives" },
+  team:              { desc: "Bénévoles, formateurs et coordinateurs" },
+  testimonials:      { desc: "Histoires d'impact et témoignages" },
+  blog:              { desc: "Créez et gérez les articles du blog" },
+  announcements:     { desc: "Annonces visibles en haut du site" },
+  seminars:          { desc: "Séminaires et formations à venir" },
   sponsors:          { desc: "Partenaires, sponsors et organisations collaboratrices" },
   payments:          { desc: "Contributions et soutiens financiers reçus" },
   "payment-methods": { desc: "Configurez MonCash, NatCash, Sogebank et autres méthodes" },
@@ -193,12 +196,13 @@ export default function Dashboard() {
         {/* Content */}
         <main className="flex-1 px-5 py-6 sm:px-8">
           <AdminStatusBanner />
-          {active === "portfolio"     && <PortfolioPanel />}
-          {active === "services"      && <ServicesPanel />}
-          {active === "team"          && <TeamPanel />}
-          {active === "testimonials"  && <TestimonialsPanel />}
-          {active === "announcements" && <AnnouncementsPanel />}
-          {active === "seminars"      && <SeminarsPanel />}
+          {active === "portfolio"        && <PortfolioPanel />}
+          {active === "services"         && <ServicesPanel />}
+          {active === "team"             && <TeamPanel />}
+          {active === "testimonials"     && <TestimonialsPanel />}
+          {active === "blog"             && <BlogPanel />}
+          {active === "announcements"    && <AnnouncementsPanel />}
+          {active === "seminars"         && <SeminarsPanel />}
           {active === "sponsors"         && <SponsorsPanel />}
           {active === "payments"         && <PaymentsPanel />}
           {active === "payment-methods"  && <PaymentMethodsPanel />}

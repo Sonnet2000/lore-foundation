@@ -329,7 +329,7 @@ export const navLinks = [
   { label: "À propos",     href: "/a-propos" },
   { label: "Programmes",   href: "#services" },
   { label: "Réalisations", href: "#portfolio" },
-  { label: "Partenaires",  href: "#sponsors" },
+  { label: "Blog",         href: "/blog" },
   { label: "Faire un don", href: "/don" },
   { label: "Contact",      href: "#contact" },
 ];

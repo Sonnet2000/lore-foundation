@@ -11,11 +11,13 @@ export async function middleware(request: NextRequest) {
     || pathname === "/api/sponsor-apply"
     || pathname === "/api/payment-methods"
     || pathname.startsWith("/api/stripe")
+    || pathname.startsWith("/api/blog")
     || pathname.startsWith("/paiement")
     || pathname.startsWith("/partenaire")
     || pathname.startsWith("/soutenir")
     || pathname.startsWith("/a-propos")
-    || pathname.startsWith("/don");
+    || pathname.startsWith("/don")
+    || pathname.startsWith("/blog");
 
   if (isLoginPage || isLoginApi || isPublicApi) {
     return NextResponse.next();

@@ -123,3 +123,27 @@ export type PaymentMethodRow = {
   sort_order: number;
   created_at: string;
 };
+
+export type BlogCategory =
+  | "technologie" | "education" | "ia"
+  | "entrepreneuriat" | "activites" | "actualites" | "leadership";
+
+export type BlogPost = {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  cover_url: string | null;
+  category: BlogCategory;
+  tags: string[];
+  author_name: string;
+  author_photo: string | null;
+  is_published: boolean;
+  is_featured: boolean;
+  read_time_minutes: number;
+  views: number;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+};

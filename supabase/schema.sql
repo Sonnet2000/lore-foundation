@@ -241,3 +241,30 @@ insert into payment_methods (type, label, number, details, instructions, is_acti
   ('natcash',  'NatCash',  '+509 41 55 9094', 'Transfert instantané sans frais', 'Ouvri NatCash → Transfert Lajan → Antre nimewo a → Valide → Kopye kòd la', true, 2),
   ('sogebank', 'Sogebank', 'Titulaire : LORÉ FOUNDATION' || chr(10) || 'Compte : 2470-0541-6317-0003' || chr(10) || 'Banque : Sogebank', 'Idéal pour les montants importants', 'Ale nan branch Sogebank → Fè vèsman → Non : LORÉ FOUNDATION → Kont : 2470-0541-6317-0003 → Konsève resi a', true, 3)
 on conflict do nothing;
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- Blog & Articles
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists blog_posts (
+  id uuid primary key default gen_random_uuid(),
+  slug text not null unique,
+  title text not null,
+  excerpt text not null default '',
+  content text not null default '',
+  cover_url text,
+  category text not null default 'actualites' check (
+    category in ('technologie','education','ia','entrepreneuriat','activites','actualites','leadership')
+  ),
+  tags text[] not null default '{}',
+  author_name text not null default 'Loré Foundation',
+  author_photo text,
+  is_published boolean not null default false,
+  is_featured boolean not null default false,
+  read_time_minutes integer not null default 5,
+  views integer not null default 0,
+  published_at timestamptz,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table blog_posts enable row level security;
