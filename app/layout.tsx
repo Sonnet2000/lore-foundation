@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Script from "next/script";
 import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 
@@ -19,77 +19,86 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lorefoundation.com"),
+  metadataBase: new URL("https://lore-foundation.vercel.app"),
   title: {
     default: "Loré Foundation — L'excellence au cœur de l'impact",
     template: "%s | Loré Foundation",
   },
   description:
-    "Loré Foundation accompagne les entreprises et créateurs en Haïti avec des solutions numériques sur mesure : développement web, applications mobiles, design graphique, intelligence artificielle et bien plus. Basée à Cap-Haïtien.",
+    "Loré Foundation accompagne les jeunes et les communautés en Haïti à travers l'éducation, la formation numérique, le leadership et l'engagement communautaire. Basée à Cap-Haïtien.",
   keywords: [
     "Loré Foundation",
-    "développement web Haïti",
-    "applications mobiles",
-    "design graphique",
-    "intelligence artificielle",
-    "agence digitale Cap-Haïtien",
-    "sérigraphie",
-    "salon de beauté",
+    "éducation Haïti",
+    "formation numérique Haïti",
+    "leadership jeunesse",
+    "développement communautaire",
+    "Cap-Haïtien",
+    "fondation Haïti",
+    "ONG Haïti",
+    "jeunesse haïtienne",
+    "formation informatique",
   ],
   authors: [{ name: "Loré Foundation" }],
-  icons: {
-    icon: "/logo.png",
-  },
+  icons: { icon: "/logo.png" },
   openGraph: {
-    title: "Loré Foundation — L'excellence au cœur de l'impact",
+    title: "Loré Foundation — Former. Inspirer. Transformer.",
     description:
-      "Des solutions numériques modernes et sur mesure : web, mobile, design, IA et accompagnement digital complet.",
-    url: "https://lorefoundation.com",
+      "Une organisation engagée dans le développement de l'éducation, la technologie et le leadership pour construire un avenir meilleur pour Haïti.",
+    url: "https://lore-foundation.vercel.app",
     siteName: "Loré Foundation",
     locale: "fr_FR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Loré Foundation — L'excellence au cœur de l'impact",
-    description:
-      "Transformez vos idées en solutions numériques avec Loré Foundation.",
+    title: "Loré Foundation — Former. Inspirer. Transformer.",
+    description: "Éducation, formation numérique et leadership pour la jeunesse haïtienne.",
   },
-  robots: {
-    index: true,
-    follow: true,
+  robots: { index: true, follow: true },
+  verification: {
+    google: "G-7DDF3Q1R44",
   },
 };
 
+const GA_ID  = "G-7DDF3Q1R44";
+const ADS_ID = "ca-pub-7566847755875100";
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="fr"
       className={`${bricolage.variable} ${jakarta.variable}`}
       suppressHydrationWarning
     >
-      <body className="bg-lore-cream font-body text-lore-ink antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">
+      <head>
+        {/* Google AdSense */}
         <Script
           async
-          src="https://www.googletagmanager.com/gtag/js?id=G-7DDF3Q1R44"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-7DDF3Q1R44');`}
-        </Script>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7566847755875100"
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS_ID}`}
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+      </head>
+      <body className="bg-lore-cream font-body text-lore-ink antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">
+        {/* Google Analytics */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}', {
+              page_path: window.location.pathname,
+              anonymize_ip: true,
+            });
+          `}
+        </Script>
+
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>
