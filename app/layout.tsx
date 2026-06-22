@@ -75,6 +75,17 @@ export default function RootLayout({
       <body className="bg-lore-cream font-body text-lore-ink antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">
         <Script
           async
+          src="https://www.googletagmanager.com/gtag/js?id=G-7DDF3Q1R44"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-7DDF3Q1R44');`}
+        </Script>
+        <Script
+          async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7566847755875100"
           crossOrigin="anonymous"
           strategy="afterInteractive"

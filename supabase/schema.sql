@@ -268,3 +268,82 @@ create table if not exists blog_posts (
 );
 
 alter table blog_posts enable row level security;
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- Projets & Financement
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists projects (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  slug text not null unique,
+  description text not null default '',
+  short_desc text not null default '',
+  category text not null default 'education' check (
+    category in ('education','numerique','leadership','communaute','sante','autre')
+  ),
+  goal_amount numeric(12,2) not null default 0,
+  raised_amount numeric(12,2) not null default 0,
+  currency text not null default 'HTG',
+  cover_url text,
+  media jsonb not null default '[]',
+  location text not null default 'Cap-Haïtien, Haïti',
+  beneficiaries integer not null default 0,
+  start_date date,
+  end_date date,
+  is_published boolean not null default false,
+  is_featured boolean not null default false,
+  status text not null default 'actif' check (status in ('actif','complete','pause')),
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table projects enable row level security;
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- Projets à financer
+-- ─────────────────────────────────────────────────────────────────────────
+create table if not exists projects (
+  id uuid primary key default gen_random_uuid(),
+  title text not null,
+  slug text not null unique,
+  description text not null default '',
+  short_desc text not null default '',
+  category text not null default 'education' check (
+    category in ('education','numerique','leadership','communaute','sante','autre')
+  ),
+  goal_amount numeric(12,2) not null default 0,
+  raised_amount numeric(12,2) not null default 0,
+  currency text not null default 'HTG',
+  media jsonb not null default '[]',
+  cover_url text,
+  location text not null default 'Cap-Haïtien, Haïti',
+  beneficiaries integer not null default 0,
+  start_date date,
+  end_date date,
+  is_published boolean not null default false,
+  is_featured boolean not null default false,
+  status text not null default 'actif' check (status in ('actif','termine','suspendu')),
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists project_donations (
+  id uuid primary key default gen_random_uuid(),
+  project_id uuid not null references projects(id) on delete cascade,
+  donor_name text not null default 'Anonyme',
+  donor_email text,
+  amount numeric(10,2) not null default 0,
+  currency text not null default 'HTG',
+  method text not null default 'autre',
+  message text not null default '',
+  is_anonymous boolean not null default false,
+  status text not null default 'pending' check (status in ('pending','confirmed','rejected')),
+  reference text not null default '',
+  proof_url text,
+  created_at timestamptz not null default now()
+);
+
+alter table projects enable row level security;
+alter table project_donations enable row level security;

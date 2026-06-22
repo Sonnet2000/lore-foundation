@@ -6,7 +6,7 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
-  Settings, BookOpen,
+  Settings, BookOpen, Target,
 } from "lucide-react";
 import PortfolioPanel       from "./PortfolioPanel";
 import ServicesPanel        from "./ServicesPanel";
@@ -19,6 +19,7 @@ import SponsorsPanel        from "./SponsorsPanel";
 import PaymentsPanel        from "./PaymentsPanel";
 import PaymentMethodsPanel  from "./PaymentMethodsPanel";
 import BlogPanel            from "./BlogPanel";
+import ProjectsPanel        from "./ProjectsPanel";
 
 const TABS = [
   { id: "portfolio",        label: "Réalisations",   icon: FolderKanban, group: "Contenu" },
@@ -26,6 +27,7 @@ const TABS = [
   { id: "team",             label: "Équipe",         icon: Users,        group: "Contenu" },
   { id: "testimonials",     label: "Témoignages",    icon: Quote,        group: "Contenu" },
   { id: "blog",             label: "Blog",           icon: BookOpen,     group: "Contenu" },
+  { id: "projects",         label: "Projets",        icon: Target,       group: "Contenu" },
   { id: "announcements",    label: "Annonces",       icon: Megaphone,    group: "Contenu" },
   { id: "seminars",         label: "Séminaires",     icon: Calendar,     group: "Contenu" },
   { id: "sponsors",        label: "Partenaires",   icon: HandHeart,   group: "Engagement" },
@@ -42,6 +44,7 @@ const TAB_META: Record<TabId, { desc: string }> = {
   team:              { desc: "Bénévoles, formateurs et coordinateurs" },
   testimonials:      { desc: "Histoires d'impact et témoignages" },
   blog:              { desc: "Créez et gérez les articles du blog" },
+  projects:          { desc: "Projets à financer — gérez médias, objectifs et dons" },
   announcements:     { desc: "Annonces visibles en haut du site" },
   seminars:          { desc: "Séminaires et formations à venir" },
   sponsors:          { desc: "Partenaires, sponsors et organisations collaboratrices" },
@@ -201,6 +204,7 @@ export default function Dashboard() {
           {active === "team"             && <TeamPanel />}
           {active === "testimonials"     && <TestimonialsPanel />}
           {active === "blog"             && <BlogPanel />}
+          {active === "projects"         && <ProjectsPanel />}
           {active === "announcements"    && <AnnouncementsPanel />}
           {active === "seminars"         && <SeminarsPanel />}
           {active === "sponsors"         && <SponsorsPanel />}

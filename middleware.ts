@@ -13,12 +13,14 @@ export async function middleware(request: NextRequest) {
     || pathname === "/api/unsubscribe"
     || pathname.startsWith("/api/stripe")
     || pathname.startsWith("/api/blog")
+    || pathname.startsWith("/api/projects")
     || pathname.startsWith("/paiement")
     || pathname.startsWith("/partenaire")
     || pathname.startsWith("/soutenir")
     || pathname.startsWith("/a-propos")
     || pathname.startsWith("/don")
-    || pathname.startsWith("/blog");
+    || pathname.startsWith("/blog")
+    || pathname.startsWith("/projets");
 
   if (isLoginPage || isLoginApi || isPublicApi) {
     return NextResponse.next();

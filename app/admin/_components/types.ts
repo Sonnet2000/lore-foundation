@@ -147,3 +147,32 @@ export type BlogPost = {
   created_at: string;
   updated_at: string;
 };
+
+export type ProjectCategory = 'education'|'numerique'|'leadership'|'communaute'|'sante'|'autre';
+export type ProjectStatus = 'actif'|'complete'|'pause';
+
+export type ProjectMedia = { url: string; type: 'image'|'video' };
+
+export type Project = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  short_desc: string;
+  category: ProjectCategory;
+  goal_amount: number;
+  raised_amount: number;
+  currency: string;
+  cover_url: string | null;
+  media: ProjectMedia[];
+  location: string;
+  beneficiaries: number;
+  start_date: string | null;
+  end_date: string | null;
+  is_published: boolean;
+  is_featured: boolean;
+  status: ProjectStatus;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};

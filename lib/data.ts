@@ -328,7 +328,7 @@ export const navLinks = [
   { label: "Accueil",      href: "#accueil" },
   { label: "À propos",     href: "/a-propos" },
   { label: "Programmes",   href: "#services" },
-  { label: "Réalisations", href: "#portfolio" },
+  { label: "Projets",      href: "/projets" },
   { label: "Blog",         href: "/blog" },
   { label: "Faire un don", href: "/don" },
   { label: "Contact",      href: "#contact" },
