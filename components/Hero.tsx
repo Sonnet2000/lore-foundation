@@ -2,12 +2,30 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, Heart, Users, Globe } from "lucide-react";
+import { ArrowRight, Heart, Users } from "lucide-react";
+import { useEffect, useState } from "react";
 import Sparkle from "@/components/ui/Sparkle";
 import CurveDivider from "@/components/ui/CurveDivider";
 import { stats, siteInfo } from "@/lib/data";
 
+type MediaItem = { url: string; type: "image" | "video" };
+
+// Média statik pou fallback si pa gen done nan DB
+const FALLBACK: MediaItem = { url: "/hero-portrait.jpg", type: "image" };
+
 export default function Hero() {
+  const [heroMedia, setHeroMedia] = useState<MediaItem>(FALLBACK);
+
+  useEffect(() => {
+    fetch("/api/admin/hero")
+      .then((r) => r.json())
+      .then((data) => {
+        const first: MediaItem | undefined = data?.media?.[0];
+        if (first?.url) setHeroMedia(first);
+      })
+      .catch(() => {/* garde fallback */});
+  }, []);
+
   return (
     <section
       id="accueil"
@@ -113,7 +131,7 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Colonne droite — photo équipe */}
+        {/* Colonne droite — photo / vidéo dynamique */}
         <motion.div
           initial={{ opacity: 0, scale: 0.93 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -125,13 +143,24 @@ export default function Hero() {
 
           <div className="relative aspect-[4/5] w-full">
             <div className="relative h-full w-full overflow-hidden tab-corner-alt rounded-2xl border border-white/10 shadow-premium">
-              <Image
-                src="/hero-portrait.jpg"
-                alt="Équipe Loré Foundation"
-                fill
-                priority
-                className="object-cover object-top"
-              />
+              {heroMedia.type === "video" ? (
+                <video
+                  src={heroMedia.url}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="h-full w-full object-cover object-top"
+                />
+              ) : (
+                <Image
+                  src={heroMedia.url}
+                  alt="Équipe Loré Foundation"
+                  fill
+                  priority
+                  className="object-cover object-top"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/40 via-transparent to-transparent" />
             </div>
 

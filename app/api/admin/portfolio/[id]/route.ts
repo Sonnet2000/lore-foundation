@@ -14,6 +14,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (typeof body.category === "string") updates.category = body.category.slice(0, 100);
   if (typeof body.description === "string") updates.description = body.description.slice(0, 1000);
   if (Array.isArray(body.images)) updates.images = body.images.slice(0, 20);
+  if (Array.isArray(body.media)) updates.media = body.media.slice(0, 20);
   if (typeof body.sort_order === "number") updates.sort_order = body.sort_order;
 
   const { data, error } = await supabase

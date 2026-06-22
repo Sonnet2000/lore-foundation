@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { Plus, ImageOff, Loader2 } from "lucide-react";
+import { Plus, ImageOff, Loader2, Play } from "lucide-react";
 import {
   FieldLabel,
   TextInput,
@@ -11,11 +11,11 @@ import {
   GhostButton,
   RowCard,
 } from "./ui";
-import ImageListField from "./ImageListField";
+import MediaListField, { MediaItem } from "./MediaListField";
 import ConfirmModal from "./ConfirmModal";
 import type { PortfolioRow } from "./types";
 
-const emptyForm = { title: "", category: "", description: "", images: [] as string[] };
+const emptyForm = { title: "", category: "", description: "", media: [] as MediaItem[] };
 
 export default function PortfolioPanel() {
   const [items, setItems] = useState<PortfolioRow[] | null>(null);
@@ -53,11 +53,16 @@ export default function PortfolioPanel() {
   }
 
   function startEdit(item: PortfolioRow) {
+    // Supporte l'ancien format images[] ET le nouveau format media[]
+    const legacyMedia: MediaItem[] = (item.images ?? []).map((url) => ({ url, type: "image" as const }));
+    const media: MediaItem[] = Array.isArray((item as any).media) && (item as any).media.length
+      ? (item as any).media
+      : legacyMedia;
     setForm({
       title: item.title,
       category: item.category,
       description: item.description,
-      images: item.images ?? [],
+      media,
     });
     setEditingId(item.id);
     setError(null);
@@ -75,7 +80,14 @@ export default function PortfolioPanel() {
     const res = await fetch(isNew ? "/api/admin/portfolio" : `/api/admin/portfolio/${editingId}`, { credentials: "include", 
       method: isNew ? "POST" : "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify({
+        title: form.title,
+        category: form.category,
+        description: form.description,
+        media: form.media,
+        // Rétrocompat: envoie aussi images[] avec juste les URLs
+        images: form.media.map((m) => m.url),
+      }),
     });
 
     const data = await res.json();
@@ -164,10 +176,10 @@ export default function PortfolioPanel() {
           </div>
 
           <div className="mt-4">
-            <ImageListField
-              label="Photos du projet"
-              values={form.images}
-              onChange={(images) => setForm({ ...form, images })}
+            <MediaListField
+              label="Photos et vidéos du projet"
+              values={form.media}
+              onChange={(media) => setForm({ ...form, media })}
               folder="portfolio"
             />
           </div>
@@ -191,18 +203,43 @@ export default function PortfolioPanel() {
           <RowCard
             key={item.id}
             title={item.title}
-            subtitle={`${item.category} · ${item.images?.length ?? 0} photo(s)`}
-            thumbnail={
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-lore-dark/5 dark:bg-white/5">
-                {item.images?.[0] ? (
-                  <Image src={item.images[0]} alt="" fill className="object-cover" unoptimized />
-                ) : (
-                  <div className="flex h-full w-full items-center justify-center text-lore-ink/20 dark:text-white/20">
-                    <ImageOff className="h-5 w-5" />
-                  </div>
-                )}
-              </div>
-            }
+            subtitle={(() => {
+              const media: MediaItem[] = Array.isArray((item as any).media) && (item as any).media.length
+                ? (item as any).media
+                : (item.images ?? []).map((url) => ({ url, type: "image" as const }));
+              const imgCount = media.filter((m) => m.type !== "video").length;
+              const vidCount = media.filter((m) => m.type === "video").length;
+              const parts = [];
+              if (imgCount) parts.push(`${imgCount} photo(s)`);
+              if (vidCount) parts.push(`${vidCount} vidéo(s)`);
+              return `${item.category}${parts.length ? " · " + parts.join(", ") : ""}`;
+            })()}
+            thumbnail={(() => {
+              const media: MediaItem[] = Array.isArray((item as any).media) && (item as any).media.length
+                ? (item as any).media
+                : (item.images ?? []).map((url) => ({ url, type: "image" as const }));
+              const first = media[0];
+              return (
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-lore-dark/5 dark:bg-white/5">
+                  {first ? (
+                    first.type === "video" ? (
+                      <>
+                        <video src={first.url} muted playsInline className="h-full w-full object-cover" />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                          <Play className="h-4 w-4 fill-white text-white" />
+                        </div>
+                      </>
+                    ) : (
+                      <Image src={first.url} alt="" fill className="object-cover" unoptimized />
+                    )
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center text-lore-ink/20 dark:text-white/20">
+                      <ImageOff className="h-5 w-5" />
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
             onEdit={() => startEdit(item)}
             onDelete={() => setDeleteTarget(item)}
           />

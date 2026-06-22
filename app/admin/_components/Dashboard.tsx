@@ -6,9 +6,10 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
-  Settings, BookOpen, Target,
+  Settings, BookOpen, Target, Home,
 } from "lucide-react";
 import PortfolioPanel       from "./PortfolioPanel";
+import HeroPanel            from "./HeroPanel";
 import ServicesPanel        from "./ServicesPanel";
 import TeamPanel            from "./TeamPanel";
 import TestimonialsPanel    from "./TestimonialsPanel";
@@ -22,6 +23,7 @@ import BlogPanel            from "./BlogPanel";
 import ProjectsPanel        from "./ProjectsPanel";
 
 const TABS = [
+  { id: "hero",             label: "Accueil",       icon: Home,         group: "Contenu" },
   { id: "portfolio",        label: "Réalisations",   icon: FolderKanban, group: "Contenu" },
   { id: "services",         label: "Programmes",     icon: Layers,       group: "Contenu" },
   { id: "team",             label: "Équipe",         icon: Users,        group: "Contenu" },
@@ -39,6 +41,7 @@ const TABS = [
 type TabId = (typeof TABS)[number]["id"];
 
 const TAB_META: Record<TabId, { desc: string }> = {
+  hero:              { desc: "Jere foto ak vidéo ki parèt nan section accueil la" },
   portfolio:         { desc: "Gérez les actions et réalisations de la fondation" },
   services:          { desc: "Gérez les programmes et initiatives" },
   team:              { desc: "Bénévoles, formateurs et coordinateurs" },
@@ -55,7 +58,7 @@ const TAB_META: Record<TabId, { desc: string }> = {
 
 export default function Dashboard() {
   const router = useRouter();
-  const [active, setActive] = useState<TabId>("portfolio");
+  const [active, setActive] = useState<TabId>("hero");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   async function handleLogout() {
@@ -199,6 +202,7 @@ export default function Dashboard() {
         {/* Content */}
         <main className="flex-1 px-5 py-6 sm:px-8">
           <AdminStatusBanner />
+          {active === "hero"             && <HeroPanel />}
           {active === "portfolio"        && <PortfolioPanel />}
           {active === "services"         && <ServicesPanel />}
           {active === "team"             && <TeamPanel />}

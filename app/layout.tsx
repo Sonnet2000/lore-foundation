@@ -4,6 +4,8 @@ import Script from "next/script";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 
+const ADS_CLIENT = "ca-pub-7566847755875100";
+
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
   variable: "--font-bricolage",
@@ -58,10 +60,13 @@ export const metadata: Metadata = {
   verification: {
     google: "G-7DDF3Q1R44",
   },
+  other: {
+    // AdSense verification — visible dans le HTML statique pour le robot Google
+    "google-adsense-account": `${ADS_CLIENT}`,
+  },
 };
 
-const GA_ID  = "G-7DDF3Q1R44";
-const ADS_ID = "ca-pub-7566847755875100";
+const GA_ID = "G-7DDF3Q1R44";
 
 export default function RootLayout({
   children,
@@ -73,12 +78,16 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        {/* Google AdSense */}
+        {/*
+          AdSense — strategy="beforeInteractive" force Next.js a injecte
+          le script directement dans le HTML rendu côté serveur,
+          ce qui le rend visible pour le robot Google AdSense.
+        */}
         <Script
           async
-          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS_ID}`}
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS_CLIENT}`}
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
         />
       </head>
       <body className="bg-lore-cream font-body text-lore-ink antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">

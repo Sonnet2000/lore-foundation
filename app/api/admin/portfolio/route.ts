@@ -59,6 +59,7 @@ export async function POST(request: Request) {
       category: body.category ?? "",
       description: body.description ?? "",
       images: Array.isArray(body.images) ? body.images : [],
+      media: Array.isArray(body.media) ? body.media : [],
       sort_order: (maxRow?.sort_order ?? -1) + 1,
     })
     .select()
