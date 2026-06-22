@@ -19,11 +19,24 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
     const fileArr = Array.from(files);
-    const urls = await uploadMany(fileArr);
-    const uploaded: MediaItem[] = urls.map((url, i) => ({
-      url,
-      type: fileArr[i]?.type.startsWith("video/") ? "video" : "image",
-    }));
+
+    // On garde le type de chaque fichier avant l'upload, indexé par position originale.
+    // uploadMany peut sauter des fichiers si un upload échoue, ce qui décalerait
+    // le mapping url[i] <-> fileArr[i]. On résout ça en uploadant un par un
+    // et en construisant MediaItem[] au fur et à mesure.
+    const uploaded: MediaItem[] = [];
+
+    for (let i = 0; i < fileArr.length; i++) {
+      const file = fileArr[i];
+      const type: "image" | "video" = file.type.startsWith("video/") ? "video" : "image";
+      // uploadMany accepte un tableau — on lui passe un fichier à la fois
+      // pour garder le contrôle exact sur le type
+      const urls = await uploadMany([file]);
+      if (urls.length > 0 && urls[0]) {
+        uploaded.push({ url: urls[0], type });
+      }
+    }
+
     if (uploaded.length) onChange([...values, ...uploaded]);
   }
 
@@ -44,6 +57,7 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
       <p className="mb-1.5 text-sm font-medium text-lore-ink/70 dark:text-white/70">{label}</p>
       <p className="mb-2.5 text-xs text-lore-ink/40 dark:text-white/40">
         Photos (JPG, PNG, WEBP) ou courtes vidéos (MP4, WEBM, MOV — 80 Mo max).
+        Ou ka seleksyone <strong>plizyè foto</strong> alafwa.
       </p>
 
       <div className="flex flex-wrap gap-3">
@@ -62,6 +76,11 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
             ) : (
               <Image src={item.url} alt="" fill className="object-cover" unoptimized />
             )}
+
+            {/* Badge type */}
+            <span className="absolute left-1 top-1 rounded-full bg-black/50 px-1.5 py-0.5 text-[9px] font-bold uppercase text-white opacity-0 transition-opacity group-hover:opacity-100">
+              {item.type === "video" ? "VID" : "IMG"}
+            </span>
 
             <button
               type="button"
@@ -95,6 +114,7 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
           </div>
         ))}
 
+        {/* Bouton ajouter */}
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
@@ -119,6 +139,7 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
           )}
         </button>
 
+        {/* Input caché — multiple activé */}
         <input
           ref={inputRef}
           type="file"
@@ -128,6 +149,17 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
           onChange={(e) => handleFiles(e.target.files)}
         />
       </div>
+
+      {/* Compteur */}
+      {values.length > 0 && (
+        <p className="mt-2 text-xs text-lore-ink/40 dark:text-white/40">
+          {values.filter((m) => m.type !== "video").length} foto
+          {values.filter((m) => m.type === "video").length > 0
+            ? ` · ${values.filter((m) => m.type === "video").length} vidéo`
+            : ""}
+          {" "}· Premye a ap parèt kòm thumbnail
+        </p>
+      )}
 
       {error && <p className="mt-1.5 text-xs text-red-500">{error}</p>}
     </div>

@@ -8,8 +8,8 @@ const ALLOWED_EXTENSIONS: Record<string, string> = {
 };
 
 const ALLOWED_FOLDERS = new Set([
-  "portfolio", "seminars", "team", "services", "testimonials",
-  "payments", "misc",
+  "hero", "portfolio", "seminars", "team", "services", "testimonials",
+  "payments", "misc", "blog", "projects",
 ]);
 
 function extensionOf(filename: string) {
