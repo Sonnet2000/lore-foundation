@@ -10,6 +10,7 @@ export async function middleware(request: NextRequest) {
   const isPublicApi = pathname === "/api/pay"
     || pathname === "/api/sponsor-apply"
     || pathname === "/api/payment-methods"
+    || pathname === "/api/unsubscribe"
     || pathname.startsWith("/api/stripe")
     || pathname.startsWith("/api/blog")
     || pathname.startsWith("/paiement")

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Loader2, Plus, Pencil, Trash2, Eye, EyeOff,
-  Star, StarOff, Clock, Tag, X, BookOpen, Globe,
+  Star, StarOff, Clock, Tag, X, BookOpen, Globe, Bell,
 } from "lucide-react";
 import ConfirmModal from "./ConfirmModal";
 import { useFileUpload } from "./useFileUpload";
@@ -53,6 +53,8 @@ export default function BlogPanel() {
   const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [deleting, setDeleting]     = useState(false);
   const [preview, setPreview]       = useState(false);
+  const [notifying, setNotifying]   = useState<string | null>(null);
+  const [notifMsg, setNotifMsg]     = useState<string | null>(null);
   const { upload, uploading, error: uploadError } = useFileUpload("portfolio");
 
   useEffect(() => { refresh(); }, []);
@@ -145,6 +147,28 @@ export default function BlogPanel() {
       body: JSON.stringify({ is_featured: !post.is_featured }),
     });
     refresh();
+  }
+
+  async function notifySubscribers(post: BlogPost) {
+    if (!post.is_published) {
+      setNotifMsg("⚠️ Publiez l'article d'abord avant d'envoyer la notification.");
+      setTimeout(() => setNotifMsg(null), 4000);
+      return;
+    }
+    setNotifying(post.id);
+    const res  = await fetch("/api/admin/blog/notify", {
+      credentials: "include", method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ post_id: post.id }),
+    });
+    const data = await res.json().catch(() => ({}));
+    setNotifying(null);
+    if (res.ok) {
+      setNotifMsg(`✅ Notification envoyée à ${data.sent ?? 0} abonné(s) !`);
+    } else {
+      setNotifMsg(`❌ ${data.error || "Erreur lors de l'envoi."}`);
+    }
+    setTimeout(() => setNotifMsg(null), 5000);
   }
 
   async function confirmDelete() {
@@ -400,6 +424,16 @@ export default function BlogPanel() {
           </div>
         )}
 
+        {notifMsg && (
+          <div className={`rounded-2xl px-5 py-3 text-sm font-semibold ${
+            notifMsg.startsWith("✅") ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+            : notifMsg.startsWith("⚠️") ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+            : "bg-red-500/10 text-red-500"
+          }`}>
+            {notifMsg}
+          </div>
+        )}
+
         <div className="flex flex-col gap-3">
           {posts.map(post => (
             <div key={post.id}
@@ -445,6 +479,14 @@ export default function BlogPanel() {
                       post.is_published ? "text-emerald-500 hover:bg-emerald-500/10" : "text-lore-ink/30 hover:bg-lore-dark/5 dark:text-white/30"
                     }`}>
                     {post.is_published ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                  </button>
+                  <button type="button" onClick={() => notifySubscribers(post)}
+                    disabled={notifying === post.id}
+                    title="Notifier les abonnés par email"
+                    className="flex h-8 w-8 items-center justify-center rounded-full text-lore-ink/30 hover:bg-lore-blue/10 hover:text-lore-blue dark:text-white/30 transition-colors disabled:opacity-50">
+                    {notifying === post.id
+                      ? <Loader2 className="h-4 w-4 animate-spin" />
+                      : <Bell className="h-4 w-4" />}
                   </button>
                   <button type="button" onClick={() => startEdit(post)}
                     className="flex h-8 w-8 items-center justify-center rounded-full text-lore-ink/40 hover:bg-lore-blue/10 hover:text-lore-blue dark:text-white/40 transition-colors">

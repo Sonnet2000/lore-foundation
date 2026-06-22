@@ -2,11 +2,13 @@ import Navbar from "@/components/Navbar";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import Hero from "@/components/Hero";
 import WhyChooseUs from "@/components/WhyChooseUs";
+import BlogBanner from "@/components/BlogBanner";
 import Services from "@/components/Services";
 import Team from "@/components/Team";
 import Portfolio from "@/components/Portfolio";
 import Seminars from "@/components/Seminars";
 import Testimonials from "@/components/Testimonials";
+import Sponsors from "@/components/Sponsors";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import CurveDivider from "@/components/ui/CurveDivider";
@@ -27,6 +29,7 @@ export default async function Home() {
       <Navbar announcement={announcement} showSeminaires={showSeminaires} />
       <Hero />
       <WhyChooseUs />
+      <BlogBanner />
       <Services />
       <Team />
       <Portfolio />
@@ -41,6 +44,7 @@ export default async function Home() {
         <CurveDivider flip className="relative z-10 -mt-px" />
       </div>
 
+      <Sponsors />
       <Contact />
       <Footer />
     </main>
