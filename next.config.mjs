@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 
 const securityHeaders = [
-  // Prevent clickjacking
-  { key: "X-Frame-Options", value: "DENY" },
+  // Prevent clickjacking — NOTE: must allow Google AdSense frames
+  // X-Frame-Options DENY is replaced by frame-ancestors in CSP below
+  // { key: "X-Frame-Options", value: "DENY" },  ← removed: conflicts with AdSense iframes
+
   // Stop MIME-type sniffing
   { key: "X-Content-Type-Options", value: "nosniff" },
   // Referrer policy
@@ -17,29 +19,39 @@ const securityHeaders = [
     key: "Strict-Transport-Security",
     value: "max-age=31536000; includeSubDomains; preload",
   },
-  // Content Security Policy
-  // Inline styles/scripts needed for Next.js hydration → use nonce in a future step,
-  // for now 'unsafe-inline' is scoped tightly per directive.
+  // Content Security Policy — updated for Google AdSense compatibility
   {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // Next.js needs inline scripts + eval for dev; in prod only inline scripts
-      "script-src 'self' 'unsafe-inline'",
-      // Tailwind + Framer Motion inject inline styles
+
+      // Scripts: Next.js inline + Google AdSense + Google APIs
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://adservice.google.com https://www.google.com https://www.gstatic.com",
+
+      // Styles: Tailwind + Framer Motion + Google Fonts
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      // Google Fonts
+
+      // Fonts: Google Fonts
       "font-src 'self' https://fonts.gstatic.com",
-      // Images: self + Supabase Storage
-      "img-src 'self' data: blob: https://*.supabase.co",
+
+      // Images: self + Supabase + Google AdSense image CDN
+      "img-src 'self' data: blob: https://*.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://*.google.com https://*.gstatic.com",
+
       // Videos: self + Supabase Storage
       "media-src 'self' blob: https://*.supabase.co",
-      // API calls: self + Supabase + Resend
-      "connect-src 'self' https://*.supabase.co https://api.resend.com",
+
+      // API calls: self + Supabase + Resend + AdSense endpoints
+      "connect-src 'self' https://*.supabase.co https://api.resend.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://*.googlesyndication.com",
+
+      // Frames: Google AdSense iframes (required for ad rendering)
+      "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.googlesyndication.com https://www.google.com",
+
+      // frame-ancestors: restricts who can embed THIS site in an iframe
+      "frame-ancestors 'self'",
+
       // No <object>, <embed>, or <applet>
       "object-src 'none'",
-      // No iframes from other origins
-      "frame-src 'none'",
+
       "base-uri 'self'",
       "form-action 'self'",
       "upgrade-insecure-requests",
@@ -62,7 +74,7 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
-      // HARDENED: was `hostname: "**"` (any origin) — now scoped to Supabase only.
+      // HARDENED: scoped to Supabase only.
       {
         protocol: "https",
         hostname: "*.supabase.co",
