@@ -48,12 +48,15 @@ export type TeamMember = {
   showSocial?: boolean;
 };
 
+export type MediaItem = { url: string; type: "image" | "video" };
+
 export type PortfolioItem = {
   id: string;
   title: string;
   category: string;
   description: string;
   images?: string[];
+  media?: MediaItem[];
 };
 
 export type Testimonial = {

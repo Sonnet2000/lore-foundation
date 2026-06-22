@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { ChevronLeft, ChevronRight, ImageOff } from "lucide-react";
+import { ChevronLeft, ChevronRight, ImageOff, Play } from "lucide-react";
 import Modal from "@/components/ui/Modal";
-import type { PortfolioItem } from "@/lib/data";
+import type { PortfolioItem, MediaItem } from "@/lib/data";
 
 type PortfolioGalleryProps = {
   item: PortfolioItem | null;
@@ -12,45 +12,65 @@ type PortfolioGalleryProps = {
 };
 
 export default function PortfolioGallery({ item, onClose }: PortfolioGalleryProps) {
-  const images = item?.images ?? [];
+  // Konsolide media: prefere media[], sinon konvèti images[] an MediaItem[]
+  const mediaList: MediaItem[] =
+    Array.isArray(item?.media) && item!.media!.length > 0
+      ? item!.media!
+      : (item?.images ?? []).map((url) => ({ url, type: "image" as const }));
+
   const [activeIndex, setActiveIndex] = useState(0);
 
-  // Reset to the first image whenever a new project is opened.
+  // Reset chak fwa yon nouvo pwojè louvri
   useEffect(() => {
     setActiveIndex(0);
   }, [item]);
 
   const goTo = (next: number) => {
-    if (images.length === 0) return;
-    setActiveIndex((next + images.length) % images.length);
+    if (mediaList.length === 0) return;
+    setActiveIndex((next + mediaList.length) % mediaList.length);
   };
+
+  const current = mediaList[activeIndex];
 
   return (
     <Modal open={item !== null} onClose={onClose}>
       {item && (
         <div>
+          {/* ── Zone média principale ── */}
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-t-4xl bg-gradient-to-br from-lore-emerald/15 via-lore-cream to-lore-dark/10 dark:from-lore-emerald/10 dark:via-lore-night-surface dark:to-lore-dark/20">
-            {images.length > 0 ? (
-              <Image
-                src={images[activeIndex]}
-                alt={`${item.title} — image ${activeIndex + 1}`}
-                fill
-                className="object-cover"
-                unoptimized
-              />
+            {mediaList.length > 0 ? (
+              current.type === "video" ? (
+                <video
+                  key={current.url}
+                  src={current.url}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="h-full w-full object-contain bg-black"
+                />
+              ) : (
+                <Image
+                  src={current.url}
+                  alt={`${item.title} — média ${activeIndex + 1}`}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+              )
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center gap-3 text-lore-dark/30 dark:text-white/25">
                 <ImageOff className="h-12 w-12" strokeWidth={1.5} />
-                <p className="text-sm font-medium">Photos à venir</p>
+                <p className="text-sm font-medium">Médias à venir</p>
               </div>
             )}
 
-            {images.length > 1 && (
+            {/* Bouton navigasyon */}
+            {mediaList.length > 1 && (
               <>
                 <button
                   type="button"
                   onClick={() => goTo(activeIndex - 1)}
-                  aria-label="Image précédente"
+                  aria-label="Média précédent"
                   className="focus-ring absolute left-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-lore-ink shadow-card transition-colors hover:bg-white dark:bg-lore-night/80 dark:text-white dark:hover:bg-lore-night"
                 >
                   <ChevronLeft className="h-5 w-5" />
@@ -58,19 +78,20 @@ export default function PortfolioGallery({ item, onClose }: PortfolioGalleryProp
                 <button
                   type="button"
                   onClick={() => goTo(activeIndex + 1)}
-                  aria-label="Image suivante"
+                  aria-label="Média suivant"
                   className="focus-ring absolute right-4 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90 text-lore-ink shadow-card transition-colors hover:bg-white dark:bg-lore-night/80 dark:text-white dark:hover:bg-lore-night"
                 >
                   <ChevronRight className="h-5 w-5" />
                 </button>
 
+                {/* Pon navigasyon anba */}
                 <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-2">
-                  {images.map((_, i) => (
+                  {mediaList.map((_, i) => (
                     <button
                       key={i}
                       type="button"
                       onClick={() => setActiveIndex(i)}
-                      aria-label={`Voir l'image ${i + 1}`}
+                      aria-label={`Voir le média ${i + 1}`}
                       className={`h-2 rounded-full transition-all ${
                         i === activeIndex ? "w-6 bg-lore-gold" : "w-2 bg-white/60"
                       }`}
@@ -81,6 +102,7 @@ export default function PortfolioGallery({ item, onClose }: PortfolioGalleryProp
             )}
           </div>
 
+          {/* ── Infòmasyon pwojè ── */}
           <div className="p-6 sm:p-8">
             <p className="text-xs font-semibold uppercase tracking-[0.15em] text-lore-emerald dark:text-lore-emerald-light">
               {item.category}
@@ -92,11 +114,12 @@ export default function PortfolioGallery({ item, onClose }: PortfolioGalleryProp
               {item.description}
             </p>
 
-            {images.length > 1 && (
+            {/* ── Miniati yo ── */}
+            {mediaList.length > 1 && (
               <div className="mt-6 grid grid-cols-4 gap-2 sm:grid-cols-6">
-                {images.map((src, i) => (
+                {mediaList.map((m, i) => (
                   <button
-                    key={src + i}
+                    key={m.url + i}
                     type="button"
                     onClick={() => setActiveIndex(i)}
                     aria-label={`Miniature ${i + 1}`}
@@ -106,7 +129,21 @@ export default function PortfolioGallery({ item, onClose }: PortfolioGalleryProp
                         : "ring-transparent hover:ring-lore-emerald/50"
                     }`}
                   >
-                    <Image src={src} alt="" fill className="object-cover" unoptimized />
+                    {m.type === "video" ? (
+                      <>
+                        <video
+                          src={m.url}
+                          muted
+                          playsInline
+                          className="h-full w-full object-cover"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                          <Play className="h-4 w-4 fill-white text-white" />
+                        </div>
+                      </>
+                    ) : (
+                      <Image src={m.url} alt="" fill className="object-cover" unoptimized />
+                    )}
                   </button>
                 ))}
               </div>

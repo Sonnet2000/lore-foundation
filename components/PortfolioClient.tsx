@@ -5,8 +5,8 @@ import Image from "next/image";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
 import PortfolioGallery from "@/components/ui/PortfolioGallery";
-import { ArrowUpRight, FolderKanban } from "lucide-react";
-import { type PortfolioItem } from "@/lib/data";
+import { ArrowUpRight, FolderKanban, Play } from "lucide-react";
+import { type PortfolioItem, type MediaItem } from "@/lib/data";
 
 export default function PortfolioClient({ items: portfolio }: { items: PortfolioItem[] }) {
   const [activeItem, setActiveItem] = useState<PortfolioItem | null>(null);
@@ -24,7 +24,12 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
 
         <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {portfolio.map((item, i) => {
-            const cover = item.images?.[0];
+            // Rezoud média cover: prefere media[], sinon images[]
+            const mediaList: MediaItem[] =
+              Array.isArray(item.media) && item.media.length > 0
+                ? item.media
+                : (item.images ?? []).map((url) => ({ url, type: "image" as const }));
+            const cover = mediaList[0];
 
             return (
               <AnimatedSection key={item.title} delay={(i % 3) * 0.08}>
@@ -42,13 +47,31 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
                   <div className="absolute inset-0 rounded-2xl ring-1 ring-white/8" />
 
                   {cover ? (
-                    <Image
-                      src={cover}
-                      alt={item.title}
-                      fill
-                      unoptimized
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
+                    cover.type === "video" ? (
+                      <>
+                        <video
+                          src={cover.url}
+                          muted
+                          playsInline
+                          loop
+                          autoPlay
+                          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                        {/* Badge vidéo */}
+                        <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1">
+                          <Play className="h-3 w-3 fill-white text-white" />
+                          <span className="text-[10px] font-semibold text-white">Vidéo</span>
+                        </div>
+                      </>
+                    ) : (
+                      <Image
+                        src={cover.url}
+                        alt={item.title}
+                        fill
+                        unoptimized
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    )
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <FolderKanban

@@ -18,6 +18,9 @@ async function getPortfolioItems(): Promise<PortfolioItem[]> {
       category: row.category,
       description: row.description,
       images: row.images ?? [],
+      media: Array.isArray(row.media) && row.media.length > 0
+        ? row.media
+        : (row.images ?? []).map((url: string) => ({ url, type: "image" as const })),
     }));
   } catch {
     // Supabase not configured yet — show the built-in placeholder content
