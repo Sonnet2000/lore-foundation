@@ -41,7 +41,7 @@ export async function POST(request: Request) {
       : `Choisis toi-même un sujet pertinent et inspirant en lien avec la mission de Loré Foundation (éducation, technologie, leadership, jeunesse, communauté haïtienne) et écris un article de blog complet à ce sujet.`;
 
     const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,6 +63,12 @@ export async function POST(request: Request) {
 
     if (!res.ok) {
       const errText = await res.text();
+      if (res.status === 429) {
+        return NextResponse.json(
+          { error: "Limite quotidienne Gemini atteinte (tier gratuit). Réessayez dans quelques minutes, ou demain si la limite journalière est dépassée." },
+          { status: 429 }
+        );
+      }
       return NextResponse.json(
         { error: `Erreur API Gemini (${res.status}): ${errText.slice(0, 250)}` },
         { status: 500 }
