@@ -1,57 +1,100 @@
 import { NextResponse } from "next/server";
 
-const SYSTEM_PROMPT = `Tu es un rédacteur professionnel pour le blog de Loré Foundation, une fondation haïtienne basée à Cap-Haïtien dont la mission est : "Améliorer la vie des gens à travers l'éducation, la formation digitale, le développement des jeunes, le leadership, l'innovation et l'action communautaire." Slogan : "Former. Inspirer. Transformer."
+const SYSTEM_CONTEXT = `Tu es un rédacteur professionnel pour le blog de Loré Foundation, une fondation haïtienne basée à Cap-Haïtien dont la mission est : "Améliorer la vie des gens à travers l'éducation, la formation digitale, le développement des jeunes, le leadership, l'innovation et l'action communautaire." Slogan : "Former. Inspirer. Transformer."
 
-Règles impératives :
-- Écris en français, ton inspirant, professionnel mais chaleureux et accessible
-- L'article doit avoir un lien clair avec la mission de Loré Foundation (éducation, technologie, leadership, jeunesse, communauté en Haïti) — même si le sujet de départ est plus large (ex: IA, entrepreneuriat), ramène toujours à l'impact concret sur la jeunesse haïtienne ou la communauté
+Le blog couvre deux types de contenu :
+1. Des articles sur les activités et programmes propres à Loré Foundation
+2. Des articles d'actualité et d'analyse sur le monde — technologie, intelligence artificielle, éducation, entrepreneuriat, innovation sociale — basés sur des informations RÉELLES ET RÉCENTES, qui informent et inspirent les lecteurs.`;
+
+const WRITING_RULES = `Règles impératives :
+- Écris en français, ton journalistique, informé, professionnel et accessible
+- Base-toi UNIQUEMENT sur les informations réelles et vérifiées trouvées via la recherche — ne complète jamais avec des faits inventés
+- Si une information n'est pas confirmée par la recherche, ne l'affirme pas
 - Structure avec des titres ## et ### en Markdown
 - Utilise des listes à puces quand pertinent
-- Inclus des exemples concrets liés à Haïti quand possible
-- Évite le jargon technique inutile — écris pour un public large
-- Longueur : 600 à 900 mots
-- Termine par un paragraphe d'appel à l'action invitant à découvrir les programmes de Loré Foundation ou à devenir partenaire
+- Évite le jargon technique inutile — écris pour un public large et curieux
+- Longueur : 600 à 1000 mots
+- Le dernier paragraphe peut être une réflexion, une conclusion, ou (si pertinent) une invitation à découvrir Loré Foundation — selon ce qui convient naturellement au sujet`;
 
-Réponds UNIQUEMENT avec un objet JSON valide, sans aucun texte avant ou après, sans balises markdown \`\`\`json, au format exact suivant :
+function getApiKey() {
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new Error("GEMINI_API_KEY manquant. Ajoutez-le dans les variables Vercel.");
+  return key;
+}
+
+export async function POST(request: Request) {
+  try {
+    const apiKey = getApiKey();
+    const body = await request.json().catch(() => ({}));
+    const topic = (body.topic ?? "").trim();
+    const category = body.category ?? "";
+    const useSearch = body.use_search !== false; // activé par défaut
+
+    // ── ÉTAPE 1 : Recherche d'actualités récentes via Google Search grounding ──
+    let researchNotes = "";
+    let sources: { title: string; uri: string }[] = [];
+
+    if (useSearch) {
+      const searchPrompt = topic
+        ? `Recherche les informations les plus récentes et fiables sur le sujet suivant : "${topic}". Résume en 5-8 points factuels précis (dates, chiffres, événements récents, déclarations officielles) que tu trouves via la recherche. Cite uniquement des faits vérifiés.`
+        : `Recherche l'actualité récente et marquante dans l'un de ces domaines : technologie, intelligence artificielle, éducation, entrepreneuriat ou innovation sociale dans le monde. Choisis UN sujet d'actualité précis et récent, puis résume en 5-8 points factuels précis ce que tu trouves (dates, chiffres, événements, déclarations officielles).`;
+
+      const searchRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ role: "user", parts: [{ text: searchPrompt }] }],
+            tools: [{ google_search: {} }],
+            generationConfig: { temperature: 0.3, maxOutputTokens: 2048 },
+          }),
+        }
+      );
+
+      if (searchRes.ok) {
+        const searchData = await searchRes.json();
+        researchNotes = searchData.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+        const groundingChunks = searchData.candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
+        sources = groundingChunks
+          .map((c: { web?: { title?: string; uri?: string } }) => ({
+            title: c.web?.title ?? "",
+            uri: c.web?.uri ?? "",
+          }))
+          .filter((s: { uri: string }) => s.uri)
+          .slice(0, 5);
+      } else if (searchRes.status === 429) {
+        return NextResponse.json(
+          { error: "Limite quotidienne Gemini atteinte (tier gratuit). Réessayez dans quelques minutes ou demain." },
+          { status: 429 }
+        );
+      }
+      // Si la recherche échoue pour une autre raison, on continue sans (fallback connaissance du modèle)
+    }
+
+    // ── ÉTAPE 2 : Rédaction structurée de l'article en JSON ──
+    const writingPrompt = topic
+      ? `${SYSTEM_CONTEXT}\n\n${WRITING_RULES}\n\n${researchNotes ? `Voici des informations récentes et vérifiées trouvées par recherche web :\n${researchNotes}\n\nÉcris maintenant un article de blog complet sur "${topic}"${category ? ` (catégorie : ${category})` : ""} en te basant sur ces informations.` : `Écris un article de blog sur "${topic}"${category ? ` (catégorie : ${category})` : ""}.`}`
+      : `${SYSTEM_CONTEXT}\n\n${WRITING_RULES}\n\n${researchNotes ? `Voici des informations récentes et vérifiées trouvées par recherche web :\n${researchNotes}\n\nÉcris maintenant un article de blog complet basé sur ces informations d'actualité.` : `Choisis un sujet pertinent lié à l'éducation, la technologie ou Loré Foundation et écris un article complet.`}`;
+
+    const jsonFormatInstruction = `\n\nRéponds UNIQUEMENT avec un objet JSON valide, sans aucun texte avant ou après, sans balises markdown \`\`\`json, au format exact suivant :
 {
   "title": "Titre accrocheur de l'article (60-80 caractères)",
   "excerpt": "Résumé accrocheur de 1-2 phrases (150-250 caractères)",
   "content": "Contenu complet en Markdown avec ## et ### pour les titres",
   "category": "une seule valeur parmi: technologie, education, ia, entrepreneuriat, activites, actualites, leadership",
   "tags": ["3 à 5 tags pertinents en minuscules"],
-  "read_time_minutes": un nombre entre 3 et 8
+  "read_time_minutes": un nombre entre 3 et 8,
+  "image_keywords": "2 à 4 mots-clés en anglais décrivant une image qui illustrerait bien le sujet"
 }`;
 
-export async function POST(request: Request) {
-  try {
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: "GEMINI_API_KEY manquant. Ajoutez-le dans les variables Vercel." },
-        { status: 500 }
-      );
-    }
-
-    const body = await request.json().catch(() => ({}));
-    const topic = (body.topic ?? "").trim();
-    const category = body.category ?? "";
-
-    const userPrompt = topic
-      ? `Écris un article de blog sur le sujet suivant : "${topic}"${category ? ` (catégorie suggérée : ${category})` : ""}.`
-      : `Choisis toi-même un sujet pertinent et inspirant en lien avec la mission de Loré Foundation (éducation, technologie, leadership, jeunesse, communauté haïtienne) et écris un article de blog complet à ce sujet.`;
-
-    const res = await fetch(
+    const writeRes = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          contents: [
-            {
-              role: "user",
-              parts: [{ text: `${SYSTEM_PROMPT}\n\n---\n\n${userPrompt}` }],
-            },
-          ],
+          contents: [{ role: "user", parts: [{ text: writingPrompt + jsonFormatInstruction }] }],
           generationConfig: {
             temperature: 0.8,
             maxOutputTokens: 4096,
@@ -61,41 +104,33 @@ export async function POST(request: Request) {
       }
     );
 
-    if (!res.ok) {
-      const errText = await res.text();
-      if (res.status === 429) {
+    if (!writeRes.ok) {
+      const errText = await writeRes.text();
+      if (writeRes.status === 429) {
         return NextResponse.json(
-          { error: "Limite quotidienne Gemini atteinte (tier gratuit). Réessayez dans quelques minutes, ou demain si la limite journalière est dépassée." },
+          { error: "Limite quotidienne Gemini atteinte (tier gratuit). Réessayez dans quelques minutes ou demain." },
           { status: 429 }
         );
       }
       return NextResponse.json(
-        { error: `Erreur API Gemini (${res.status}): ${errText.slice(0, 250)}` },
+        { error: `Erreur API Gemini (${writeRes.status}): ${errText.slice(0, 250)}` },
         { status: 500 }
       );
     }
 
-    const data = await res.json();
-    const rawText: string =
-      data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+    const writeData = await writeRes.json();
+    const rawText: string = writeData.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 
     if (!rawText) {
-      return NextResponse.json(
-        { error: "Gemini n'a renvoyé aucun contenu. Réessayez." },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Gemini n'a renvoyé aucun contenu. Réessayez." }, { status: 500 });
     }
 
     const cleaned = rawText.replace(/```json\s*|\s*```/g, "").trim();
-
     let parsed;
     try {
       parsed = JSON.parse(cleaned);
     } catch {
-      return NextResponse.json(
-        { error: "Réponse IA invalide (JSON mal formé). Réessayez." },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: "Réponse IA invalide (JSON mal formé). Réessayez." }, { status: 500 });
     }
 
     const VALID_CATEGORIES = ["technologie", "education", "ia", "entrepreneuriat", "activites", "actualites", "leadership"];
@@ -112,7 +147,39 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "L'IA n'a pas généré de contenu valide." }, { status: 500 });
     }
 
-    return NextResponse.json({ item: result });
+    // Ajouter les sources en bas de l'article si on a fait une recherche
+    if (sources.length > 0) {
+      const sourcesText = sources
+        .filter(s => s.title && s.uri)
+        .map(s => `- [${s.title}](${s.uri})`)
+        .join("\n");
+      if (sourcesText) {
+        result.content += `\n\n## Sources\n\n${sourcesText}`;
+      }
+    }
+
+    // ── Recherche d'une image de couverture pertinente via Unsplash ──
+    let cover_url: string | null = null;
+    const unsplashKey = process.env.UNSPLASH_ACCESS_KEY;
+    if (unsplashKey) {
+      try {
+        const searchQuery = String(parsed.image_keywords ?? (result.tags.join(" ") || result.category));
+        const imgRes = await fetch(
+          `https://api.unsplash.com/search/photos?query=${encodeURIComponent(searchQuery)}&per_page=1&orientation=landscape`,
+          { headers: { Authorization: `Client-ID ${unsplashKey}` } }
+        );
+        if (imgRes.ok) {
+          const imgData = await imgRes.json();
+          cover_url = imgData.results?.[0]?.urls?.regular ?? null;
+        }
+      } catch { /* pas bloquant */ }
+    }
+
+    return NextResponse.json({
+      item: { ...result, cover_url },
+      used_search: useSearch && !!researchNotes,
+      sources_count: sources.length,
+    });
 
   } catch (e: unknown) {
     return NextResponse.json(

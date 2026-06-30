@@ -58,8 +58,10 @@ export default function BlogPanel() {
   const [aiModalOpen, setAiModalOpen] = useState(false);
   const [aiTopic, setAiTopic]       = useState("");
   const [aiCategory, setAiCategory] = useState("");
+  const [aiUseSearch, setAiUseSearch] = useState(true);
   const [aiGenerating, setAiGenerating] = useState(false);
   const [aiError, setAiError]       = useState<string | null>(null);
+  const [aiSearchUsed, setAiSearchUsed] = useState<{ used: boolean; sources: number } | null>(null);
   const { upload, uploading, error: uploadError } = useFileUpload("portfolio");
 
   useEffect(() => { refresh(); }, []);
@@ -78,6 +80,7 @@ export default function BlogPanel() {
     setTagInput("");
     setError(null);
     setPreview(false);
+    setAiSearchUsed(null);
   }
 
   function startEdit(post: BlogPost) {
@@ -98,6 +101,7 @@ export default function BlogPanel() {
     setTagInput("");
     setError(null);
     setPreview(false);
+    setAiSearchUsed(null);
   }
 
   function addTag() {
@@ -183,7 +187,7 @@ export default function BlogPanel() {
       const res = await fetch("/api/admin/blog/generate", {
         credentials: "include", method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic: aiTopic.trim(), category: aiCategory }),
+        body: JSON.stringify({ topic: aiTopic.trim(), category: aiCategory, use_search: aiUseSearch }),
       });
       const data = await res.json().catch(() => ({}));
       setAiGenerating(false);
@@ -191,6 +195,7 @@ export default function BlogPanel() {
         setAiError(data.error || "Erreur lors de la génération.");
         return;
       }
+      setAiSearchUsed({ used: !!data.used_search, sources: data.sources_count ?? 0 });
       // Préremplir le formulaire avec le contenu généré — en mode preview/édition
       setEditingId("new");
       setForm({
@@ -201,6 +206,7 @@ export default function BlogPanel() {
         category:          data.item.category,
         tags:              data.item.tags,
         read_time_minutes: data.item.read_time_minutes,
+        cover_url:         data.item.cover_url || "",
         is_published:      false, // toujours brouillon — l'utilisateur valide
       });
       setAiModalOpen(false);
@@ -244,6 +250,18 @@ export default function BlogPanel() {
             {preview ? "Éditeur" : "Aperçu"}
           </button>
         </div>
+
+        {aiSearchUsed && (
+          <div className={`rounded-xl px-4 py-3 text-xs font-semibold flex items-center gap-2 ${
+            aiSearchUsed.used
+              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+              : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+          }`}>
+            {aiSearchUsed.used
+              ? `🔍 Recherche web effectuée — ${aiSearchUsed.sources} source(s) trouvée(s). Vérifiez les faits avant publication.`
+              : "⚠️ Recherche web non disponible — article basé sur les connaissances générales de l'IA. Vérifiez bien les faits."}
+          </div>
+        )}
 
         {/* Preview mode */}
         {preview ? (
@@ -599,12 +617,29 @@ export default function BlogPanel() {
                     </select>
                   </Field>
 
+                  {/* Toggle recherche web */}
+                  <label className="flex items-center gap-3 cursor-pointer rounded-xl border border-lore-dark/10 dark:border-white/10 px-4 py-3">
+                    <div onClick={() => setAiUseSearch(!aiUseSearch)}
+                      className={`flex h-6 w-11 shrink-0 items-center rounded-full transition-colors ${aiUseSearch ? "bg-emerald-500" : "bg-lore-dark/20 dark:bg-white/20"}`}>
+                      <span className={`mx-1 h-4 w-4 rounded-full bg-white shadow transition-transform ${aiUseSearch ? "translate-x-5" : ""}`} />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-lore-ink dark:text-white">
+                        🔍 Rechercher l&apos;actualité réelle sur le web
+                      </p>
+                      <p className="text-xs text-lore-ink/50 dark:text-white/50">
+                        L&apos;IA cherchera des informations récentes et vérifiées avant d&apos;écrire
+                      </p>
+                    </div>
+                  </label>
+
                   {aiError && <div className="rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-500">{aiError}</div>}
 
                   <div className="rounded-xl bg-blue-500/5 border border-blue-500/15 px-4 py-3 text-xs text-lore-ink/60 dark:text-white/60">
-                    💡 L&apos;IA écrira un article complet en lien avec la mission de Loré Foundation
-                    (éducation, technologie, leadership, jeunesse haïtienne). Vous pourrez le modifier
-                    avant de le publier.
+                    💡 L&apos;IA peut écrire sur des sujets d&apos;actualité, de technologie, d&apos;éducation
+                    ou directement sur Loré Foundation, et cherchera automatiquement une image de
+                    couverture pertinente. Important : l&apos;IA n&apos;a pas accès à l&apos;actualité
+                    en temps réel — vérifiez toujours les faits récents avant publication.
                   </div>
 
                   <button type="button" onClick={generateWithAI}
