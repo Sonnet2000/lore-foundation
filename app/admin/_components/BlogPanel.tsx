@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import {
   Loader2, Plus, Pencil, Trash2, Eye, EyeOff,
-  Star, StarOff, Clock, Tag, X, BookOpen, Globe, Bell,
+  Star, StarOff, Clock, Tag, X, BookOpen, Globe, Bell, Sparkles,
 } from "lucide-react";
 import ConfirmModal from "./ConfirmModal";
 import { useFileUpload } from "./useFileUpload";
@@ -55,6 +55,11 @@ export default function BlogPanel() {
   const [preview, setPreview]       = useState(false);
   const [notifying, setNotifying]   = useState<string | null>(null);
   const [notifMsg, setNotifMsg]     = useState<string | null>(null);
+  const [aiModalOpen, setAiModalOpen] = useState(false);
+  const [aiTopic, setAiTopic]       = useState("");
+  const [aiCategory, setAiCategory] = useState("");
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiError, setAiError]       = useState<string | null>(null);
   const { upload, uploading, error: uploadError } = useFileUpload("portfolio");
 
   useEffect(() => { refresh(); }, []);
@@ -169,6 +174,43 @@ export default function BlogPanel() {
       setNotifMsg(`❌ ${data.error || "Erreur lors de l'envoi."}`);
     }
     setTimeout(() => setNotifMsg(null), 5000);
+  }
+
+  async function generateWithAI() {
+    setAiError(null);
+    setAiGenerating(true);
+    try {
+      const res = await fetch("/api/admin/blog/generate", {
+        credentials: "include", method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ topic: aiTopic.trim(), category: aiCategory }),
+      });
+      const data = await res.json().catch(() => ({}));
+      setAiGenerating(false);
+      if (!res.ok || !data.item) {
+        setAiError(data.error || "Erreur lors de la génération.");
+        return;
+      }
+      // Préremplir le formulaire avec le contenu généré — en mode preview/édition
+      setEditingId("new");
+      setForm({
+        ...emptyForm,
+        title:             data.item.title,
+        excerpt:           data.item.excerpt,
+        content:           data.item.content,
+        category:          data.item.category,
+        tags:              data.item.tags,
+        read_time_minutes: data.item.read_time_minutes,
+        is_published:      false, // toujours brouillon — l'utilisateur valide
+      });
+      setAiModalOpen(false);
+      setAiTopic("");
+      setAiCategory("");
+      setPreview(true); // ouvre directement en aperçu
+    } catch (e) {
+      setAiGenerating(false);
+      setAiError(e instanceof Error ? e.message : "Erreur réseau.");
+    }
   }
 
   async function confirmDelete() {
@@ -402,10 +444,16 @@ export default function BlogPanel() {
               {drafts > 0 && <span className="ml-2 text-amber-500 font-semibold">{drafts} brouillons</span>}
             </p>
           </div>
-          <button type="button" onClick={startNew}
-            className="flex items-center gap-2 rounded-full bg-lore-blue px-5 py-2.5 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
-            <Plus className="h-4 w-4" /> Nouvel article
-          </button>
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => setAiModalOpen(true)}
+              className="flex items-center gap-2 rounded-full border-2 border-purple-400/30 bg-gradient-to-r from-purple-500/10 to-blue-500/10 px-5 py-2.5 text-sm font-bold text-purple-600 dark:text-purple-300 hover:from-purple-500/20 hover:to-blue-500/20 transition-colors">
+              <Sparkles className="h-4 w-4" /> Générer avec IA
+            </button>
+            <button type="button" onClick={startNew}
+              className="flex items-center gap-2 rounded-full bg-lore-blue px-5 py-2.5 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
+              <Plus className="h-4 w-4" /> Nouvel article
+            </button>
+          </div>
         </div>
 
         {posts.length === 0 && (
@@ -502,6 +550,73 @@ export default function BlogPanel() {
           ))}
         </div>
       </div>
+
+      {/* Modal génération IA */}
+      {aiModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-5">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !aiGenerating && setAiModalOpen(false)} />
+          <div className="relative w-full max-w-lg rounded-3xl bg-white dark:bg-lore-night-surface shadow-2xl overflow-hidden">
+
+            <div className="bg-gradient-to-r from-purple-500/10 to-blue-500/10 px-6 py-5 flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 text-white">
+                <Sparkles className="h-5 w-5" />
+              </div>
+              <div className="flex-1">
+                <p className="font-display font-bold text-lore-ink dark:text-white">Générer un article avec IA</p>
+                <p className="text-xs text-lore-ink/50 dark:text-white/50">L&apos;article sera créé en brouillon — vous le validez avant publication</p>
+              </div>
+              {!aiGenerating && (
+                <button type="button" onClick={() => setAiModalOpen(false)}
+                  className="flex h-8 w-8 items-center justify-center rounded-full text-lore-ink/40 hover:bg-lore-dark/5 dark:text-white/40">
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+
+            <div className="p-6 flex flex-col gap-4">
+              {aiGenerating ? (
+                <div className="flex flex-col items-center gap-4 py-8 text-center">
+                  <div className="relative">
+                    <Loader2 className="h-12 w-12 animate-spin text-purple-500" />
+                    <Sparkles className="absolute inset-0 m-auto h-5 w-5 text-blue-500" />
+                  </div>
+                  <p className="font-semibold text-sm text-lore-ink dark:text-white">L&apos;IA rédige votre article...</p>
+                  <p className="text-xs text-lore-ink/50 dark:text-white/50">Cela peut prendre 15-30 secondes</p>
+                </div>
+              ) : (
+                <>
+                  <Field label="Sujet de l'article (optionnel)">
+                    <textarea value={aiTopic} onChange={e => setAiTopic(e.target.value)}
+                      rows={3}
+                      placeholder="ex: L'importance de l'IA dans l'éducation en Haïti — ou laissez vide pour que l'IA choisisse un sujet pertinent"
+                      className={INPUT} />
+                  </Field>
+
+                  <Field label="Catégorie suggérée (optionnel)">
+                    <select value={aiCategory} onChange={e => setAiCategory(e.target.value)} className={INPUT}>
+                      <option value="">Laisser l'IA décider</option>
+                      {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>)}
+                    </select>
+                  </Field>
+
+                  {aiError && <div className="rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-500">{aiError}</div>}
+
+                  <div className="rounded-xl bg-blue-500/5 border border-blue-500/15 px-4 py-3 text-xs text-lore-ink/60 dark:text-white/60">
+                    💡 L&apos;IA écrira un article complet en lien avec la mission de Loré Foundation
+                    (éducation, technologie, leadership, jeunesse haïtienne). Vous pourrez le modifier
+                    avant de le publier.
+                  </div>
+
+                  <button type="button" onClick={generateWithAI}
+                    className="flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 px-7 py-3.5 text-sm font-bold text-white hover:opacity-90 transition-opacity">
+                    <Sparkles className="h-4 w-4" /> Générer l&apos;article
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
