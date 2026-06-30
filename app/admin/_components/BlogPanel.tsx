@@ -594,7 +594,7 @@ export default function BlogPanel() {
 
                   <Field label="Catégorie suggérée (optionnel)">
                     <select value={aiCategory} onChange={e => setAiCategory(e.target.value)} className={INPUT}>
-                      <option value="">Laisser l'IA décider</option>
+                      <option value="">Laisser l&apos;IA décider</option>
                       {CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.emoji} {c.label}</option>)}
                     </select>
                   </Field>
