@@ -12,7 +12,7 @@ Règles impératives :
 - Longueur : 600 à 900 mots
 - Termine par un paragraphe d'appel à l'action invitant à découvrir les programmes de Loré Foundation ou à devenir partenaire
 
-Réponds UNIQUEMENT avec un objet JSON valide, sans aucun texte avant ou après, au format exact suivant :
+Réponds UNIQUEMENT avec un objet JSON valide, sans aucun texte avant ou après, sans balises markdown \`\`\`json, au format exact suivant :
 {
   "title": "Titre accrocheur de l'article (60-80 caractères)",
   "excerpt": "Résumé accrocheur de 1-2 phrases (150-250 caractères)",
@@ -24,10 +24,10 @@ Réponds UNIQUEMENT avec un objet JSON valide, sans aucun texte avant ou après,
 
 export async function POST(request: Request) {
   try {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "ANTHROPIC_API_KEY manquant. Ajoutez-le dans les variables Vercel." },
+        { error: "GEMINI_API_KEY manquant. Ajoutez-le dans les variables Vercel." },
         { status: 500 }
       );
     }
@@ -40,33 +40,46 @@ export async function POST(request: Request) {
       ? `Écris un article de blog sur le sujet suivant : "${topic}"${category ? ` (catégorie suggérée : ${category})` : ""}.`
       : `Choisis toi-même un sujet pertinent et inspirant en lien avec la mission de Loré Foundation (éducation, technologie, leadership, jeunesse, communauté haïtienne) et écris un article de blog complet à ce sujet.`;
 
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
-      },
-      body: JSON.stringify({
-        model: "claude-sonnet-4-6",
-        max_tokens: 4000,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: "user", content: userPrompt }],
-      }),
-    });
+    const res = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            {
+              role: "user",
+              parts: [{ text: `${SYSTEM_PROMPT}\n\n---\n\n${userPrompt}` }],
+            },
+          ],
+          generationConfig: {
+            temperature: 0.8,
+            maxOutputTokens: 4096,
+            responseMimeType: "application/json",
+          },
+        }),
+      }
+    );
 
     if (!res.ok) {
       const errText = await res.text();
       return NextResponse.json(
-        { error: `Erreur API Claude (${res.status}): ${errText.slice(0, 200)}` },
+        { error: `Erreur API Gemini (${res.status}): ${errText.slice(0, 250)}` },
         { status: 500 }
       );
     }
 
     const data = await res.json();
-    const rawText = data.content?.[0]?.text ?? "";
+    const rawText: string =
+      data.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
 
-    // Nettoyer et parser le JSON (au cas où Claude ajoute des ```json fences)
+    if (!rawText) {
+      return NextResponse.json(
+        { error: "Gemini n'a renvoyé aucun contenu. Réessayez." },
+        { status: 500 }
+      );
+    }
+
     const cleaned = rawText.replace(/```json\s*|\s*```/g, "").trim();
 
     let parsed;
@@ -74,12 +87,11 @@ export async function POST(request: Request) {
       parsed = JSON.parse(cleaned);
     } catch {
       return NextResponse.json(
-        { error: "Réponse IA invalide. Réessayez." },
+        { error: "Réponse IA invalide (JSON mal formé). Réessayez." },
         { status: 500 }
       );
     }
 
-    // Validation basique
     const VALID_CATEGORIES = ["technologie", "education", "ia", "entrepreneuriat", "activites", "actualites", "leadership"];
     const result = {
       title:             String(parsed.title ?? "").slice(0, 150),
