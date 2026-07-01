@@ -6,6 +6,7 @@ import { ArrowRight, Heart, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import Sparkle from "@/components/ui/Sparkle";
 import CurveDivider from "@/components/ui/CurveDivider";
+import Globe3D from "@/components/ui/Globe3D";
 import { stats, siteInfo } from "@/lib/data";
 
 type MediaItem = { url: string; type: "image" | "video" };
@@ -46,7 +47,10 @@ export default function Hero() {
       <Sparkle className="absolute right-[12%] top-44 hidden sm:block" size={20} />
       <Sparkle className="absolute left-[42%] top-16 hidden lg:block" size={16} />
 
-      <div className="mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-2 lg:gap-10 lg:px-12">
+      {/* Glòb 3D — reprezante enpak global Loré Foundation, an background dous */}
+      <Globe3D className="absolute -right-[18%] top-1/2 hidden h-[130%] w-[70%] -translate-y-1/2 md:block lg:-right-[10%] lg:h-[150%] lg:w-[60%]" />
+
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-2 lg:gap-10 lg:px-12">
         {/* Colonne gauche */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
