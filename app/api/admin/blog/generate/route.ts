@@ -36,8 +36,8 @@ export async function POST(request: Request) {
 
     if (useSearch) {
       const searchPrompt = topic
-        ? `Recherche les informations les plus récentes et fiables sur le sujet suivant : "${topic}". Résume en 5-8 points factuels précis (dates, chiffres, événements récents, déclarations officielles) que tu trouves via la recherche. Cite uniquement des faits vérifiés.`
-        : `Recherche l'actualité récente et marquante dans l'un de ces domaines : technologie, intelligence artificielle, éducation, entrepreneuriat ou innovation sociale dans le monde. Choisis UN sujet d'actualité précis et récent, puis résume en 5-8 points factuels précis ce que tu trouves (dates, chiffres, événements, déclarations officielles).`;
+        ? `Recherche des informations récentes et fiables sur : "${topic}". Donne-moi 5 points factuels précis trouvés en ligne (dates, chiffres, faits vérifiés). Sois concis.`
+        : `Trouve UNE actualité récente et intéressante dans un de ces domaines : technologie, IA, éducation, entrepreneuriat. Résume en 4-5 points factuels précis (dates, faits vérifiés). Sois concis.`;
 
       const searchRes = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 
       if (searchRes.ok) {
         const searchData = await searchRes.json();
-        researchNotes = searchData.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+        researchNotes = (searchData.candidates?.[0]?.content?.parts?.[0]?.text ?? "").slice(0, 1500);
         const groundingChunks = searchData.candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
         sources = groundingChunks
           .map((c: { web?: { title?: string; uri?: string } }) => ({
@@ -126,11 +126,45 @@ export async function POST(request: Request) {
     }
 
     const cleaned = rawText.replace(/```json\s*|\s*```/g, "").trim();
+
+    // Essayer d'extraire un objet JSON même si du texte l'entoure
     let parsed;
     try {
       parsed = JSON.parse(cleaned);
     } catch {
-      return NextResponse.json({ error: "Réponse IA invalide (JSON mal formé). Réessayez." }, { status: 500 });
+      // Chercher un bloc JSON dans le texte (entre { et })
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        try {
+          parsed = JSON.parse(jsonMatch[0]);
+        } catch {
+          // Si toujours invalide, demander une correction à Gemini
+          const fixRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{
+                  role: "user",
+                  parts: [{ text: `Le texte suivant contient un article de blog mais n'est pas un JSON valide. Extrais les informations et retourne UNIQUEMENT un objet JSON valide dans ce format exact, sans aucun texte avant ou après :\n{"title":"...","excerpt":"...","content":"...","category":"actualites","tags":["tag1"],"read_time_minutes":5,"image_keywords":"keyword"}\n\nTexte à convertir:\n${rawText.slice(0, 3000)}` }],
+                }],
+                generationConfig: { temperature: 0.1, maxOutputTokens: 4096, responseMimeType: "application/json" },
+              }),
+            }
+          );
+          if (fixRes.ok) {
+            const fixData = await fixRes.json();
+            const fixText = fixData.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+            try { parsed = JSON.parse(fixText.replace(/```json\s*|\s*```/g, "").trim()); }
+            catch { return NextResponse.json({ error: "Réponse IA invalide après correction. Réessayez." }, { status: 500 }); }
+          } else {
+            return NextResponse.json({ error: "Réponse IA invalide (JSON mal formé). Réessayez." }, { status: 500 });
+          }
+        }
+      } else {
+        return NextResponse.json({ error: "Réponse IA invalide (JSON mal formé). Réessayez." }, { status: 500 });
+      }
     }
 
     const VALID_CATEGORIES = ["technologie", "education", "ia", "entrepreneuriat", "activites", "actualites", "leadership"];
