@@ -347,3 +347,69 @@ create table if not exists project_donations (
 
 alter table projects enable row level security;
 alter table project_donations enable row level security;
+
+-- ─────────────────────────────────────────────────────────────────────────
+-- Espace membre : comptes utilisateurs (Supabase Auth) + profils
+-- ─────────────────────────────────────────────────────────────────────────
+-- L'authentification elle-même (mot de passe, Google) est gérée par
+-- Supabase Auth (schéma "auth", déjà fourni par Supabase — rien à créer
+-- ici). Il faut seulement, dans le Dashboard Supabase :
+--   1. Authentication → Providers → activer "Email".
+--   2. Authentication → Providers → activer "Google" et renseigner le
+--      Client ID / Client Secret Google (voir README pour les étapes).
+--   3. Authentication → URL Configuration → ajouter l'URL de votre site
+--      (ex: https://votre-site.vercel.app) dans "Redirect URLs".
+--
+-- La table `profiles` ci-dessous stocke les infos complémentaires (nom
+-- complet, téléphone, photo) et se remplit automatiquement à l'inscription
+-- grâce au trigger `on_auth_user_created`.
+
+create table if not exists profiles (
+  id uuid primary key references auth.users(id) on delete cascade,
+  full_name text not null default '',
+  phone text not null default '',
+  avatar_url text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table profiles enable row level security;
+
+-- Crée automatiquement une ligne `profiles` dès qu'un compte est créé
+-- (inscription email/mot de passe OU première connexion Google).
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  insert into public.profiles (id, full_name, avatar_url)
+  values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'name', ''),
+    new.raw_user_meta_data->>'avatar_url'
+  )
+  on conflict (id) do nothing;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_created on auth.users;
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute function public.handle_new_user();
+
+-- Relie les dons et inscriptions à un compte utilisateur quand la personne
+-- est connectée au moment de l'action. Reste "null" pour les dons/paiements
+-- faits sans compte (le tableau de bord rattrape aussi l'historique existant
+-- en comparant l'adresse email).
+alter table project_donations add column if not exists user_id uuid references auth.users(id) on delete set null;
+alter table payments add column if not exists user_id uuid references auth.users(id) on delete set null;
+alter table seminar_registrations add column if not exists user_id uuid references auth.users(id) on delete set null;
+
+create index if not exists project_donations_user_id_idx on project_donations(user_id);
+create index if not exists payments_user_id_idx on payments(user_id);
+create index if not exists seminar_registrations_user_id_idx on seminar_registrations(user_id);
+create index if not exists project_donations_donor_email_idx on project_donations(lower(donor_email));
+create index if not exists seminar_registrations_email_idx on seminar_registrations(lower(email));
+create index if not exists sponsors_email_idx on sponsors(lower(email));

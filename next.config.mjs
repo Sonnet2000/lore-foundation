@@ -79,6 +79,11 @@ const nextConfig = {
         protocol: "https",
         hostname: "*.supabase.co",
       },
+      // Photos de profil Google (connexion "Continuer avec Google").
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
     ],
   },
 };

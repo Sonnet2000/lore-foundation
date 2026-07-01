@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ArrowRight, Megaphone } from "lucide-react";
 import { navLinks, type Announcement } from "@/lib/data";
 import ThemeToggle from "@/components/ThemeToggle";
+import AccountNavLink from "@/components/account/AccountNavLink";
 
 type NavbarProps = {
   announcement?: Announcement | null;
@@ -134,6 +135,7 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
         {/* Desktop CTA */}
         <div className="hidden items-center gap-3 lg:flex">
           <ThemeToggle />
+          <AccountNavLink />
           <a
             href="#contact"
             className="btn-gold focus-ring rounded-full px-6 py-2.5 text-sm font-bold transition-transform duration-200 hover:scale-105"
@@ -196,6 +198,9 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
                 transition={{ duration: 0.3, delay: 0.3 }}
                 className="flex flex-col gap-4"
               >
+                <div onClick={() => setOpen(false)}>
+                  <AccountNavLink variant="mobile" />
+                </div>
                 <a
                   href="#contact"
                   onClick={() => setOpen(false)}
