@@ -146,3 +146,25 @@ export function RowCard({
 export function DragHint() {
   return <GripVertical className="h-4 w-4 shrink-0 text-lore-ink/20 dark:text-white/20" />;
 }
+
+type StatCardProps = {
+  label: string;
+  value: string | number;
+  icon: React.ComponentType<{ className?: string }>;
+  hint?: string;
+};
+
+export function StatCard({ label, value, icon: Icon, hint }: StatCardProps) {
+  return (
+    <div className="flex flex-col gap-2 rounded-2xl border border-lore-dark/5 bg-white p-4 dark:border-white/5 dark:bg-lore-night-surface">
+      <div className="flex items-center justify-between">
+        <span className="text-xs font-semibold uppercase tracking-wide text-lore-ink/40 dark:text-white/40">
+          {label}
+        </span>
+        <Icon className="h-4 w-4 text-lore-emerald dark:text-lore-emerald-light" />
+      </div>
+      <p className="font-display text-2xl font-bold text-lore-ink dark:text-white">{value}</p>
+      {hint && <p className="text-xs text-lore-ink/40 dark:text-white/40">{hint}</p>}
+    </div>
+  );
+}

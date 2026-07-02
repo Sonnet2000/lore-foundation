@@ -72,6 +72,7 @@ export async function middleware(request: NextRequest) {
     || pathname === "/api/sponsor-apply"
     || pathname === "/api/payment-methods"
     || pathname === "/api/unsubscribe"
+    || pathname === "/api/track"
     || pathname.startsWith("/api/stripe")
     || pathname.startsWith("/api/blog")
     || pathname.startsWith("/api/projects")

@@ -148,6 +148,41 @@ export type BlogPost = {
   updated_at: string;
 };
 
+export type UserRow = {
+  id: string;
+  email: string;
+  full_name: string;
+  phone: string;
+  avatar_url: string | null;
+  created_at: string;
+  last_sign_in_at: string | null;
+  banned: boolean;
+  provider: string;
+  donationsCount: number;
+  donationsTotal: number;
+  paymentsCount: number;
+  paymentsTotal: number;
+  seminarsCount: number;
+};
+
+export type DailyStat = { date: string; views: number; visitors: number };
+export type TopPage = { path: string; views: number };
+export type TopReferrer = { referrer: string; views: number };
+
+export type AnalyticsSummary = {
+  totalViews: number;
+  totalVisitors: number;
+  viewsToday: number;
+  visitorsToday: number;
+  views7d: number;
+  visitors7d: number;
+  views30d: number;
+  visitors30d: number;
+  daily: DailyStat[];
+  topPages: TopPage[];
+  topReferrers: TopReferrer[];
+};
+
 export type ProjectCategory = 'education'|'numerique'|'leadership'|'communaute'|'sante'|'autre';
 export type ProjectStatus = 'actif'|'complete'|'pause';
 

@@ -6,7 +6,7 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
-  Settings, BookOpen, Target, Home,
+  Settings, BookOpen, Target, Home, UserCog, BarChart3,
 } from "lucide-react";
 import PortfolioPanel       from "./PortfolioPanel";
 import HeroPanel            from "./HeroPanel";
@@ -21,6 +21,8 @@ import PaymentsPanel        from "./PaymentsPanel";
 import PaymentMethodsPanel  from "./PaymentMethodsPanel";
 import BlogPanel            from "./BlogPanel";
 import ProjectsPanel        from "./ProjectsPanel";
+import UsersPanel           from "./UsersPanel";
+import AnalyticsPanel       from "./AnalyticsPanel";
 
 const TABS = [
   { id: "hero",             label: "Accueil",       icon: Home,         group: "Contenu" },
@@ -36,6 +38,8 @@ const TABS = [
   { id: "payments",        label: "Contributions", icon: CreditCard,  group: "Engagement" },
   { id: "payment-methods", label: "Méthodes paiem",icon: Settings,    group: "Engagement" },
   { id: "subscribers",     label: "Abonnés",       icon: Mail,        group: "Engagement" },
+  { id: "users",           label: "Utilisateurs",  icon: UserCog,     group: "Utilisateurs" },
+  { id: "analytics",       label: "Statistiques",  icon: BarChart3,   group: "Utilisateurs" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -54,6 +58,8 @@ const TAB_META: Record<TabId, { desc: string }> = {
   payments:          { desc: "Contributions et soutiens financiers reçus" },
   "payment-methods": { desc: "Configurez MonCash, NatCash, Sogebank et autres méthodes" },
   subscribers:       { desc: "Personnes inscrites à la newsletter" },
+  users:             { desc: "Tout moun ki gen kont sou espas manm — jere, bloke oswa efase" },
+  analytics:         { desc: "Estatistik vizit sit la — trafik, paj popilè, vizitè" },
 };
 
 export default function Dashboard() {
@@ -69,6 +75,7 @@ export default function Dashboard() {
 
   const contentTabs   = TABS.filter(t => t.group === "Contenu");
   const engageTabs    = TABS.filter(t => t.group === "Engagement");
+  const usersTabs     = TABS.filter(t => t.group === "Utilisateurs");
   const activeTab     = TABS.find(t => t.id === active)!;
 
   return (
@@ -89,6 +96,7 @@ export default function Dashboard() {
         <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-6">
           <SideGroup label="Contenu du site" tabs={contentTabs} active={active} onSelect={setActive} />
           <SideGroup label="Engagement & Finance" tabs={engageTabs} active={active} onSelect={setActive} />
+          <SideGroup label="Utilisateurs & Trafic" tabs={usersTabs} active={active} onSelect={setActive} />
         </nav>
 
         {/* Footer */}
@@ -121,6 +129,7 @@ export default function Dashboard() {
             <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-6">
               <SideGroup label="Contenu du site" tabs={contentTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
               <SideGroup label="Engagement & Finance" tabs={engageTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
+              <SideGroup label="Utilisateurs & Trafic" tabs={usersTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
             </nav>
             <div className="border-t border-black/5 dark:border-white/5 px-3 py-4 flex flex-col gap-2">
               <a href="/" target="_blank" rel="noopener noreferrer"
@@ -215,6 +224,8 @@ export default function Dashboard() {
           {active === "payments"         && <PaymentsPanel />}
           {active === "payment-methods"  && <PaymentMethodsPanel />}
           {active === "subscribers"      && <SubscribersPanel />}
+          {active === "users"            && <UsersPanel />}
+          {active === "analytics"        && <AnalyticsPanel />}
         </main>
       </div>
     </div>

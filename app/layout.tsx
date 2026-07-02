@@ -3,6 +3,7 @@ import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
+import VisitorTracker from "@/components/VisitorTracker";
 
 const ADS_CLIENT = "ca-pub-7566847755875100";
 
@@ -108,7 +109,10 @@ export default function RootLayout({
           `}
         </Script>
 
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <VisitorTracker />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
