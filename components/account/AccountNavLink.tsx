@@ -16,21 +16,37 @@ export default function AccountNavLink({ variant = "desktop" }: { variant?: "des
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const supabase = createSupabaseBrowserClient();
-
-    supabase.auth.getUser().then(({ data }) => {
-      const user = data.user;
-      setSession(
-        user
-          ? {
-              displayName:
-                (user.user_metadata?.full_name as string | undefined) || user.email?.split("@")[0] || "Membre",
-              avatarUrl: (user.user_metadata?.avatar_url as string | undefined) ?? null,
-            }
-          : null
-      );
+    let supabase;
+    try {
+      supabase = createSupabaseBrowserClient();
+    } catch (err) {
+      // Variables d'environnement manquantes ou mal configurées : on masque
+      // simplement le lien de connexion plutôt que de faire planter tout le
+      // site. On log pour que ce soit visible dans la console/monitoring.
+      console.error("AccountNavLink: Supabase indisponible —", err);
       setReady(true);
-    });
+      return;
+    }
+
+    supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        const user = data.user;
+        setSession(
+          user
+            ? {
+                displayName:
+                  (user.user_metadata?.full_name as string | undefined) || user.email?.split("@")[0] || "Membre",
+                avatarUrl: (user.user_metadata?.avatar_url as string | undefined) ?? null,
+              }
+            : null
+        );
+        setReady(true);
+      })
+      .catch((err) => {
+        console.error("AccountNavLink: getUser a échoué —", err);
+        setReady(true);
+      });
 
     const { data: sub } = supabase.auth.onAuthStateChange((_event, sessionState) => {
       const user = sessionState?.user;
