@@ -6,7 +6,7 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
-  Settings, BookOpen, Target, Home, UserCog, BarChart3,
+  Settings, BookOpen, Target, Home, UserCog, BarChart3, Share2,
 } from "lucide-react";
 import PortfolioPanel       from "./PortfolioPanel";
 import HeroPanel            from "./HeroPanel";
@@ -23,6 +23,7 @@ import BlogPanel            from "./BlogPanel";
 import ProjectsPanel        from "./ProjectsPanel";
 import UsersPanel           from "./UsersPanel";
 import AnalyticsPanel       from "./AnalyticsPanel";
+import SiteInfoPanel        from "./SiteInfoPanel";
 
 const TABS = [
   { id: "hero",             label: "Accueil",       icon: Home,         group: "Contenu" },
@@ -34,6 +35,7 @@ const TABS = [
   { id: "projects",         label: "Projets",        icon: Target,       group: "Contenu" },
   { id: "announcements",    label: "Annonces",       icon: Megaphone,    group: "Contenu" },
   { id: "seminars",         label: "Séminaires",     icon: Calendar,     group: "Contenu" },
+  { id: "site-info",        label: "Coordonnées",    icon: Share2,       group: "Contenu" },
   { id: "sponsors",        label: "Partenaires",   icon: HandHeart,   group: "Engagement" },
   { id: "payments",        label: "Contributions", icon: CreditCard,  group: "Engagement" },
   { id: "payment-methods", label: "Méthodes paiem",icon: Settings,    group: "Engagement" },
@@ -54,6 +56,7 @@ const TAB_META: Record<TabId, { desc: string }> = {
   projects:          { desc: "Projets à financer — gérez médias, objectifs et dons" },
   announcements:     { desc: "Annonces visibles en haut du site" },
   seminars:          { desc: "Séminaires et formations à venir" },
+  "site-info":       { desc: "Telefòn, imèl, adrès ak lyen rezo sosyal (Facebook, TikTok, YouTube, elt.)" },
   sponsors:          { desc: "Partenaires, sponsors et organisations collaboratrices" },
   payments:          { desc: "Contributions et soutiens financiers reçus" },
   "payment-methods": { desc: "Configurez MonCash, NatCash, Sogebank et autres méthodes" },
@@ -220,6 +223,7 @@ export default function Dashboard() {
           {active === "projects"         && <ProjectsPanel />}
           {active === "announcements"    && <AnnouncementsPanel />}
           {active === "seminars"         && <SeminarsPanel />}
+          {active === "site-info"        && <SiteInfoPanel />}
           {active === "sponsors"         && <SponsorsPanel />}
           {active === "payments"         && <PaymentsPanel />}
           {active === "payment-methods"  && <PaymentMethodsPanel />}

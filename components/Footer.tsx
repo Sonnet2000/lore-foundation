@@ -1,9 +1,12 @@
 import Image from "next/image";
 import { MapPin, Mail, Phone } from "lucide-react";
-import { navLinks, services, socialLinks, siteInfo } from "@/lib/data";
+import { navLinks, services, siteInfo } from "@/lib/data";
+import { getContactInfo } from "@/lib/site-info-server";
+import { PLATFORM_META, socialLinkLabel } from "@/lib/site-info";
 
-export default function Footer() {
+export default async function Footer() {
   const year = new Date().getFullYear();
+  const contact = await getContactInfo();
 
   return (
     <footer className="relative overflow-hidden px-5 pt-16 text-white sm:px-8 lg:px-12"
@@ -52,18 +55,21 @@ export default function Footer() {
 
             {/* Social links */}
             <div className="mt-6 flex items-center gap-2.5">
-              {socialLinks.map(({ name, Icon, href }) => (
-                <a
-                  key={name}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${name} — Loré Foundation`}
-                  className="focus-ring group flex h-10 w-10 items-center justify-center rounded-full text-white/60 ring-1 ring-white/10 transition-all hover:ring-lore-gold hover:text-lore-darker hover:bg-lore-gold"
-                >
-                  <Icon className="h-4 w-4" />
-                </a>
-              ))}
+              {contact.socialLinks.map((link) => {
+                const Icon = PLATFORM_META[link.platform].Icon;
+                return (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${socialLinkLabel(link)} — Loré Foundation`}
+                    className="focus-ring group flex h-10 w-10 items-center justify-center rounded-full text-white/60 ring-1 ring-white/10 transition-all hover:ring-lore-gold hover:text-lore-darker hover:bg-lore-gold"
+                  >
+                    <Icon className="h-4 w-4" />
+                  </a>
+                );
+              })}
             </div>
           </div>
 
@@ -113,9 +119,9 @@ export default function Footer() {
             <ul className="mt-5 flex flex-col gap-4 text-sm text-white/50">
               <li className="flex items-start gap-3">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-lore-gold/70" />
-                {siteInfo.address}
+                {contact.address}
               </li>
-              {siteInfo.phones.map((phone) => (
+              {contact.phones.map((phone) => (
                 <li key={phone} className="flex items-start gap-3">
                   <Phone className="mt-0.5 h-4 w-4 shrink-0 text-lore-gold/70" />
                   {phone}
@@ -123,7 +129,7 @@ export default function Footer() {
               ))}
               <li className="flex items-start gap-3">
                 <Mail className="mt-0.5 h-4 w-4 shrink-0 text-lore-gold/70" />
-                {siteInfo.email}
+                {contact.email}
               </li>
             </ul>
           </div>

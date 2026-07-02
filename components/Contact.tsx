@@ -1,15 +1,28 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone, Send, MessageCircle } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { services, siteInfo } from "@/lib/data";
+import { services } from "@/lib/data";
+import { DEFAULT_CONTACT, type ContactInfo } from "@/lib/site-info";
 
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
-  const [whatsappUrl, setWhatsappUrl] = useState(siteInfo.whatsapp);
+  const [contact, setContact] = useState<ContactInfo>(DEFAULT_CONTACT);
+  const [whatsappUrl, setWhatsappUrl] = useState<string>("");
+
+  useEffect(() => {
+    fetch("/api/site-info")
+      .then((r) => r.json())
+      .then((data: ContactInfo) => setContact(data))
+      .catch(() => {});
+  }, []);
+
+  const primaryWhatsappUrl =
+    contact.socialLinks.find((l) => l.platform === "whatsapp")?.url ||
+    `https://wa.me/${contact.whatsappNumber}`;
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +41,7 @@ export default function Contact() {
       phone ? `Téléphone : ${phone}` : "",
     ].filter(Boolean);
 
-    const url = `https://wa.me/${siteInfo.whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
+    const url = `https://wa.me/${contact.whatsappNumber}?text=${encodeURIComponent(lines.join("\n"))}`;
     setWhatsappUrl(url);
     window.open(url, "_blank", "noopener,noreferrer");
     setSubmitted(true);
@@ -83,9 +96,9 @@ export default function Contact() {
 
               <div className="mt-8 flex flex-col gap-5">
                 {[
-                  { icon: MapPin, label: "Adresse", value: siteInfo.address },
-                  { icon: Phone, label: "Téléphone", value: siteInfo.phones.join(" · ") },
-                  { icon: Mail, label: "Email", value: siteInfo.email },
+                  { icon: MapPin, label: "Adresse", value: contact.address },
+                  { icon: Phone, label: "Téléphone", value: contact.phones.join(" · ") },
+                  { icon: Mail, label: "Email", value: contact.email },
                 ].map(({ icon: Icon, label, value }) => (
                   <div key={label} className="flex items-start gap-4">
                     <span
@@ -103,7 +116,7 @@ export default function Contact() {
               </div>
 
               <a
-                href={siteInfo.whatsapp}
+                href={primaryWhatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-gold focus-ring mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-[1.02]"
@@ -189,7 +202,7 @@ export default function Contact() {
 
                   <div className="sm:col-span-1">
                     <label htmlFor="phone" className={labelClasses}>Téléphone</label>
-                    <input id="phone" name="phone" type="tel" placeholder={siteInfo.phones[0]} className={inputClasses} />
+                    <input id="phone" name="phone" type="tel" placeholder={contact.phones[0]} className={inputClasses} />
                   </div>
 
                   <div className="sm:col-span-1">

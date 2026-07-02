@@ -2,7 +2,9 @@ import Image from "next/image";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { getSupabase } from "@/lib/supabase";
-import { team as fallbackTeam, socialLinks, type TeamMember } from "@/lib/data";
+import { team as fallbackTeam, type TeamMember } from "@/lib/data";
+import { getContactInfo } from "@/lib/site-info-server";
+import { PLATFORM_META, socialLinkLabel } from "@/lib/site-info";
 
 async function getTeam(): Promise<TeamMember[]> {
   try {
@@ -27,7 +29,7 @@ async function getTeam(): Promise<TeamMember[]> {
 }
 
 export default async function Team() {
-  const team = await getTeam();
+  const [team, contact] = await Promise.all([getTeam(), getContactInfo()]);
 
   return (
     <section
@@ -98,18 +100,21 @@ export default async function Team() {
 
                 {member.showSocial && (
                   <div className="mt-5 flex items-center gap-2.5">
-                    {socialLinks.map(({ name, Icon, href }) => (
-                      <a
-                        key={name}
-                        href={href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`${name} — ${member.name}`}
-                        className="focus-ring flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-lore-dark/10 text-lore-dark/55 transition-all hover:bg-lore-emerald hover:ring-lore-emerald hover:text-white dark:ring-white/10 dark:text-white/55"
-                      >
-                        <Icon className="h-4 w-4" />
-                      </a>
-                    ))}
+                    {contact.socialLinks.map((link) => {
+                      const Icon = PLATFORM_META[link.platform].Icon;
+                      return (
+                        <a
+                          key={link.id}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`${socialLinkLabel(link)} — ${member.name}`}
+                          className="focus-ring flex h-9 w-9 items-center justify-center rounded-full ring-1 ring-lore-dark/10 text-lore-dark/55 transition-all hover:bg-lore-emerald hover:ring-lore-emerald hover:text-white dark:ring-white/10 dark:text-white/55"
+                        >
+                          <Icon className="h-4 w-4" />
+                        </a>
+                      );
+                    })}
                   </div>
                 )}
               </div>
