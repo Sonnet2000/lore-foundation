@@ -3,6 +3,8 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getOrCreateProfile, getAccountOverview } from "@/lib/account";
 import DashboardView from "./DashboardView";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Tableau de bord",
   robots: { index: false, follow: false },

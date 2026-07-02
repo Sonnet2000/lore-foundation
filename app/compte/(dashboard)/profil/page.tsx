@@ -3,6 +3,8 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getOrCreateProfile } from "@/lib/account";
 import ProfileForm from "./ProfileForm";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Mon profil",
   robots: { index: false, follow: false },
