@@ -1,6 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+// Route de redirection OAuth/email : jamais de pré-génération au build.
+export const dynamic = "force-dynamic";
+
 /**
  * Route de retour après :
  *  - un clic sur "Continuer avec Google" (OAuth),

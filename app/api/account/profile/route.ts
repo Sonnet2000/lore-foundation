@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSupabase } from "@/lib/supabase";
 
+// Route liée à l'utilisateur connecté : jamais de pré-génération au build.
+export const dynamic = "force-dynamic";
+
 export async function PATCH(request: Request) {
   const supabaseAuth = await createSupabaseServerClient();
   const {

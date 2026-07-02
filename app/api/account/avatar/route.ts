@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getSupabase, MEDIA_BUCKET } from "@/lib/supabase";
 
+// Route liée à l'utilisateur connecté : jamais de pré-génération au build.
+export const dynamic = "force-dynamic";
+
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_SIZE_BYTES = 3 * 1024 * 1024; // 3 MB — photo de profil uniquement
 

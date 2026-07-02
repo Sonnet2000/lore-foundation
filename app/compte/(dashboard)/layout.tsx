@@ -5,6 +5,12 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 import { getOrCreateProfile } from "@/lib/account";
 import AccountSidebarNav from "@/components/account/AccountSidebarNav";
 
+// Espace compte = toujours lié à l'utilisateur connecté (cookies/session).
+// On force le rendu dynamique pour que Next.js n'essaie JAMAIS de pré-générer
+// ces pages au moment du build (ce qui plantait le build quand les variables
+// Supabase n'étaient pas encore visibles à cette étape).
+export const dynamic = "force-dynamic";
+
 export default async function AccountDashboardLayout({ children }: { children: React.ReactNode }) {
   const supabase = await createSupabaseServerClient();
   const {
