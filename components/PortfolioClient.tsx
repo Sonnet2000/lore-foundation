@@ -22,7 +22,7 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
           />
         </AnimatedSection>
 
-        <div className="mt-10 grid gap-4 sm:mt-14 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-2 gap-3.5 sm:mt-14 sm:gap-5 lg:grid-cols-3">
           {portfolio.map((item, i) => {
             // Rezoud média cover: prefere media[], sinon images[]
             const mediaList: MediaItem[] =
@@ -37,14 +37,13 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
                   type="button"
                   id={`portfolio-${item.id}`}
                   onClick={() => setActiveItem(item)}
-                  className="focus-ring group relative block w-full scroll-mt-28 overflow-hidden rounded-2xl text-left"
-                  style={{ aspectRatio: "16/10" }}
+                  className="focus-ring group relative block aspect-[4/5] w-full scroll-mt-28 overflow-hidden rounded-xl text-left sm:aspect-[16/10] sm:rounded-2xl"
                 >
                   {/* Background */}
                   <div className="absolute inset-0 bg-gradient-to-br from-lore-dark/80 via-lore-night-surface to-lore-darker" />
 
                   {/* Subtle border */}
-                  <div className="absolute inset-0 rounded-2xl ring-1 ring-white/8" />
+                  <div className="absolute inset-0 rounded-xl ring-1 ring-white/8 sm:rounded-2xl" />
 
                   {cover ? (
                     cover.type === "video" ? (
@@ -58,9 +57,9 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
                           className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                         {/* Badge vidéo */}
-                        <div className="absolute left-3 top-3 flex items-center gap-1 rounded-full bg-black/60 px-2 py-1">
-                          <Play className="h-3 w-3 fill-white text-white" />
-                          <span className="text-[10px] font-semibold text-white">Vidéo</span>
+                        <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/60 px-1.5 py-0.5 sm:left-3 sm:top-3 sm:px-2 sm:py-1">
+                          <Play className="h-2.5 w-2.5 fill-white text-white sm:h-3 sm:w-3" />
+                          <span className="text-[8px] font-semibold text-white sm:text-[10px]">Vidéo</span>
                         </div>
                       </>
                     ) : (
@@ -68,30 +67,30 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
                         src={cover.url}
                         alt={item.title}
                         fill
-                        sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                        sizes="(min-width: 1024px) 33vw, 50vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     )
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <FolderKanban
-                        className="h-8 w-8 text-white/15 transition-transform duration-500 group-hover:scale-90"
+                        className="h-5 w-5 text-white/15 transition-transform duration-500 group-hover:scale-90 sm:h-8 sm:w-8"
                         strokeWidth={1.25}
                       />
                     </div>
                   )}
 
                   {/* Always-visible title bar */}
-                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-lore-darker/95 via-lore-darker/60 to-transparent px-4 pb-3.5 pt-8">
-                    <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-lore-gold/80">
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-lore-darker/95 via-lore-darker/60 to-transparent px-2.5 pb-2.5 pt-6 sm:px-4 sm:pb-3.5 sm:pt-8">
+                    <p className="text-[7px] font-bold uppercase tracking-[0.15em] text-lore-gold/80 sm:text-[9px] sm:tracking-[0.2em]">
                       {item.category}
                     </p>
-                    <div className="mt-0.5 flex items-center justify-between gap-2">
-                      <h3 className="font-display text-sm font-bold leading-tight text-white">
+                    <div className="mt-0.5 flex items-center justify-between gap-1.5 sm:gap-2">
+                      <h3 className="font-display text-[11px] font-bold leading-tight text-white sm:text-sm">
                         {item.title}
                       </h3>
-                      <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-lore-gold text-lore-darker opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                        <ArrowUpRight className="h-3 w-3" />
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-lore-gold text-lore-darker opacity-70 transition-opacity duration-300 sm:h-6 sm:w-6 sm:opacity-0 sm:group-hover:opacity-100">
+                        <ArrowUpRight className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                       </span>
                     </div>
                   </div>
