@@ -145,7 +145,7 @@ function ProjectCard({ project: p, featured }: { project: Project; featured?: bo
     : null;
 
   return (
-    <Link href={`/projets/${p.slug}`}
+    <Link href={`/projects/${p.slug}`}
       className={`group flex flex-col overflow-hidden rounded-3xl border border-lore-dark/5 bg-white dark:border-white/5 dark:bg-lore-night-surface hover:shadow-xl transition-shadow ${
         featured ? "sm:flex-row" : ""
       }`}>

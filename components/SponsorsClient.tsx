@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { HandHeart, Globe, ChevronDown, ChevronUp, CheckCircle2, Loader2 } from "lucide-react";
 
 type PublicSponsor = {
@@ -250,7 +251,7 @@ function SponsorRow({ label, items }: { label: string; items: PublicSponsor[] })
           <div key={s.id}
             className="flex items-center gap-3 rounded-2xl border border-lore-dark/5 bg-white px-5 py-3 dark:border-white/5 dark:bg-lore-night-surface">
             {s.logo_url
-              ? <img src={s.logo_url} alt={s.name} className="h-8 w-8 rounded-full object-cover" />
+              ? <Image src={s.logo_url} alt={s.name} width={32} height={32} sizes="32px" className="h-8 w-8 rounded-full object-cover" />
               : <div className="flex h-8 w-8 items-center justify-center rounded-full bg-lore-blue/10 text-sm font-bold text-lore-blue">
                   {s.name.charAt(0)}
                 </div>}

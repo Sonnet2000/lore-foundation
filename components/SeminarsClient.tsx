@@ -76,7 +76,7 @@ export default function SeminarsClient({ items }: { items: Seminar[] }) {
                           </div>
                         </>
                       ) : (
-                        <Image src={cover.url} alt={seminar.title} fill className="object-cover" unoptimized />
+                        <Image src={cover.url} alt={seminar.title} fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
                       )
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-lore-dark/20 dark:text-white/20">

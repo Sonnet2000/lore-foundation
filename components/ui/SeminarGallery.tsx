@@ -44,8 +44,8 @@ export default function SeminarGallery({ title, media, onClose }: SeminarGallery
                   src={current.url}
                   alt={`${title} — image ${activeIndex + 1}`}
                   fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                   className="object-cover"
-                  unoptimized
                 />
               )
             ) : (
@@ -99,7 +99,7 @@ export default function SeminarGallery({ title, media, onClose }: SeminarGallery
                     {item.type === "video" ? (
                       <video src={item.url} muted playsInline className="h-full w-full object-cover" />
                     ) : (
-                      <Image src={item.url} alt="" fill className="object-cover" unoptimized />
+                      <Image src={item.url} alt="" fill sizes="80px" className="object-cover" />
                     )}
                   </button>
                 ))}

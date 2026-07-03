@@ -78,7 +78,7 @@ export default async function Team() {
                       src={member.photo}
                       alt={member.name}
                       fill
-                      unoptimized
+                      sizes="(min-width: 640px) 128px, 112px"
                       className="object-cover"
                     />
                   </div>

@@ -101,7 +101,7 @@ export default function ProjetPage() {
     <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-lore-cream dark:bg-lore-night px-5 text-center">
       <Target className="h-16 w-16 text-lore-ink/20 dark:text-white/20" />
       <h1 className="font-display text-2xl font-bold text-lore-ink dark:text-white">Projet non trouvé</h1>
-      <Link href="/projets" className="rounded-full bg-lore-blue px-6 py-3 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
+      <Link href="/projects" className="rounded-full bg-lore-blue px-6 py-3 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
         Voir tous les projets
       </Link>
     </div>
@@ -113,7 +113,7 @@ export default function ProjetPage() {
       {/* Header */}
       <div className="sticky top-0 z-20 border-b border-lore-dark/5 bg-white/90 backdrop-blur-md dark:border-white/5 dark:bg-lore-night/90">
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-5 py-4">
-          <Link href="/projets" className="text-lore-ink/50 hover:text-lore-ink dark:text-white/50 dark:hover:text-white transition-colors">
+          <Link href="/projects" className="text-lore-ink/50 hover:text-lore-ink dark:text-white/50 dark:hover:text-white transition-colors">
             <ArrowLeft className="h-5 w-5" />
           </Link>
           <p className="flex-1 font-display font-bold text-sm text-lore-ink dark:text-white truncate">{project.title}</p>
