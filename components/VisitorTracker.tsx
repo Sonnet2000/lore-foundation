@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { getStoredConsent } from "@/lib/cookie-consent";
 
 const VISITOR_ID_KEY = "lore_visitor_id";
 
@@ -29,6 +30,7 @@ export default function VisitorTracker() {
   useEffect(() => {
     if (!pathname) return;
     if (pathname.startsWith("/admin") || pathname.startsWith("/compte")) return;
+    if (getStoredConsent() !== "accepted") return;
 
     const visitorId = getVisitorId();
 

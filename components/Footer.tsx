@@ -138,7 +138,12 @@ export default async function Footer() {
         {/* Bottom bar */}
         <div className="flex flex-col items-center justify-between gap-3 py-6 text-xs text-white/30 sm:flex-row">
           <p>© {year} Loré Foundation. Tous droits réservés.</p>
-          <p>Conçu avec soin en Haïti 🇭🇹</p>
+          <div className="flex items-center gap-4">
+            <a href="/politique-de-confidentialite" className="hover:text-white/60 transition-colors">
+              Politique de confidentialité
+            </a>
+            <p>Conçu avec soin en Haïti 🇭🇹</p>
+          </div>
         </div>
       </div>
     </footer>

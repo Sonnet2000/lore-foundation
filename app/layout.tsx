@@ -4,6 +4,8 @@ import Script from "next/script";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import VisitorTracker from "@/components/VisitorTracker";
+import CookieConsent from "@/components/CookieConsent";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const ADS_CLIENT = "ca-pub-7566847755875100";
 
@@ -67,7 +69,6 @@ export const metadata: Metadata = {
   },
 };
 
-const GA_ID = "G-7DDF3Q1R44";
 
 export default function RootLayout({
   children,
@@ -92,26 +93,13 @@ export default function RootLayout({
         />
       </head>
       <body className="bg-lore-cream font-body text-lore-ink antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">
-        {/* Google Analytics */}
-        <Script
-          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_ID}', {
-              page_path: window.location.pathname,
-              anonymize_ip: true,
-            });
-          `}
-        </Script>
+        {/* Google Analytics — chaje sèlman apre moun aksepte cookies yo */}
+        <GoogleAnalytics />
 
         <ThemeProvider>
           <VisitorTracker />
           {children}
+          <CookieConsent />
         </ThemeProvider>
       </body>
     </html>
