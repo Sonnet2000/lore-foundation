@@ -7,6 +7,8 @@ type TabCardProps = {
   variant?: "light" | "dark" | "emerald";
   accent?: boolean;
   noPadding?: boolean;
+  /** Padding plis sere sou mobil (pou grid 2 kolòn) — retounen nòmal apre sm: */
+  compact?: boolean;
 };
 
 const sizeClass: Record<NonNullable<TabCardProps["size"]>, string> = {
@@ -29,13 +31,14 @@ export default function TabCard({
   variant = "light",
   accent = true,
   noPadding = false,
+  compact = false,
 }: TabCardProps) {
   return (
     <div className={`relative ${className}`}>
       {/* Gold tab accent */}
       {accent && (
         <span
-          className="absolute -right-2 -top-2 h-9 w-9 rotate-45 rounded-sm sm:h-11 sm:w-11"
+          className={`absolute -right-2 -top-2 rotate-45 rounded-sm ${compact ? "h-7 w-7 sm:h-11 sm:w-11" : "h-9 w-9 sm:h-11 sm:w-11"}`}
           style={{ background: "linear-gradient(135deg, #f2d272, #d4af37)" }}
           aria-hidden="true"
         />
@@ -50,7 +53,7 @@ export default function TabCard({
       )}
       <div
         className={`relative h-full w-full transition-all duration-300 ${
-          noPadding ? "p-0" : "p-6 sm:p-8"
+          noPadding ? "p-0" : compact ? "p-3.5 sm:p-8" : "p-6 sm:p-8"
         } ${sizeClass[size]} ${variantClass[variant]}`}
       >
         {children}

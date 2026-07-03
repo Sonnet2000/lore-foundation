@@ -65,7 +65,7 @@ export default async function Services() {
           />
         </AnimatedSection>
 
-        <div className="mt-14 grid gap-5 sm:mt-18 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-2 gap-3.5 sm:mt-18 sm:gap-6 lg:grid-cols-3">
           {services.map((service, i) => (
             <AnimatedSection key={service.title} delay={(i % 3) * 0.08}>
               <a
@@ -75,41 +75,42 @@ export default async function Services() {
               >
                 <TabCard
                   size="sm"
+                  compact
                   variant={i === 4 ? "emerald" : "light"}
                   className="group h-full card-lift"
                 >
                   <div className="flex items-start justify-between">
                     <span
-                      className={`mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl ring-1 ${
+                      className={`mb-2.5 inline-flex h-9 w-9 items-center justify-center rounded-xl ring-1 sm:mb-4 sm:h-12 sm:w-12 ${
                         i === 4
                           ? "bg-white/15 text-white ring-white/20"
                           : "bg-lore-dark/5 text-lore-dark ring-lore-dark/8 dark:bg-white/5 dark:text-lore-emerald-light dark:ring-white/8"
                       }`}
                     >
-                      <service.icon className="h-6 w-6" strokeWidth={1.75} />
+                      <service.icon className="h-4.5 w-4.5 sm:h-6 sm:w-6" strokeWidth={1.75} />
                     </span>
                     <ArrowUpRight
-                      className={`h-5 w-5 shrink-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 ${
+                      className={`h-3.5 w-3.5 shrink-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 sm:h-5 sm:w-5 ${
                         i === 4 ? "text-white/50" : "text-lore-ink/25 dark:text-white/25"
                       }`}
                     />
                   </div>
                   <h3
-                    className={`font-display text-lg font-bold tracking-tight ${
+                    className={`font-display text-sm font-bold tracking-tight sm:text-lg ${
                       i === 4 ? "text-white" : "text-lore-ink dark:text-white"
                     }`}
                   >
                     {service.title}
                   </h3>
                   <p
-                    className={`mt-2 text-sm leading-relaxed ${
+                    className={`mt-1.5 line-clamp-3 text-[11px] leading-relaxed sm:mt-2 sm:line-clamp-none sm:text-sm ${
                       i === 4 ? "text-white/70" : "text-lore-ink/55 dark:text-white/55"
                     }`}
                   >
                     {service.description}
                   </p>
                   <span
-                    className={`mt-5 inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest ${
+                    className={`mt-3 inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest sm:mt-5 sm:text-xs ${
                       i === 4 ? "text-white/75" : "text-lore-emerald dark:text-lore-emerald-light"
                     }`}
                   >
