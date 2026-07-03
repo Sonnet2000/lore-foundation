@@ -103,7 +103,7 @@ export default async function Services() {
                     {service.title}
                   </h3>
                   <p
-                    className={`mt-1.5 line-clamp-3 text-[11px] leading-relaxed sm:mt-2 sm:line-clamp-none sm:text-sm ${
+                    className={`mt-1.5 line-clamp-3 text-xs leading-relaxed sm:mt-2 sm:line-clamp-none sm:text-sm ${
                       i === 4 ? "text-white/70" : "text-lore-ink/55 dark:text-white/55"
                     }`}
                   >

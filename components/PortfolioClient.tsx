@@ -33,17 +33,27 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
 
             return (
               <AnimatedSection key={item.title} delay={(i % 3) * 0.08}>
-                <button
-                  type="button"
-                  id={`portfolio-${item.id}`}
-                  onClick={() => setActiveItem(item)}
-                  className="focus-ring group relative block aspect-[4/5] w-full scroll-mt-28 overflow-hidden rounded-xl text-left sm:aspect-[16/10] sm:rounded-2xl"
-                >
+                <div className="relative">
+                  {/* Ti triyang lò — menm siyati "ledger" ak rès sit la */}
+                  <span
+                    className="absolute -right-1.5 -top-1.5 h-7 w-7 rotate-45 rounded-sm sm:-right-2 sm:-top-2 sm:h-9 sm:w-9"
+                    style={{
+                      background: "linear-gradient(135deg, #f2d272, #d4af37)",
+                      boxShadow: "-3px 3px 8px -2px rgba(0,0,0,0.35), inset 1px 1px 0 rgba(255,255,255,0.4)",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <button
+                    type="button"
+                    id={`portfolio-${item.id}`}
+                    onClick={() => setActiveItem(item)}
+                    className="tab-corner-sm focus-ring group relative block aspect-[4/5] w-full scroll-mt-28 text-left shadow-card dark:shadow-card-dark sm:aspect-[16/10]"
+                  >
                   {/* Background */}
                   <div className="absolute inset-0 bg-gradient-to-br from-lore-dark/80 via-lore-night-surface to-lore-darker" />
 
                   {/* Subtle border */}
-                  <div className="absolute inset-0 rounded-xl ring-1 ring-white/8 sm:rounded-2xl" />
+                  <div className="absolute inset-0 ring-1 ring-white/8" />
 
                   {cover ? (
                     cover.type === "video" ? (
@@ -82,7 +92,7 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
 
                   {/* Always-visible title bar */}
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-lore-darker/95 via-lore-darker/60 to-transparent px-2.5 pb-2.5 pt-6 sm:px-4 sm:pb-3.5 sm:pt-8">
-                    <p className="text-[7px] font-bold uppercase tracking-[0.15em] text-lore-gold/80 sm:text-[9px] sm:tracking-[0.2em]">
+                    <p className="font-mono text-[7px] font-bold uppercase tracking-[0.15em] text-lore-gold/80 sm:text-[9px] sm:tracking-[0.2em]">
                       {item.category}
                     </p>
                     <div className="mt-0.5 flex items-center justify-between gap-1.5 sm:gap-2">
@@ -94,7 +104,8 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
                       </span>
                     </div>
                   </div>
-                </button>
+                  </button>
+                </div>
               </AnimatedSection>
             );
           })}

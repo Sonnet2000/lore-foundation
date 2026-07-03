@@ -35,11 +35,14 @@ export default function TabCard({
 }: TabCardProps) {
   return (
     <div className={`relative ${className}`}>
-      {/* Gold tab accent */}
+      {/* Gold tab accent — style "kwen papye pliye" ak yon lonbraj pou pwofondè */}
       {accent && (
         <span
           className={`absolute -right-2 -top-2 rotate-45 rounded-sm ${compact ? "h-7 w-7 sm:h-11 sm:w-11" : "h-9 w-9 sm:h-11 sm:w-11"}`}
-          style={{ background: "linear-gradient(135deg, #f2d272, #d4af37)" }}
+          style={{
+            background: "linear-gradient(135deg, #f2d272, #d4af37)",
+            boxShadow: "-3px 3px 8px -2px rgba(0,0,0,0.35), inset 1px 1px 0 rgba(255,255,255,0.4)",
+          }}
           aria-hidden="true"
         />
       )}
@@ -53,7 +56,7 @@ export default function TabCard({
       )}
       <div
         className={`relative h-full w-full transition-all duration-300 ${
-          noPadding ? "p-0" : compact ? "p-3.5 sm:p-8" : "p-6 sm:p-8"
+          noPadding ? "p-0" : compact ? "p-4 sm:p-8" : "p-6 sm:p-8"
         } ${sizeClass[size]} ${variantClass[variant]}`}
       >
         {children}

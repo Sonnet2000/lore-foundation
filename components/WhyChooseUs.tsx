@@ -50,7 +50,7 @@ export default function WhyChooseUs() {
                 <h3 className="font-display text-sm font-bold text-lore-ink dark:text-white sm:text-xl">
                   {card.title}
                 </h3>
-                <p className="mt-1.5 line-clamp-3 text-[11px] leading-relaxed text-lore-ink/55 dark:text-white/55 sm:mt-3 sm:line-clamp-none sm:text-sm">
+                <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-lore-ink/55 dark:text-white/55 sm:mt-3 sm:line-clamp-none sm:text-sm">
                   {card.description}
                 </p>
 
