@@ -91,6 +91,19 @@ export default function RootLayout({
           crossOrigin="anonymous"
           strategy="beforeInteractive"
         />
+        {/*
+          Auto ads — san sa a, Google chaje script la (sa fè kont lan "aktive")
+          men li pa janm mande pou l mete okenn anons sou paj yo. "push" la
+          antre nan yon file dat li trete kèlkeswa lè script anwo a fini chaje.
+        */}
+        <Script id="adsense-auto-ads" strategy="beforeInteractive">
+          {`
+            (window.adsbygoogle = window.adsbygoogle || []).push({
+              google_ad_client: "${ADS_CLIENT}",
+              enable_page_level_ads: true
+            });
+          `}
+        </Script>
       </head>
       <body className="bg-lore-cream font-body text-lore-ink antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">
         {/* Google Analytics — chaje sèlman apre moun aksepte cookies yo */}
