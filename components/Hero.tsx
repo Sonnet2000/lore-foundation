@@ -153,27 +153,25 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Colonne droite — photo dan yon blòk koulè, ak kat ki flote */}
+        {/* Colonne droite — photo */}
         <motion.div
           initial={{ opacity: 0, scale: 0.93 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="relative mx-auto w-full max-w-md lg:max-w-none"
         >
-          {/* Gwo sèk koulè lò dèyè foto a — echo idantite mak la */}
-          <div
-            className="absolute left-1/2 top-1/2 h-[92%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-90"
-            style={{ background: "radial-gradient(circle at 35% 30%, #f2d272, #d4af37 60%, #b8892a 100%)" }}
-            aria-hidden="true"
-          />
-          <div
-            className="absolute -bottom-4 -right-2 h-24 w-24 rounded-full opacity-40 blur-sm sm:h-32 sm:w-32"
-            style={{ background: "radial-gradient(circle, #18A6FF, transparent 70%)" }}
+          {/* Ti triyang lò — menm siyati "ledger" ak rès sit la */}
+          <span
+            className="absolute -right-2 -top-2 h-11 w-11 rotate-45 rounded-sm sm:h-14 sm:w-14"
+            style={{
+              background: "linear-gradient(135deg, #f2d272, #d4af37)",
+              boxShadow: "-3px 3px 10px -2px rgba(0,0,0,0.4), inset 1px 1px 0 rgba(255,255,255,0.4)",
+            }}
             aria-hidden="true"
           />
 
-          <div className="relative mx-auto aspect-square w-[86%]">
-            <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-white/20 shadow-premium">
+          <div className="relative aspect-[4/5] w-full">
+            <div className="tab-corner relative h-full w-full overflow-hidden shadow-premium">
               {heroMedia.type === "video" ? (
                 <video
                   src={heroMedia.url}
@@ -197,7 +195,7 @@ export default function Hero() {
 
             {/* Kat sitasyon k ap flote — anwo agoch */}
             <motion.div
-              className="absolute -left-6 top-2 hidden max-w-[190px] rounded-2xl bg-white/95 p-3.5 shadow-gold sm:block md:-left-12 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
+              className="absolute -left-6 top-8 hidden max-w-[190px] rounded-2xl bg-white/95 p-3.5 shadow-gold sm:block md:-left-12 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             >
@@ -216,7 +214,7 @@ export default function Hero() {
 
             {/* Badge flottant — ba agoch, estatistik prensipal */}
             <motion.div
-              className="absolute -bottom-2 -left-4 hidden rounded-2xl bg-lore-dark/95 px-4 py-3 shadow-premium ring-1 ring-blue-400/20 sm:flex sm:items-center sm:gap-3 md:-left-8"
+              className="absolute -bottom-4 -left-4 hidden rounded-2xl bg-lore-dark/95 px-4 py-3 shadow-premium ring-1 ring-blue-400/20 sm:flex sm:items-center sm:gap-3 md:-left-8"
               animate={{ y: [0, 10, 0] }}
               transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
             >
@@ -231,7 +229,7 @@ export default function Hero() {
 
             {/* Badge flottant — anwo adwat, kominote a */}
             <motion.div
-              className="absolute -right-4 bottom-16 hidden rounded-2xl bg-white/95 px-4 py-3 shadow-gold sm:flex sm:items-center sm:gap-3 md:-right-10 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
+              className="absolute -right-4 top-10 hidden rounded-2xl bg-white/95 px-4 py-3 shadow-gold sm:flex sm:items-center sm:gap-3 md:-right-10 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
               animate={{ y: [0, -8, 0] }}
               transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
             >
