@@ -2,17 +2,19 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { ArrowRight, Heart, Users } from "lucide-react";
+import { ArrowRight, Heart, Users, Star, GraduationCap } from "lucide-react";
 import { useEffect, useState } from "react";
 import Sparkle from "@/components/ui/Sparkle";
 import CurveDivider from "@/components/ui/CurveDivider";
 import Globe3D from "@/components/ui/Globe3D";
-import { stats, siteInfo } from "@/lib/data";
+import { stats, siteInfo, testimonials } from "@/lib/data";
 
 type MediaItem = { url: string; type: "image" | "video" };
 
 // Média statik pou fallback si pa gen done nan DB
 const FALLBACK: MediaItem = { url: "/hero-portrait.jpg", type: "image" };
+
+const heroQuote = testimonials[0];
 
 export default function Hero() {
   const [heroMedia, setHeroMedia] = useState<MediaItem>(FALLBACK);
@@ -90,8 +92,24 @@ export default function Hero() {
             construire un avenir meilleur pour Haïti.
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+          {/* CTAs — grouper an pil pou yon lè plis konpak */}
+          <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+            {/* Ti flèch dekoratif ki pwente sou bouton prensipal la */}
+            <svg
+              className="pointer-events-none absolute -left-8 -top-9 hidden h-10 w-14 text-lore-gold/70 sm:block"
+              viewBox="0 0 60 40"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M4 4C18 6 34 10 44 22C48 27 50 31 51 35"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeDasharray="1 7"
+              />
+              <path d="M45 30L52 36L56 28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
             <a
               href="/partenaire"
               className="btn-gold focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-105"
@@ -135,18 +153,27 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Colonne droite — photo / vidéo dynamique */}
+        {/* Colonne droite — photo dan yon blòk koulè, ak kat ki flote */}
         <motion.div
           initial={{ opacity: 0, scale: 0.93 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="relative mx-auto w-full max-w-md lg:max-w-none"
         >
-          <div className="absolute inset-0 -m-3 rounded-3xl border border-blue-300/15 pointer-events-none" />
-          <div className="absolute inset-0 -m-6 rounded-3xl border border-blue-300/7 pointer-events-none" />
+          {/* Gwo sèk koulè lò dèyè foto a — echo idantite mak la */}
+          <div
+            className="absolute left-1/2 top-1/2 h-[92%] w-[92%] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-90"
+            style={{ background: "radial-gradient(circle at 35% 30%, #f2d272, #d4af37 60%, #b8892a 100%)" }}
+            aria-hidden="true"
+          />
+          <div
+            className="absolute -bottom-4 -right-2 h-24 w-24 rounded-full opacity-40 blur-sm sm:h-32 sm:w-32"
+            style={{ background: "radial-gradient(circle, #18A6FF, transparent 70%)" }}
+            aria-hidden="true"
+          />
 
-          <div className="relative aspect-[4/5] w-full">
-            <div className="relative h-full w-full overflow-hidden tab-corner-alt rounded-2xl border border-white/10 shadow-premium">
+          <div className="relative mx-auto aspect-square w-[86%]">
+            <div className="relative h-full w-full overflow-hidden rounded-full border-4 border-white/20 shadow-premium">
               {heroMedia.type === "video" ? (
                 <video
                   src={heroMedia.url}
@@ -165,40 +192,57 @@ export default function Hero() {
                   className="object-cover object-top"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/40 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/30 via-transparent to-transparent" />
             </div>
 
-            {/* Badge flottant — haut gauche */}
+            {/* Kat sitasyon k ap flote — anwo agoch */}
             <motion.div
-              className="absolute -left-4 top-8 hidden rounded-2xl bg-white/95 px-4 py-3 shadow-gold sm:flex sm:items-center sm:gap-3 md:-left-8 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
+              className="absolute -left-6 top-2 hidden max-w-[190px] rounded-2xl bg-white/95 p-3.5 shadow-gold sm:block md:-left-12 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <div className="flex gap-0.5 text-lore-gold">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-3 w-3 fill-current" />
+                ))}
+              </div>
+              <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-lore-ink/70 dark:text-white/70">
+                &ldquo;{heroQuote.quote}&rdquo;
+              </p>
+              <p className="mt-1.5 font-display text-[11px] font-bold text-lore-ink dark:text-white">
+                {heroQuote.name}
+              </p>
+            </motion.div>
+
+            {/* Badge flottant — ba agoch, estatistik prensipal */}
+            <motion.div
+              className="absolute -bottom-2 -left-4 hidden rounded-2xl bg-lore-dark/95 px-4 py-3 shadow-premium ring-1 ring-blue-400/20 sm:flex sm:items-center sm:gap-3 md:-left-8"
+              animate={{ y: [0, 10, 0] }}
+              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+            >
+              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/15 text-blue-300">
+                <GraduationCap className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="font-display text-sm font-bold text-white">500+ jeunes formés</p>
+                <p className="text-xs text-white/50">depuis notre création</p>
+              </div>
+            </motion.div>
+
+            {/* Badge flottant — anwo adwat, kominote a */}
+            <motion.div
+              className="absolute -right-4 bottom-16 hidden rounded-2xl bg-white/95 px-4 py-3 shadow-gold sm:flex sm:items-center sm:gap-3 md:-right-10 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
             >
               <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
                 <Users className="h-5 w-5" />
               </span>
               <div>
                 <p className="font-display text-sm font-bold text-lore-ink dark:text-white">
-                  500+ jeunes formés
-                </p>
-                <p className="text-xs text-lore-ink/50 dark:text-white/50">depuis notre création</p>
-              </div>
-            </motion.div>
-
-            {/* Badge flottant — bas droite */}
-            <motion.div
-              className="absolute -right-4 bottom-10 hidden rounded-2xl bg-lore-dark/95 px-4 py-3 shadow-premium ring-1 ring-blue-400/20 sm:flex sm:items-center sm:gap-3 md:-right-8"
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/15 text-blue-300">
-                <Heart className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="font-display text-sm font-bold text-white">
                   Impact communautaire
                 </p>
-                <p className="text-xs text-white/50">Cap-Haïtien & au-delà</p>
+                <p className="text-xs text-lore-ink/50 dark:text-white/50">Cap-Haïtien & au-delà</p>
               </div>
             </motion.div>
           </div>

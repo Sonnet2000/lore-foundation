@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, ArrowRight, CheckCircle2 } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
-import TabCard from "@/components/ui/TabCard";
 import Modal from "@/components/ui/Modal";
 import ServiceIllustration from "@/components/ui/ServiceIllustration";
 import { whyChooseUs } from "@/lib/data";
@@ -14,16 +13,7 @@ export default function WhyChooseUs() {
   const active = openIndex !== null ? whyChooseUs[openIndex] : null;
 
   return (
-    <section className="relative px-5 py-20 sm:px-8 sm:py-28 lg:px-12 bg-lore-cream dark:bg-lore-night overflow-hidden">
-      {/* Subtle radial glow top-center */}
-      <div
-        className="absolute left-1/2 top-0 -translate-x-1/2 h-72 w-[600px] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 0%, rgba(15,152,255,0.06) 0%, transparent 70%)",
-        }}
-      />
-
+    <section className="relative px-5 py-20 sm:px-8 sm:py-28 lg:px-12 bg-white dark:bg-lore-night overflow-hidden">
       <div className="mx-auto max-w-7xl relative">
         <AnimatedSection>
           <SectionHeading
@@ -33,39 +23,80 @@ export default function WhyChooseUs() {
           />
         </AnimatedSection>
 
-        <div className="mt-10 grid grid-cols-2 gap-3.5 sm:mt-18 sm:gap-7 lg:grid-cols-3 lg:gap-9">
-          {whyChooseUs.map((card, i) => (
-            <AnimatedSection key={card.title} delay={i * 0.12}>
-              <TabCard compact className="h-full card-lift">
-                {/* Icon with ring */}
-                <span className="mb-2.5 inline-flex h-10 w-10 items-center justify-center rounded-2xl bg-lore-emerald/8 text-lore-emerald ring-1 ring-lore-emerald/15 dark:bg-lore-emerald/10 dark:text-lore-emerald-light dark:ring-lore-emerald/20 sm:mb-5 sm:h-14 sm:w-14">
-                  <card.icon className="h-5 w-5 sm:h-7 sm:w-7" strokeWidth={1.75} />
-                </span>
+        {/* Panno fonse — menm siyati ak Nos Programmes ak Portfolio */}
+        <AnimatedSection delay={0.1}>
+          <div
+            className="relative mt-10 overflow-hidden rounded-[28px] px-4 py-8 sm:mt-16 sm:rounded-[36px] sm:px-8 sm:py-14"
+            style={{ background: "linear-gradient(160deg, #031a4a 0%, #052a6e 55%, #043C9E 100%)" }}
+          >
+            <div className="hero-grid absolute inset-0 pointer-events-none opacity-40" aria-hidden="true" />
 
-                {/* Number accent */}
-                <span className="mb-1.5 block font-display text-[9px] font-bold uppercase tracking-[0.2em] text-lore-gold/70 sm:mb-3 sm:text-xs sm:tracking-[0.25em]">
-                  0{i + 1}
-                </span>
+            <div className="relative grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
+              {whyChooseUs.map((card, i) => {
+                const highlighted = i === 1;
+                return (
+                  <AnimatedSection key={card.title} delay={i * 0.12}>
+                    <button
+                      type="button"
+                      onClick={() => setOpenIndex(i)}
+                      className="focus-ring group relative block h-full w-full text-left"
+                    >
+                      <div
+                        className={`relative flex h-full flex-col rounded-2xl p-3.5 pb-8 shadow-lg transition-transform duration-300 group-hover:-translate-y-1.5 sm:rounded-3xl sm:p-6 sm:pb-11 ${
+                          highlighted ? "bg-lore-gold" : "bg-white dark:bg-lore-night-surface"
+                        }`}
+                      >
+                        <span
+                          className={`mb-2.5 inline-flex h-9 w-9 items-center justify-center rounded-xl sm:mb-4 sm:h-12 sm:w-12 ${
+                            highlighted
+                              ? "bg-lore-darker/10 text-lore-darker"
+                              : "bg-lore-emerald/8 text-lore-emerald ring-1 ring-lore-emerald/15 dark:bg-lore-emerald/10 dark:text-lore-emerald-light dark:ring-lore-emerald/20"
+                          }`}
+                        >
+                          <card.icon className="h-4.5 w-4.5 sm:h-6 sm:w-6" strokeWidth={1.75} />
+                        </span>
 
-                <h3 className="font-display text-sm font-bold text-lore-ink dark:text-white sm:text-xl">
-                  {card.title}
-                </h3>
-                <p className="mt-1.5 line-clamp-3 text-xs leading-relaxed text-lore-ink/55 dark:text-white/55 sm:mt-3 sm:line-clamp-none sm:text-sm">
-                  {card.description}
-                </p>
+                        <span
+                          className={`mb-1 block font-display text-[9px] font-bold uppercase tracking-[0.2em] sm:mb-2 sm:text-xs ${
+                            highlighted ? "text-lore-darker/60" : "text-lore-gold/70"
+                          }`}
+                        >
+                          0{i + 1}
+                        </span>
 
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(i)}
-                  className="focus-ring group mt-3 inline-flex items-center gap-1.5 rounded text-[11px] font-semibold text-lore-emerald transition-colors hover:text-lore-dark dark:text-lore-emerald-light dark:hover:text-white sm:mt-6 sm:text-sm"
-                >
-                  Découvrir
-                  <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 sm:h-4 sm:w-4" />
-                </button>
-              </TabCard>
-            </AnimatedSection>
-          ))}
-        </div>
+                        <h3
+                          className={`font-display text-xs font-bold sm:text-lg ${
+                            highlighted ? "text-lore-darker" : "text-lore-ink dark:text-white"
+                          }`}
+                        >
+                          {card.title}
+                        </h3>
+                        <p
+                          className={`mt-1 line-clamp-3 text-[10px] leading-snug sm:mt-2 sm:line-clamp-none sm:text-sm ${
+                            highlighted ? "text-lore-darker/70" : "text-lore-ink/55 dark:text-white/55"
+                          }`}
+                        >
+                          {card.description}
+                        </p>
+                      </div>
+
+                      {/* Bouton flèch won — chevouche kwen ba-dwat, menm fòm ak lòt seksyon yo */}
+                      <span
+                        className={`absolute -bottom-3.5 -right-2.5 flex h-9 w-9 items-center justify-center rounded-full shadow-lg ring-4 transition-transform duration-300 group-hover:scale-110 sm:-bottom-5 sm:-right-3 sm:h-12 sm:w-12 sm:ring-[6px] ${
+                          highlighted
+                            ? "bg-lore-darker text-lore-gold ring-lore-gold"
+                            : "bg-lore-gold text-lore-darker ring-[#031a4a]"
+                        }`}
+                      >
+                        <ArrowUpRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                      </span>
+                    </button>
+                  </AnimatedSection>
+                );
+              })}
+            </div>
+          </div>
+        </AnimatedSection>
       </div>
 
       <Modal open={active !== null} onClose={() => setOpenIndex(null)}>
