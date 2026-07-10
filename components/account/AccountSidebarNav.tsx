@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, UserRound } from "lucide-react";
+import { LayoutDashboard, UserRound, GraduationCap } from "lucide-react";
 import LogoutButton from "./LogoutButton";
 
 const links = [
   { href: "/compte/tableau-de-bord", label: "Tableau de bord", icon: LayoutDashboard },
+  { href: "/compte/kou", label: "Mes cours", icon: GraduationCap },
   { href: "/compte/profil", label: "Mon profil", icon: UserRound },
 ];
 

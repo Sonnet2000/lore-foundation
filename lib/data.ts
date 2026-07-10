@@ -330,6 +330,7 @@ export const socialLinks = [
 export const navLinks = [
   { label: "Accueil",      href: "#accueil" },
   { label: "À propos",     href: "/a-propos" },
+  { label: "École",        href: "/ecole" },
   { label: "Programmes",   href: "#services" },
   { label: "Projets",      href: "/projects" },
   { label: "Blog",         href: "/blog" },

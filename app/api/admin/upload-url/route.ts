@@ -5,11 +5,16 @@ const ALLOWED_EXTENSIONS: Record<string, string> = {
   jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png",
   webp: "image/webp", gif: "image/gif", avif: "image/avif",
   mp4: "video/mp4", webm: "video/webm", mov: "video/quicktime",
+  pdf: "application/pdf", doc: "application/msword",
+  docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ppt: "application/vnd.ms-powerpoint",
+  pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  zip: "application/zip",
 };
 
 const ALLOWED_FOLDERS = new Set([
   "hero", "portfolio", "seminars", "team", "services", "testimonials",
-  "payments", "misc", "blog", "projects",
+  "payments", "misc", "blog", "projects", "courses", "assignments",
 ]);
 
 function extensionOf(filename: string) {

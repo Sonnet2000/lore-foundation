@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader2, Mail, Lock, User, Eye, EyeOff, CheckCircle2 } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import GoogleButton from "@/components/account/GoogleButton";
@@ -26,6 +26,7 @@ function passwordStrength(pw: string) {
 
 export default function SignupForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -69,7 +70,7 @@ export default function SignupForm() {
     // Si la confirmation par email est désactivée dans Supabase, une session
     // est retournée immédiatement : on peut aller droit au tableau de bord.
     if (data.session) {
-      router.push("/compte/tableau-de-bord");
+      router.push(searchParams.get("next") || "/compte/tableau-de-bord");
       router.refresh();
       return;
     }

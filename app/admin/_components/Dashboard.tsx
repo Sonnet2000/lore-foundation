@@ -6,7 +6,7 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
-  Settings, BookOpen, Target, Home, UserCog, BarChart3, Share2,
+  Settings, BookOpen, Target, Home, UserCog, BarChart3, Share2, GraduationCap,
 } from "lucide-react";
 import PortfolioPanel       from "./PortfolioPanel";
 import HeroPanel            from "./HeroPanel";
@@ -24,6 +24,7 @@ import ProjectsPanel        from "./ProjectsPanel";
 import UsersPanel           from "./UsersPanel";
 import AnalyticsPanel       from "./AnalyticsPanel";
 import SiteInfoPanel        from "./SiteInfoPanel";
+import CoursesPanel         from "./CoursesPanel";
 
 const TABS = [
   { id: "hero",             label: "Accueil",       icon: Home,         group: "Contenu" },
@@ -36,6 +37,7 @@ const TABS = [
   { id: "announcements",    label: "Annonces",       icon: Megaphone,    group: "Contenu" },
   { id: "seminars",         label: "Séminaires",     icon: Calendar,     group: "Contenu" },
   { id: "site-info",        label: "Coordonnées",    icon: Share2,       group: "Contenu" },
+  { id: "courses",          label: "École",          icon: GraduationCap, group: "École" },
   { id: "sponsors",        label: "Partenaires",   icon: HandHeart,   group: "Engagement" },
   { id: "payments",        label: "Contributions", icon: CreditCard,  group: "Engagement" },
   { id: "payment-methods", label: "Méthodes paiem",icon: Settings,    group: "Engagement" },
@@ -57,6 +59,7 @@ const TAB_META: Record<TabId, { desc: string }> = {
   announcements:     { desc: "Annonces visibles en haut du site" },
   seminars:          { desc: "Séminaires et formations à venir" },
   "site-info":       { desc: "Telefòn, imèl, adrès ak lyen rezo sosyal (Facebook, TikTok, YouTube, elt.)" },
+  courses:           { desc: "Kou yo, enskripsyon elèv yo, devwa ak kòreksyon" },
   sponsors:          { desc: "Partenaires, sponsors et organisations collaboratrices" },
   payments:          { desc: "Contributions et soutiens financiers reçus" },
   "payment-methods": { desc: "Configurez MonCash, NatCash, Sogebank et autres méthodes" },
@@ -77,6 +80,7 @@ export default function Dashboard() {
   }
 
   const contentTabs   = TABS.filter(t => t.group === "Contenu");
+  const ecoleTabs      = TABS.filter(t => t.group === "École");
   const engageTabs    = TABS.filter(t => t.group === "Engagement");
   const usersTabs     = TABS.filter(t => t.group === "Utilisateurs");
   const activeTab     = TABS.find(t => t.id === active)!;
@@ -98,6 +102,7 @@ export default function Dashboard() {
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-6">
           <SideGroup label="Contenu du site" tabs={contentTabs} active={active} onSelect={setActive} />
+          <SideGroup label="École" tabs={ecoleTabs} active={active} onSelect={setActive} />
           <SideGroup label="Engagement & Finance" tabs={engageTabs} active={active} onSelect={setActive} />
           <SideGroup label="Utilisateurs & Trafic" tabs={usersTabs} active={active} onSelect={setActive} />
         </nav>
@@ -131,6 +136,7 @@ export default function Dashboard() {
             </div>
             <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-6">
               <SideGroup label="Contenu du site" tabs={contentTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
+              <SideGroup label="École" tabs={ecoleTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
               <SideGroup label="Engagement & Finance" tabs={engageTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
               <SideGroup label="Utilisateurs & Trafic" tabs={usersTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
             </nav>
@@ -224,6 +230,7 @@ export default function Dashboard() {
           {active === "announcements"    && <AnnouncementsPanel />}
           {active === "seminars"         && <SeminarsPanel />}
           {active === "site-info"        && <SiteInfoPanel />}
+          {active === "courses"          && <CoursesPanel />}
           {active === "sponsors"         && <SponsorsPanel />}
           {active === "payments"         && <PaymentsPanel />}
           {active === "payment-methods"  && <PaymentMethodsPanel />}

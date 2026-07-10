@@ -211,3 +211,57 @@ export type Project = {
   created_at: string;
   updated_at: string;
 };
+
+export type CourseRow = {
+  id: string;
+  title: string;
+  slug: string;
+  description: string;
+  cover_url: string | null;
+  price: string;
+  duration: string;
+  is_published: boolean;
+  sort_order: number;
+  created_at: string;
+};
+
+export type EnrollmentRow = {
+  id: string;
+  course_id: string;
+  user_id: string;
+  status: "pending" | "approved" | "rejected";
+  note: string;
+  created_at: string;
+  decided_at: string | null;
+  full_name: string;
+  phone: string;
+  email: string;
+};
+
+export type AssignmentRow = {
+  id: string;
+  course_id: string;
+  title: string;
+  description: string;
+  attachment_url: string | null;
+  due_at: string | null;
+  is_published: boolean;
+  sort_order: number;
+  created_at: string;
+};
+
+export type SubmissionRow = {
+  id: string;
+  assignment_id: string;
+  user_id: string;
+  text_response: string;
+  link_url: string | null;
+  file_url: string | null;
+  status: "submitted" | "graded";
+  grade: string | null;
+  feedback: string | null;
+  submitted_at: string;
+  graded_at: string | null;
+  full_name: string;
+  email: string;
+};
