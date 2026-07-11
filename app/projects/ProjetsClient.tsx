@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Target, MapPin, Users, Clock, ArrowRight, Heart } from "lucide-react";
+import { ArrowLeft, Target, MapPin, Users, Clock, ArrowRight, MessageCircle } from "lucide-react";
 import type { Project, ProjectCategory } from "@/app/admin/_components/types";
 
 const CATS: { id: ProjectCategory | "all"; label: string; emoji: string }[] = [
@@ -24,11 +24,6 @@ const CAT_COLORS: Record<string, string> = {
   sante:      "bg-rose-500/15 text-rose-600 dark:text-rose-300",
   autre:      "bg-slate-500/15 text-slate-500",
 };
-
-function pct(raised: number, goal: number) {
-  if (!goal) return 0;
-  return Math.min(100, Math.round((raised / goal) * 100));
-}
 
 export default function ProjetsClient() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -56,11 +51,11 @@ export default function ProjetsClient() {
           </Link>
           <div className="flex-1">
             <p className="font-display font-bold text-lore-ink dark:text-white">Nos Projets</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation · Financer l&apos;avenir d&apos;Haïti</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation · Réalisations & études de cas</p>
           </div>
-          <Link href="/don" className="flex items-center gap-2 rounded-full bg-lore-blue px-4 py-2 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
-            <Heart className="h-4 w-4" /> Faire un don
-          </Link>
+          <a href="https://wa.me/message/QSQVE7F4WDBGF1" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-lore-blue px-4 py-2 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
+            <MessageCircle className="h-4 w-4" /> Discuter d&apos;un projet
+          </a>
         </div>
       </div>
 
@@ -70,14 +65,14 @@ export default function ProjetsClient() {
         <div className="hero-grid absolute inset-0 opacity-20 pointer-events-none" />
         <div className="mx-auto max-w-6xl px-5 text-center relative z-10">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold text-white/80 mb-4">
-            <Target className="h-3.5 w-3.5" /> {projects.length} projet{projects.length !== 1 ? "s" : ""} à financer
+            <Target className="h-3.5 w-3.5" /> {projects.length} projet{projects.length !== 1 ? "s" : ""} réalisé{projects.length !== 1 ? "s" : ""}
           </span>
           <h1 className="font-display text-4xl font-extrabold text-white md:text-5xl">
-            Investissez dans <span className="text-gradient-gold">l&apos;avenir d&apos;Haïti</span>
+            Ce que nous avons <span className="text-gradient-gold">construit ensemble</span>
           </h1>
           <p className="mt-4 text-white/60 max-w-xl mx-auto">
-            Chaque contribution, grande ou petite, aide Loré Foundation à transformer des vies
-            à travers l&apos;éducation, la technologie et l&apos;engagement communautaire.
+            Un aperçu des formations, projets numériques et initiatives communautaires réalisés
+            par Loré Foundation à Cap-Haïtien et au-delà.
           </p>
         </div>
       </div>
@@ -139,7 +134,6 @@ export default function ProjetsClient() {
 
 function ProjectCard({ project: p, featured }: { project: Project; featured?: boolean }) {
   const cat   = p.category;
-  const prog  = pct(p.raised_amount, p.goal_amount);
   const daysLeft = p.end_date
     ? Math.max(0, Math.ceil((new Date(p.end_date).getTime() - Date.now()) / 86400000))
     : null;
@@ -188,29 +182,10 @@ function ProjectCard({ project: p, featured }: { project: Project; featured?: bo
         </div>
 
         {/* Progression */}
-        {p.goal_amount > 0 && (
-          <div>
-            <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-bold text-lore-ink dark:text-white">
-                {p.raised_amount.toLocaleString("fr-FR")} {p.currency}
-              </span>
-              <span className="text-lore-blue font-bold">{prog}%</span>
-            </div>
-            <div className="h-2 w-full rounded-full bg-lore-dark/10 dark:bg-white/10">
-              <div className="h-full rounded-full bg-gradient-to-r from-lore-blue to-blue-400 transition-all" style={{ width: `${prog}%` }} />
-            </div>
-            <p className="mt-1 text-[11px] text-lore-ink/40 dark:text-white/40">
-              Objectif : {p.goal_amount.toLocaleString("fr-FR")} {p.currency}
-            </p>
-          </div>
-        )}
 
         <div className="flex items-center justify-between mt-auto pt-2">
           <span className="text-xs font-semibold text-lore-blue flex items-center gap-1 group-hover:gap-2 transition-all">
-            Voir & financer <ArrowRight className="h-3.5 w-3.5" />
-          </span>
-          <span className="rounded-full bg-lore-blue/10 px-3 py-1 text-xs font-bold text-lore-blue">
-            Financer →
+            Voir le projet <ArrowRight className="h-3.5 w-3.5" />
           </span>
         </div>
       </div>

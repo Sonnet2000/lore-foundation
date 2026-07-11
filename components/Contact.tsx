@@ -69,9 +69,9 @@ export default function Contact() {
       <div className="mx-auto max-w-7xl relative">
         <AnimatedSection>
           <SectionHeading
-            eyebrow="Contact & Engagement"
-            title="Rejoignez le mouvement"
-            description="Que vous souhaitiez faire du bénévolat, devenir partenaire ou soutenir nos projets, nous serions ravis d'échanger avec vous. Ensemble, nous pouvons faire davantage."
+            eyebrow="Contact"
+            title="Parlons de votre projet"
+            description="Que vous souhaitiez démarrer une formation, lancer un projet numérique ou devenir partenaire, nous serions ravis d'échanger avec vous."
           />
         </AnimatedSection>
 
@@ -209,9 +209,9 @@ export default function Contact() {
                     <label htmlFor="service" className={labelClasses}>Je souhaite</label>
                     <select id="service" name="service" defaultValue="" required className={inputClasses}>
                       <option value="" disabled>Choisir une option</option>
-                      <option value="Bénévolat / Volontariat">🤝 Bénévolat / Volontariat</option>
-                      <option value="Devenir partenaire">🌐 Devenir partenaire</option>
-                      <option value="Soutenir financièrement">💙 Soutenir financièrement</option>
+                      <option value="Inscription à l'École">🎓 Inscription à l&apos;École</option>
+                      <option value="Devenir partenaire">🤝 Devenir partenaire</option>
+                      <option value="Devis pour un projet">💼 Devis pour un projet</option>
                       {services.map((s) => (
                         <option key={s.title} value={s.title}>{s.title}</option>
                       ))}

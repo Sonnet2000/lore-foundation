@@ -4,45 +4,45 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import {
-  ArrowLeft, BookOpen, Laptop, Users, Globe,
+  ArrowLeft, Laptop, Users, Globe,
   Star, Heart, Lightbulb, Zap, Target,
-  ArrowRight, HandHeart,
+  ArrowRight, HandHeart, GraduationCap,
 } from "lucide-react";
 
 // ─── Données ──────────────────────────────────────────────────────────────
 
 const DOMAINES = [
   {
-    icon: BookOpen,
-    title: "Éducation",
+    icon: GraduationCap,
+    title: "École professionnelle",
     color: "from-blue-500/15 to-blue-400/5 border-blue-400/20",
     iconBg: "bg-blue-500/15 text-blue-500 dark:text-blue-300",
     description:
-      "Nous soutenons les initiatives éducatives qui favorisent l'accès au savoir et l'amélioration des conditions d'apprentissage.",
+      "Nous formons des étudiants et des professionnels aux métiers du numérique à travers des cours pratiques et un suivi personnalisé.",
   },
   {
     icon: Laptop,
-    title: "Formation numérique",
+    title: "Développement web & logiciel",
     color: "from-purple-500/15 to-purple-400/5 border-purple-400/20",
     iconBg: "bg-purple-500/15 text-purple-500 dark:text-purple-300",
     description:
-      "Nous développons les compétences numériques des jeunes, des enseignants et des professionnels afin de les préparer aux défis du monde moderne.",
+      "Nous concevons des sites web, applications et logiciels de gestion sur mesure pour les entreprises et organisations locales.",
   },
   {
     icon: Users,
-    title: "Développement de la jeunesse",
+    title: "Design & création",
     color: "from-emerald-500/15 to-emerald-400/5 border-emerald-400/20",
     iconBg: "bg-emerald-500/15 text-emerald-500 dark:text-emerald-300",
     description:
-      "Nous encourageons le leadership, l'innovation et l'esprit d'initiative chez les jeunes générations.",
+      "Nous créons des identités visuelles, supports imprimés et contenus digitaux qui donnent à chaque marque une image professionnelle.",
   },
   {
     icon: Globe,
-    title: "Engagement communautaire",
+    title: "Support & accompagnement",
     color: "from-amber-500/15 to-amber-400/5 border-amber-400/20",
     iconBg: "bg-amber-500/15 text-amber-500 dark:text-amber-300",
     description:
-      "Nous mettons en œuvre des actions qui renforcent la solidarité, l'autonomie et le développement durable des communautés.",
+      "Nous restons disponibles après chaque projet ou formation, avec un support technique réactif et un accompagnement continu.",
   },
 ];
 
@@ -131,7 +131,7 @@ export default function AProposClient() {
               <span className="text-gradient-gold">Loré Foundation</span>
             </h1>
             <p className="max-w-2xl text-lg text-white/70 leading-relaxed">
-              L&apos;excellence au cœur de l&apos;impact.
+              Former. Créer. Réussir.
             </p>
           </motion.div>
         </div>
@@ -154,20 +154,19 @@ export default function AProposClient() {
               </div>
               <p className="text-lore-ink/70 dark:text-white/70 leading-relaxed">
                 Loré Foundation est née d&apos;une conviction profonde : personne ne devrait être privé
-                d&apos;opportunités simplement parce qu&apos;il manque de soutien, de ressources ou
-                d&apos;accompagnement.
+                d&apos;opportunités professionnelles simplement parce qu&apos;il manque de formation,
+                de ressources ou d&apos;accompagnement technique de qualité.
               </p>
               <p className="text-lore-ink/70 dark:text-white/70 leading-relaxed">
-                Son fondateur a lui-même connu les défis auxquels font face de nombreuses personnes
-                déterminées à avancer malgré les obstacles. Cette expérience a inspiré la création
-                d&apos;une organisation dédiée à ceux qui possèdent le potentiel, la volonté et les
-                ambitions nécessaires pour réussir, mais qui ne trouvent pas toujours l&apos;aide dont
-                ils ont besoin au bon moment.
+                Son fondateur a lui-même connu les défis auxquels font face de nombreux entrepreneurs
+                et étudiants déterminés à avancer malgré le manque de ressources. Cette expérience a
+                inspiré la création d&apos;une organisation qui combine école professionnelle et
+                services numériques pour répondre à des besoins concrets.
               </p>
               <p className="text-lore-ink/70 dark:text-white/70 leading-relaxed">
-                Aujourd&apos;hui, Loré Foundation transforme cette expérience en action concrète en
-                créant des initiatives qui favorisent l&apos;éducation, le développement des compétences,
-                l&apos;inclusion numérique et l&apos;autonomisation des communautés.
+                Aujourd&apos;hui, Loré Foundation forme des étudiants aux métiers du numérique et
+                accompagne des entreprises et organisations locales avec des services professionnels :
+                développement web, design graphique, sérigraphie et support technique.
               </p>
             </div>
 
@@ -183,7 +182,7 @@ export default function AProposClient() {
               {/* Badge */}
               <div className="absolute bottom-5 left-5 right-5 rounded-2xl bg-white/95 dark:bg-lore-night-surface/95 px-5 py-3 backdrop-blur-sm">
                 <p className="font-display font-bold text-lore-ink dark:text-white text-sm">
-                  🇭🇹 Former. Inspirer. Transformer.
+                  🇭🇹 Former. Créer. Réussir.
                 </p>
                 <p className="mt-0.5 text-xs text-lore-ink/50 dark:text-white/50">
                   Cap-Haïtien, Nord, Haïti
@@ -208,10 +207,9 @@ export default function AProposClient() {
                 Notre mission
               </h3>
               <p className="text-lore-ink/70 dark:text-white/70 leading-relaxed text-sm md:text-base">
-                Accompagner les individus, en particulier les jeunes et les éducateurs, en leur
-                offrant des opportunités d&apos;apprentissage, de développement personnel et professionnel
-                afin qu&apos;ils puissent révéler leur plein potentiel et contribuer positivement à leur
-                communauté.
+                Former les talents numériques de demain et accompagner les entreprises et
+                organisations haïtiennes avec des services professionnels de qualité, pour
+                qu&apos;ils puissent grandir, se digitaliser et réussir.
               </p>
             </div>
 
@@ -224,9 +222,9 @@ export default function AProposClient() {
                 Notre vision
               </h3>
               <p className="text-lore-ink/70 dark:text-white/70 leading-relaxed text-sm md:text-base">
-                Construire une société où chaque personne motivée a accès aux connaissances, aux
-                compétences et aux opportunités nécessaires pour réussir, indépendamment de son
-                origine ou de sa situation.
+                Devenir la référence en formation numérique et services technologiques dans le
+                Nord d&apos;Haïti, en donnant à chaque étudiant et chaque entreprise les outils
+                nécessaires pour réussir dans l&apos;économie numérique.
               </p>
             </div>
           </div>
@@ -309,26 +307,27 @@ export default function AProposClient() {
                 Notre engagement
               </span>
               <h2 className="font-display text-2xl md:text-3xl font-extrabold text-white leading-tight max-w-2xl">
-                Chaque individu mérite une chance de réussir
+                Chaque projet mérite un travail bien fait
               </h2>
               <p className="max-w-2xl text-white/70 leading-relaxed">
-                Chez Loré Foundation, nous travaillons chaque jour pour transformer les obstacles en
-                opportunités, les ambitions en réalisations et les rêves en projets porteurs d&apos;avenir.
+                Chez Loré Foundation, nous travaillons chaque jour pour transformer les idées en
+                projets concrets et les compétences en carrières — pour nos étudiants comme pour
+                nos clients.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mt-2">
-                <Link href="/partenaire"
+                <Link href="/ecole"
                   className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-lore-blue hover:bg-white/90 transition-colors">
-                  Devenir partenaire
+                  Découvrir l&apos;École
                   <ArrowRight className="h-4 w-4" />
                 </Link>
-                <Link href="/soutenir"
+                <Link href="/partenaire"
                   className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/20 transition-colors backdrop-blur-sm">
                   <Heart className="h-4 w-4" />
-                  Soutenir nos projets
+                  Devenir partenaire
                 </Link>
               </div>
               <p className="mt-4 font-display text-sm font-semibold text-white/50 italic">
-                « Loré Foundation — L&apos;excellence au cœur de l&apos;impact. »
+                « Loré Foundation — Former. Créer. Réussir. »
               </p>
             </div>
           </div>

@@ -70,18 +70,13 @@ export async function middleware(request: NextRequest) {
   const isLoginApi = pathname === "/api/admin/login";
   const isPublicApi = pathname === "/api/pay"
     || pathname === "/api/sponsor-apply"
-    || pathname === "/api/payment-methods"
     || pathname === "/api/unsubscribe"
     || pathname === "/api/track"
     || pathname === "/api/site-info"
-    || pathname.startsWith("/api/stripe")
     || pathname.startsWith("/api/blog")
     || pathname.startsWith("/api/projects")
-    || pathname.startsWith("/paiement")
     || pathname.startsWith("/partenaire")
-    || pathname.startsWith("/soutenir")
     || pathname.startsWith("/a-propos")
-    || pathname.startsWith("/don")
     || pathname.startsWith("/blog")
     || pathname.startsWith("/projets");
 

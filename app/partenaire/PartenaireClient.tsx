@@ -21,18 +21,18 @@ const PARTNER_TYPES = [
   {
     id: "entreprise",
     icon: Handshake,
-    label: "Entreprise / Sponsor",
+    label: "Entreprise / Client",
     color: "from-amber-500/20 to-amber-400/10 border-amber-400/30",
     iconBg: "bg-amber-500/15 text-amber-400",
-    description: "Entreprises qui souhaitent soutenir notre mission à travers un partenariat financier ou en nature.",
+    description: "Entreprises qui souhaitent digitaliser leurs activités ou collaborer avec nous sur un projet.",
   },
   {
     id: "individu",
     icon: Heart,
-    label: "Bénévole / Formateur",
+    label: "Formateur / Freelance",
     color: "from-emerald-500/20 to-emerald-400/10 border-emerald-400/30",
     iconBg: "bg-emerald-500/15 text-emerald-400",
-    description: "Professionnels, experts ou passionnés qui souhaitent contribuer bénévolement à nos programmes.",
+    description: "Professionnels, experts ou passionnés qui souhaitent collaborer avec nous ou donner des formations.",
   },
 ];
 
@@ -65,8 +65,8 @@ const CONTRIBUTION_WAYS = [
   },
   {
     icon: Heart,
-    title: "Soutien financier",
-    description: "Contribuez financièrement pour couvrir les coûts opérationnels et amplifier notre impact.",
+    title: "Confier-nous un projet",
+    description: "Faites développer votre site, votre logiciel de gestion ou votre identité visuelle par notre équipe.",
   },
 ];
 
@@ -85,7 +85,7 @@ const BENEFITS = [
   {
     icon: Users,
     title: "Accès à notre réseau",
-    description: "Intégrez un réseau de partenaires, bénévoles et leaders engagés pour Haïti.",
+    description: "Intégrez un réseau de partenaires, clients et professionnels engagés pour Haïti.",
   },
   {
     icon: Globe,

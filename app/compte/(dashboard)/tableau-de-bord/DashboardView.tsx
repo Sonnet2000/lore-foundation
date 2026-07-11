@@ -92,7 +92,7 @@ export default function DashboardView({
         <div className="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10">
           <HeartHandshake className="h-5 w-5 text-lore-emerald-light" />
           <p className="mt-3 font-display text-xl font-bold text-white">{stats.donationsCount}</p>
-          <p className="mt-0.5 text-xs text-white/45">Dons effectués</p>
+          <p className="mt-0.5 text-xs text-white/45">Contributions</p>
         </div>
         <div className="rounded-2xl bg-white/[0.03] p-5 ring-1 ring-white/10">
           <GraduationCap className="h-5 w-5 text-lore-emerald-light" />
@@ -117,8 +117,8 @@ export default function DashboardView({
           <div className="rounded-2xl bg-white/[0.03] p-8 text-center ring-1 ring-white/10">
             <p className="text-white/60">Aucune activité pour le moment.</p>
             <div className="mt-4 flex flex-wrap justify-center gap-3">
-              <Link href="/soutenir" className="btn-gold rounded-full px-5 py-2.5 text-sm font-bold">
-                Faire un don
+              <Link href="/ecole" className="btn-gold rounded-full px-5 py-2.5 text-sm font-bold">
+                Découvrir l&apos;École
               </Link>
               <Link
                 href="/#seminaires"

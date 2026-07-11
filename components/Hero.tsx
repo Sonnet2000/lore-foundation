@@ -69,7 +69,7 @@ export default function Hero() {
           >
             <span className="glow-dot" />
             <span className="text-xs font-medium text-white/80 sm:text-sm">
-              🇭🇹 Ensemble, bâtissons un avenir meilleur pour Haïti
+              🇭🇹 Formation professionnelle & services numériques à Cap-Haïtien
             </span>
           </motion.div>
 
@@ -81,15 +81,15 @@ export default function Hero() {
           {/* H1 */}
           <h1 className="font-display text-[2.6rem] font-extrabold leading-[1.08] tracking-[-0.02em] text-white sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4rem]">
             Former.{" "}
-            <span className="text-gradient-gold">Inspirer.</span>{" "}
-            Transformer.
+            <span className="text-gradient-gold">Créer.</span>{" "}
+            Réussir.
           </h1>
 
           {/* Description */}
           <p className="max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
-            Loré Foundation est une organisation engagée dans le développement
-            de l&apos;éducation, de la technologie et du leadership pour
-            construire un avenir meilleur pour Haïti.
+            Loré Foundation forme les talents de demain et accompagne les entreprises
+            haïtiennes avec des services numériques professionnels — développement web,
+            design graphique et bien plus.
           </p>
 
           {/* CTAs — grouper an pil pou yon lè plis konpak */}
@@ -111,25 +111,24 @@ export default function Hero() {
               <path d="M45 30L52 36L56 28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <a
-              href="/partenaire"
+              href="/ecole"
               className="btn-gold focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-105"
             >
-              Rejoindre notre mission
+              Découvrir l&apos;École
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
             <a
-              href="/partenaire"
+              href="/#services"
               className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/25"
             >
-              <Heart className="h-4 w-4" />
-              Devenir partenaire
+              Nos services
             </a>
             <a
-              href="/don"
+              href="/partenaire"
               className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-blue-300/20 bg-blue-400/10 px-7 py-3.5 text-sm font-semibold text-blue-200 backdrop-blur-sm transition-all hover:bg-blue-400/20"
             >
               <Heart className="h-4 w-4" />
-              Faire un don
+              Devenir partenaire
             </a>
           </div>
 
@@ -238,7 +237,7 @@ export default function Hero() {
               </span>
               <div>
                 <p className="font-display text-sm font-bold text-lore-ink dark:text-white">
-                  Impact communautaire
+                  Formation & services pro
                 </p>
                 <p className="text-xs text-lore-ink/50 dark:text-white/50">Cap-Haïtien & au-delà</p>
               </div>

@@ -100,15 +100,15 @@ export default function SponsorsClient({ sponsors }: { sponsors: PublicSponsor[]
         {/* En-tête */}
         <div className="mb-12 text-center">
           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-lore-blue/20 bg-lore-blue/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-lore-blue dark:border-lore-blue/30 dark:bg-lore-blue/10">
-            <HandHeart className="h-3.5 w-3.5" /> Partenaires & Sponsors
+            <HandHeart className="h-3.5 w-3.5" /> Partenaires & Clients
           </span>
           <h2 className="font-display text-3xl font-bold text-lore-ink dark:text-white md:text-4xl">
-            Ensemble, nous amplifions l&apos;impact
+            Ils nous font confiance
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lore-ink/60 dark:text-white/60">
-            Nos partenaires, sponsors et organisations collaboratrices jouent un rôle essentiel dans notre mission.
-            Grâce à leur soutien, nous pouvons toucher plus de communautés, former plus de jeunes et créer un
-            changement durable à travers Haïti. Rejoignez ce réseau de solidarité.
+            Nos partenaires, clients et organisations collaboratrices jouent un rôle essentiel dans notre croissance.
+            Grâce à leur confiance, nous formons plus d&apos;étudiants et livrons plus de projets à travers Haïti.
+            Rejoignez ce réseau de partenaires.
           </p>
         </div>
 
@@ -183,7 +183,7 @@ export default function SponsorsClient({ sponsors }: { sponsors: PublicSponsor[]
                     Demande reçue !
                   </p>
                   <p className="text-sm text-lore-ink/60 dark:text-white/60">
-                    Merci pour votre intérêt à soutenir Loré Foundation. Notre équipe vous contactera dans les 48 heures pour discuter de votre partenariat.
+                    Merci pour votre intérêt pour un partenariat avec Loré Foundation. Notre équipe vous contactera dans les 48 heures pour en discuter.
                   </p>
                   <button type="button" onClick={() => setSuccess(false)}
                     className="rounded-full border border-lore-dark/10 px-5 py-2 text-sm dark:border-white/10">

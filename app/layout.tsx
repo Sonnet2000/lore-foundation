@@ -26,29 +26,29 @@ const jakarta = Plus_Jakarta_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL("https://lore-foundation.vercel.app"),
   title: {
-    default: "Loré Foundation — L'excellence au cœur de l'impact",
+    default: "Loré Foundation — Formation professionnelle & services numériques",
     template: "%s | Loré Foundation",
   },
   description:
-    "Loré Foundation accompagne les jeunes et les communautés en Haïti à travers l'éducation, la formation numérique, le leadership et l'engagement communautaire. Basée à Cap-Haïtien.",
+    "Loré Foundation propose des formations professionnelles (développement web, design graphique) et des services numériques pour entreprises à Cap-Haïtien : développement de sites web, logiciels de gestion, design et support technique.",
   keywords: [
     "Loré Foundation",
-    "éducation Haïti",
-    "formation numérique Haïti",
-    "leadership jeunesse",
-    "développement communautaire",
+    "formation développement web Haïti",
+    "école informatique Cap-Haïtien",
+    "développement web Haïti",
+    "design graphique Haïti",
+    "services numériques Haïti",
+    "logiciel de gestion Haïti",
     "Cap-Haïtien",
-    "fondation Haïti",
-    "ONG Haïti",
-    "jeunesse haïtienne",
-    "formation informatique",
+    "formation professionnelle Haïti",
+    "dépannage informatique Cap-Haïtien",
   ],
   authors: [{ name: "Loré Foundation" }],
   icons: { icon: "/logo.png" },
   openGraph: {
-    title: "Loré Foundation — Former. Inspirer. Transformer.",
+    title: "Loré Foundation — Former. Créer. Réussir.",
     description:
-      "Une organisation engagée dans le développement de l'éducation, la technologie et le leadership pour construire un avenir meilleur pour Haïti.",
+      "Formations professionnelles et services numériques (développement web, design graphique, support technique) pour particuliers et entreprises à Cap-Haïtien.",
     url: "https://lore-foundation.vercel.app",
     siteName: "Loré Foundation",
     locale: "fr_FR",
@@ -56,8 +56,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Loré Foundation — Former. Inspirer. Transformer.",
-    description: "Éducation, formation numérique et leadership pour la jeunesse haïtienne.",
+    title: "Loré Foundation — Former. Créer. Réussir.",
+    description: "Formation professionnelle et services numériques à Cap-Haïtien.",
   },
   robots: { index: true, follow: true },
   verification: {
