@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Phone, Send, MessageCircle } from "lucide-react";
+import { Mail, MapPin, Phone, Send, MessageCircle, Wallet } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { services } from "@/lib/data";
@@ -189,6 +190,7 @@ export default function Contact() {
                   </button>
                 </motion.div>
               ) : (
+                <>
                 <form onSubmit={handleSubmit} className="grid gap-5 sm:grid-cols-2">
                   <div className="sm:col-span-1">
                     <label htmlFor="name" className={labelClasses}>Nom complet</label>
@@ -240,6 +242,22 @@ export default function Contact() {
                     </button>
                   </div>
                 </form>
+
+                <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-lore-gold/20 bg-lore-gold/5 px-5 py-4">
+                  <div className="flex items-center gap-3">
+                    <Wallet className="h-5 w-5 shrink-0 text-lore-gold-dark dark:text-lore-gold-light" />
+                    <p className="text-sm text-lore-ink/70 dark:text-white/70">
+                      Vous avez déjà un devis ? Réglez-le en ligne via Binance.
+                    </p>
+                  </div>
+                  <Link
+                    href="/paiement"
+                    className="focus-ring shrink-0 rounded-full bg-lore-gold px-4 py-2 text-xs font-bold text-lore-dark whitespace-nowrap hover:scale-[1.02] transition-transform"
+                  >
+                    Payer maintenant
+                  </Link>
+                </div>
+                </>
               )}
             </div>
           </AnimatedSection>

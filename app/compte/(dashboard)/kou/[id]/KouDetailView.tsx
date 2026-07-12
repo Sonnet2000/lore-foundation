@@ -4,14 +4,15 @@ import { useRef, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft, Clock3, CheckCircle2, XCircle, FileText,
-  Upload, Loader2, Award, Paperclip,
+  Upload, Loader2, Award, Paperclip, PlayCircle,
 } from "lucide-react";
-import type { CourseRow, EnrollmentRow, AssignmentRow, SubmissionRow } from "@/lib/school";
+import type { CourseRow, EnrollmentRow, AssignmentRow, SubmissionRow, LessonRow } from "@/lib/school";
 
 type Data = {
   course: CourseRow;
   enrollment: EnrollmentRow | null;
   assignments: (AssignmentRow & { submission: SubmissionRow | null })[];
+  lessons: LessonRow[];
 };
 
 function formatDate(iso: string | null) {
@@ -166,8 +167,58 @@ function AssignmentCard({ item }: { item: Data["assignments"][number] }) {
   );
 }
 
+function isVideoEmbeddable(url: string) {
+  return /youtube\.com|youtu\.be|vimeo\.com/.test(url);
+}
+
+function toEmbedUrl(url: string) {
+  const yt = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([\w-]+)/);
+  if (yt) return `https://www.youtube.com/embed/${yt[1]}`;
+  const vimeo = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}`;
+  return url;
+}
+
+function LessonCard({ lesson }: { lesson: LessonRow }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="focus-ring flex w-full items-center gap-3 p-4 text-left"
+      >
+        <PlayCircle className="h-5 w-5 shrink-0 text-lore-emerald-light" />
+        <span className="flex-1 text-sm font-semibold text-white">{lesson.title}</span>
+      </button>
+      {open && (
+        <div className="px-4 pb-4 flex flex-col gap-3">
+          {lesson.video_url && (
+            isVideoEmbeddable(lesson.video_url) ? (
+              <div className="relative aspect-video overflow-hidden rounded-xl bg-black">
+                <iframe
+                  src={toEmbedUrl(lesson.video_url)}
+                  className="absolute inset-0 h-full w-full"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            ) : (
+              // eslint-disable-next-line jsx-a11y/media-has-caption
+              <video src={lesson.video_url} controls className="w-full rounded-xl bg-black" />
+            )
+          )}
+          {lesson.description && <p className="text-sm text-white/70 whitespace-pre-wrap">{lesson.description}</p>}
+          {lesson.content && <p className="text-sm text-white/60 whitespace-pre-wrap">{lesson.content}</p>}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function KouDetailView({ data }: { data: Data }) {
-  const { course, enrollment, assignments } = data;
+  const { course, enrollment, assignments, lessons } = data;
 
   return (
     <div className="flex flex-col gap-6">
@@ -205,6 +256,15 @@ export default function KouDetailView({ data }: { data: Data }) {
           <div className="flex items-center gap-2 rounded-2xl border border-green-500/20 bg-green-500/10 p-4 text-sm text-green-300">
             <CheckCircle2 className="h-4 w-4 shrink-0" />
             Ou apwouve nan kou sa a.
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <h2 className="font-display text-lg font-bold text-white">Leçons ({lessons.length})</h2>
+            {lessons.length === 0 ? (
+              <p className="text-sm text-white/40">Pa gen leson pou kounye a.</p>
+            ) : (
+              lessons.map((l) => <LessonCard key={l.id} lesson={l} />)
+            )}
           </div>
 
           <div className="flex flex-col gap-4">

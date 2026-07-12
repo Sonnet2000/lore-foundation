@@ -99,6 +99,11 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
                   )}
                 </div>
                 <div className="flex flex-1 flex-col gap-3 p-5">
+                  {course.format !== "in_person" && (
+                    <span className="w-fit rounded-full bg-lore-emerald/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-lore-emerald">
+                      {course.format === "online" ? "100% en ligne" : "Hybride"}
+                    </span>
+                  )}
                   <h3 className="font-display text-lg font-bold text-lore-ink dark:text-white">{course.title}</h3>
                   <p className="flex items-center gap-1.5 text-xs text-lore-ink/50 dark:text-white/50">
                     <Clock3 className="h-3.5 w-3.5" />

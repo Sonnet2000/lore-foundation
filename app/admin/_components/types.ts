@@ -212,6 +212,8 @@ export type Project = {
   updated_at: string;
 };
 
+export type CourseFormat = "online" | "in_person" | "hybrid";
+
 export type CourseRow = {
   id: string;
   title: string;
@@ -220,6 +222,7 @@ export type CourseRow = {
   cover_url: string | null;
   price: string;
   duration: string;
+  format: CourseFormat;
   is_published: boolean;
   sort_order: number;
   created_at: string;
@@ -231,6 +234,9 @@ export type EnrollmentRow = {
   user_id: string;
   status: "pending" | "approved" | "rejected";
   note: string;
+  payment_method: string | null;
+  payment_reference: string | null;
+  payment_proof_url: string | null;
   created_at: string;
   decided_at: string | null;
   full_name: string;
@@ -264,4 +270,46 @@ export type SubmissionRow = {
   graded_at: string | null;
   full_name: string;
   email: string;
+};
+
+export type AdRow = {
+  id: string;
+  title: string;
+  description: string;
+  image_url: string;
+  link_url: string | null;
+  cta_label: string;
+  is_published: boolean;
+  sort_order: number;
+  starts_at: string | null;
+  ends_at: string | null;
+  created_at: string;
+};
+
+export type PaymentRequestRow = {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  subject: string;
+  amount: string;
+  method: string;
+  reference: string;
+  proof_url: string | null;
+  status: "pending" | "confirmed" | "rejected";
+  notes: string;
+  created_at: string;
+  confirmed_at: string | null;
+};
+
+export type LessonRow = {
+  id: string;
+  course_id: string;
+  title: string;
+  description: string;
+  video_url: string | null;
+  content: string;
+  is_published: boolean;
+  sort_order: number;
+  created_at: string;
 };

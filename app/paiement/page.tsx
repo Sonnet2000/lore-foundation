@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
+import { getPaymentSettings } from "@/lib/site-info-server";
 import PaiementClient from "./PaiementClient";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
-  title: "Soutenir nos projets — Loré Foundation",
-  description: "Soutenez les projets de Loré Foundation via MonCash, NatCash ou Sogebank. Contribution anonyme possible.",
+  title: "Paiement",
+  description: "Payez un service Loré Foundation via Binance Pay.",
+  robots: { index: false, follow: false },
 };
 
-export default function PaiementPage() {
-  return <PaiementClient />;
+export default async function PaiementPage() {
+  const settings = await getPaymentSettings();
+  return <PaiementClient settings={settings} />;
 }

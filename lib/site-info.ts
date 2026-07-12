@@ -96,3 +96,32 @@ export function mergeContactInfo(partial: Partial<ContactInfo> | null | undefine
     socialLinks: Array.isArray(partial.socialLinks) ? partial.socialLinks : DEFAULT_CONTACT.socialLinks,
   };
 }
+
+/** Konfigirasyon peman Binance (verifikasyon manyèl — pa gen API/webhook). */
+export type PaymentSettings = {
+  binanceEnabled: boolean;
+  binancePayId: string;
+  binanceWalletAddress: string;
+  binanceQrUrl: string;
+  instructions: string;
+};
+
+export const DEFAULT_PAYMENT: PaymentSettings = {
+  binanceEnabled: false,
+  binancePayId: "",
+  binanceWalletAddress: "",
+  binanceQrUrl: "",
+  instructions:
+    "Voye montan an sou Binance Pay ID oswa adrès la anba a, epi kole referans/ID tranzaksyon an ak yon kapti ekran anba pou nou ka konfime peman an.",
+};
+
+export function mergePaymentSettings(partial: Partial<PaymentSettings> | null | undefined): PaymentSettings {
+  if (!partial) return DEFAULT_PAYMENT;
+  return {
+    binanceEnabled: typeof partial.binanceEnabled === "boolean" ? partial.binanceEnabled : DEFAULT_PAYMENT.binanceEnabled,
+    binancePayId: partial.binancePayId || DEFAULT_PAYMENT.binancePayId,
+    binanceWalletAddress: partial.binanceWalletAddress || DEFAULT_PAYMENT.binanceWalletAddress,
+    binanceQrUrl: partial.binanceQrUrl || DEFAULT_PAYMENT.binanceQrUrl,
+    instructions: partial.instructions || DEFAULT_PAYMENT.instructions,
+  };
+}

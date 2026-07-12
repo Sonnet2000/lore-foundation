@@ -1,8 +1,10 @@
 import "server-only";
 import { tryGetSupabase } from "@/lib/supabase";
 import { DEFAULT_CONTACT, mergeContactInfo, type ContactInfo } from "@/lib/site-info";
+import { DEFAULT_PAYMENT, mergePaymentSettings, type PaymentSettings } from "@/lib/site-info";
 
 const SETTING_KEY = "contact";
+const PAYMENT_KEY = "payment";
 
 export async function getContactInfo(): Promise<ContactInfo> {
   try {
@@ -19,5 +21,23 @@ export async function getContactInfo(): Promise<ContactInfo> {
     return mergeContactInfo(data.value);
   } catch {
     return DEFAULT_CONTACT;
+  }
+}
+
+export async function getPaymentSettings(): Promise<PaymentSettings> {
+  try {
+    const supabase = tryGetSupabase();
+    if (!supabase) return DEFAULT_PAYMENT;
+
+    const { data, error } = await supabase
+      .from("site_settings")
+      .select("value")
+      .eq("key", PAYMENT_KEY)
+      .maybeSingle();
+
+    if (error || !data) return DEFAULT_PAYMENT;
+    return mergePaymentSettings(data.value);
+  } catch {
+    return DEFAULT_PAYMENT;
   }
 }

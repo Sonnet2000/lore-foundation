@@ -2,6 +2,7 @@ import Navbar from "@/components/Navbar";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import Hero from "@/components/Hero";
 import EcoleHighlight from "@/components/EcoleHighlight";
+import AdsBanner from "@/components/AdsBanner";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import BlogBanner from "@/components/BlogBanner";
 import Services from "@/components/Services";
@@ -35,6 +36,7 @@ export default async function Home() {
       <BlogBanner />
       <Team />
       <Portfolio />
+      <AdsBanner />
       <Seminars />
 
       <div className="relative">

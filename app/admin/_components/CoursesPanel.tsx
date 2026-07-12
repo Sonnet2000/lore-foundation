@@ -3,15 +3,15 @@
 import { useEffect, useState } from "react";
 import {
   Plus, Loader2, GraduationCap, Users, ChevronDown, ClipboardList,
-  CheckCircle2, XCircle, Clock, FileText, Link as LinkIcon, Award,
+  CheckCircle2, XCircle, Clock, FileText, Link as LinkIcon, Award, PlayCircle, Wallet,
 } from "lucide-react";
 import {
-  FieldLabel, TextInput, TextArea, PrimaryButton, GhostButton, RowCard,
+  FieldLabel, TextInput, TextArea, SelectInput, PrimaryButton, GhostButton, RowCard,
 } from "./ui";
 import ImageUploadField from "./ImageUploadField";
 import FileUploadField from "./FileUploadField";
 import ConfirmModal from "./ConfirmModal";
-import type { CourseRow, EnrollmentRow, AssignmentRow, SubmissionRow } from "./types";
+import type { CourseRow, EnrollmentRow, AssignmentRow, SubmissionRow, LessonRow, CourseFormat } from "./types";
 
 type CourseForm = {
   title: string;
@@ -20,11 +20,24 @@ type CourseForm = {
   cover_url: string | null;
   price: string;
   duration: string;
+  format: CourseFormat;
   is_published: boolean;
 };
 
 const emptyCourseForm: CourseForm = {
-  title: "", slug: "", description: "", cover_url: null, price: "", duration: "", is_published: true,
+  title: "", slug: "", description: "", cover_url: null, price: "", duration: "", format: "in_person", is_published: true,
+};
+
+type LessonForm = {
+  title: string;
+  description: string;
+  video_url: string;
+  content: string;
+  is_published: boolean;
+};
+
+const emptyLessonForm: LessonForm = {
+  title: "", description: "", video_url: "", content: "", is_published: true,
 };
 
 type AssignmentForm = {
@@ -69,14 +82,20 @@ export default function CoursesPanel() {
   const [deleteTarget, setDeleteTarget] = useState<CourseRow | null>(null);
   const [deleting, setDeleting] = useState(false);
 
-  const [expanded, setExpanded] = useState<{ courseId: string; view: "enrollments" | "assignments" } | null>(null);
+  const [expanded, setExpanded] = useState<{ courseId: string; view: "enrollments" | "assignments" | "lessons" } | null>(null);
   const [enrollments, setEnrollments] = useState<EnrollmentRow[] | null>(null);
   const [assignments, setAssignments] = useState<AssignmentRow[] | null>(null);
+  const [lessons, setLessons] = useState<LessonRow[] | null>(null);
 
   const [assignmentEditingId, setAssignmentEditingId] = useState<string | "new" | null>(null);
   const [assignmentForm, setAssignmentForm] = useState<AssignmentForm>(emptyAssignmentForm);
   const [assignmentSaving, setAssignmentSaving] = useState(false);
   const [assignmentDeleteTarget, setAssignmentDeleteTarget] = useState<AssignmentRow | null>(null);
+
+  const [lessonEditingId, setLessonEditingId] = useState<string | "new" | null>(null);
+  const [lessonForm, setLessonForm] = useState<LessonForm>(emptyLessonForm);
+  const [lessonSaving, setLessonSaving] = useState(false);
+  const [lessonDeleteTarget, setLessonDeleteTarget] = useState<LessonRow | null>(null);
 
   const [expandedAssignmentId, setExpandedAssignmentId] = useState<string | null>(null);
   const [submissions, setSubmissions] = useState<SubmissionRow[] | null>(null);
@@ -97,7 +116,7 @@ export default function CoursesPanel() {
   function startEditCourse(c: CourseRow) {
     setForm({
       title: c.title, slug: c.slug, description: c.description, cover_url: c.cover_url,
-      price: c.price, duration: c.duration, is_published: c.is_published,
+      price: c.price, duration: c.duration, format: c.format, is_published: c.is_published,
     });
     setEditingId(c.id);
     setError(null);
@@ -130,7 +149,7 @@ export default function CoursesPanel() {
     refreshCourses();
   }
 
-  async function toggleView(courseId: string, view: "enrollments" | "assignments") {
+  async function toggleView(courseId: string, view: "enrollments" | "assignments" | "lessons") {
     if (expanded?.courseId === courseId && expanded.view === view) { setExpanded(null); return; }
     setExpanded({ courseId, view });
     setExpandedAssignmentId(null);
@@ -139,11 +158,16 @@ export default function CoursesPanel() {
       const res = await fetch(`/api/admin/courses/${courseId}/enrollments`, { credentials: "include" });
       const data = await res.json().catch(() => ({}));
       setEnrollments(data.items ?? []);
-    } else {
+    } else if (view === "assignments") {
       setAssignments(null);
       const res = await fetch(`/api/admin/assignments?course_id=${courseId}`, { credentials: "include" });
       const data = await res.json().catch(() => ({}));
       setAssignments(data.items ?? []);
+    } else {
+      setLessons(null);
+      const res = await fetch(`/api/admin/lessons?course_id=${courseId}`, { credentials: "include" });
+      const data = await res.json().catch(() => ({}));
+      setLessons(data.items ?? []);
     }
   }
 
@@ -196,6 +220,47 @@ export default function CoursesPanel() {
     setAssignmentDeleteTarget(null);
     if (expandedAssignmentId === assignmentDeleteTarget.id) setExpandedAssignmentId(null);
     toggleAssignmentsRefresh();
+  }
+
+  function startNewLesson() { setLessonForm(emptyLessonForm); setLessonEditingId("new"); }
+
+  function startEditLesson(l: LessonRow) {
+    setLessonForm({
+      title: l.title, description: l.description, video_url: l.video_url ?? "",
+      content: l.content, is_published: l.is_published,
+    });
+    setLessonEditingId(l.id);
+  }
+
+  async function refreshLessons() {
+    if (!expanded) return;
+    const res = await fetch(`/api/admin/lessons?course_id=${expanded.courseId}`, { credentials: "include" });
+    const data = await res.json().catch(() => ({}));
+    setLessons(data.items ?? []);
+  }
+
+  async function saveLesson() {
+    if (!expanded || !lessonForm.title.trim()) return;
+    setLessonSaving(true);
+    const isNew = lessonEditingId === "new";
+    const payload = { ...lessonForm, course_id: expanded.courseId };
+    const res = await fetch(isNew ? "/api/admin/lessons" : `/api/admin/lessons/${lessonEditingId}`, {
+      credentials: "include",
+      method: isNew ? "POST" : "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    setLessonSaving(false);
+    if (!res.ok) return;
+    setLessonEditingId(null);
+    refreshLessons();
+  }
+
+  async function confirmDeleteLesson() {
+    if (!lessonDeleteTarget) return;
+    await fetch(`/api/admin/lessons/${lessonDeleteTarget.id}`, { credentials: "include", method: "DELETE" });
+    setLessonDeleteTarget(null);
+    refreshLessons();
   }
 
   async function toggleSubmissions(assignmentId: string) {
@@ -254,6 +319,15 @@ export default function CoursesPanel() {
         onConfirm={confirmDeleteAssignment}
         onCancel={() => setAssignmentDeleteTarget(null)}
       />
+      <ConfirmModal
+        open={!!lessonDeleteTarget}
+        title="Efase leson sa a ?"
+        message={`« ${lessonDeleteTarget?.title} » ap efase pou tout tan.`}
+        confirmLabel="Efase"
+        danger
+        onConfirm={confirmDeleteLesson}
+        onCancel={() => setLessonDeleteTarget(null)}
+      />
 
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
@@ -288,6 +362,14 @@ export default function CoursesPanel() {
                 <FieldLabel>Pri (opsyonèl)</FieldLabel>
                 <TextInput value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="Gratis, oswa 2 500 HTG" />
               </div>
+            </div>
+            <div className="mt-4">
+              <FieldLabel>Fòma</FieldLabel>
+              <SelectInput value={form.format} onChange={(e) => setForm({ ...form, format: e.target.value as CourseFormat })}>
+                <option value="in_person">En présentiel</option>
+                <option value="online">100% en ligne</option>
+                <option value="hybrid">Hybride</option>
+              </SelectInput>
             </div>
             <div className="mt-4">
               <FieldLabel>Deskripsyon</FieldLabel>
@@ -337,6 +419,11 @@ export default function CoursesPanel() {
                   <ClipboardList className="h-3.5 w-3.5" />Devwa
                   <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded?.courseId === c.id && expanded.view === "assignments" ? "rotate-180" : ""}`} />
                 </button>
+                <button type="button" onClick={() => toggleView(c.id, "lessons")}
+                  className="focus-ring flex items-center gap-1.5 text-xs font-semibold text-lore-gold-dark hover:text-lore-dark dark:text-lore-gold-light">
+                  <PlayCircle className="h-3.5 w-3.5" />Leçons
+                  <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded?.courseId === c.id && expanded.view === "lessons" ? "rotate-180" : ""}`} />
+                </button>
               </div>
 
               {expanded?.courseId === c.id && expanded.view === "enrollments" && (
@@ -352,6 +439,15 @@ export default function CoursesPanel() {
                           <div>
                             <p className="text-sm font-semibold text-lore-ink dark:text-white">{e.full_name || e.email}</p>
                             <p className="text-xs text-lore-ink/50 dark:text-white/50">{e.email}{e.phone ? ` · ${e.phone}` : ""}</p>
+                            {(e.payment_reference || e.payment_proof_url) && (
+                              <p className="mt-1 flex items-center gap-2 text-xs text-lore-gold-dark dark:text-lore-gold-light">
+                                <Wallet className="h-3 w-3" />
+                                {e.payment_reference && <span className="font-mono">{e.payment_reference}</span>}
+                                {e.payment_proof_url && (
+                                  <a href={e.payment_proof_url} target="_blank" rel="noopener noreferrer" className="underline">Gade prèv</a>
+                                )}
+                              </p>
+                            )}
                           </div>
                           <div className="flex items-center gap-2">
                             <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
@@ -495,6 +591,74 @@ export default function CoursesPanel() {
                               )}
                             </div>
                           )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {expanded?.courseId === c.id && expanded.view === "lessons" && (
+                <div className="ml-[60px] flex flex-col gap-3 rounded-2xl border border-lore-dark/5 bg-white p-4 dark:border-white/5 dark:bg-lore-night-surface">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-semibold text-lore-ink/50 dark:text-white/50">Leçons pou kou sa a</p>
+                    {lessonEditingId === null && (
+                      <button onClick={startNewLesson} className="focus-ring inline-flex items-center gap-1.5 rounded-full bg-lore-gold/10 px-3 py-1.5 text-xs font-semibold text-lore-gold-dark hover:bg-lore-gold/20 dark:text-lore-gold-light">
+                        <Plus className="h-3.5 w-3.5" />Nouvo leson
+                      </button>
+                    )}
+                  </div>
+
+                  {lessonEditingId !== null && (
+                    <div className="rounded-2xl border border-lore-dark/5 bg-lore-cream/60 p-4 dark:border-white/5 dark:bg-white/[0.04]">
+                      <FieldLabel>Tit leson an</FieldLabel>
+                      <TextInput value={lessonForm.title} onChange={(e) => setLessonForm({ ...lessonForm, title: e.target.value })} placeholder="Leson 1 : Entwodiksyon" />
+                      <div className="mt-3">
+                        <FieldLabel>Lyen videyo (YouTube, Vimeo, oswa lyen dirèk .mp4)</FieldLabel>
+                        <TextInput value={lessonForm.video_url} onChange={(e) => setLessonForm({ ...lessonForm, video_url: e.target.value })} placeholder="https://youtube.com/watch?v=..." />
+                      </div>
+                      <div className="mt-3">
+                        <FieldLabel>Deskripsyon kout</FieldLabel>
+                        <TextArea rows={2} value={lessonForm.description} onChange={(e) => setLessonForm({ ...lessonForm, description: e.target.value })} />
+                      </div>
+                      <div className="mt-3">
+                        <FieldLabel>Nòt/kontni siplemantè (opsyonèl)</FieldLabel>
+                        <TextArea rows={3} value={lessonForm.content} onChange={(e) => setLessonForm({ ...lessonForm, content: e.target.value })} />
+                      </div>
+                      <div className="mt-3">
+                        <label className="flex items-center gap-2 text-sm font-medium text-lore-ink/70 dark:text-white/70">
+                          <input type="checkbox" checked={lessonForm.is_published} onChange={(e) => setLessonForm({ ...lessonForm, is_published: e.target.checked })} className="h-4 w-4 rounded accent-lore-emerald" />
+                          Publye (vizib pou elèv apwouve yo)
+                        </label>
+                      </div>
+                      <div className="mt-4 flex items-center gap-3">
+                        <PrimaryButton onClick={saveLesson} disabled={lessonSaving}>
+                          {lessonSaving && <Loader2 className="h-4 w-4 animate-spin" />}Anrejistre
+                        </PrimaryButton>
+                        <GhostButton onClick={() => setLessonEditingId(null)}>Anile</GhostButton>
+                      </div>
+                    </div>
+                  )}
+
+                  {lessons === null ? (
+                    <Loader2 className="h-4 w-4 animate-spin text-lore-ink/40 dark:text-white/40" />
+                  ) : lessons.length === 0 ? (
+                    <p className="text-sm text-lore-ink/40 dark:text-white/40">Pa gen leson pou kounye a.</p>
+                  ) : (
+                    <div className="flex flex-col gap-2">
+                      {lessons.map((l) => (
+                        <div key={l.id} className="flex items-center justify-between rounded-xl border border-lore-dark/5 p-3 dark:border-white/5">
+                          <div className="flex items-center gap-2">
+                            <PlayCircle className="h-4 w-4 text-lore-gold-dark dark:text-lore-gold-light" />
+                            <div>
+                              <p className="text-sm font-semibold text-lore-ink dark:text-white">{l.title}</p>
+                              <p className="text-xs text-lore-ink/50 dark:text-white/50">{l.is_published ? "Publye" : "Pa publye"}</p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button onClick={() => startEditLesson(l)} className="focus-ring text-xs font-semibold text-lore-ink/50 hover:text-lore-blue dark:text-white/50">Modifye</button>
+                            <button onClick={() => setLessonDeleteTarget(l)} className="focus-ring text-xs font-semibold text-lore-ink/50 hover:text-red-500 dark:text-white/50">Efase</button>
+                          </div>
                         </div>
                       ))}
                     </div>

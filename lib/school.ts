@@ -1,6 +1,8 @@
 import "server-only";
 import { getSupabase } from "@/lib/supabase";
 
+export type CourseFormat = "online" | "in_person" | "hybrid";
+
 export type CourseRow = {
   id: string;
   title: string;
@@ -9,6 +11,7 @@ export type CourseRow = {
   cover_url: string | null;
   price: string;
   duration: string;
+  format: CourseFormat;
   is_published: boolean;
   sort_order: number;
   created_at: string;
@@ -22,8 +25,23 @@ export type EnrollmentRow = {
   user_id: string;
   status: EnrollmentStatus;
   note: string;
+  payment_method: string | null;
+  payment_reference: string | null;
+  payment_proof_url: string | null;
   created_at: string;
   decided_at: string | null;
+};
+
+export type LessonRow = {
+  id: string;
+  course_id: string;
+  title: string;
+  description: string;
+  video_url: string | null;
+  content: string;
+  is_published: boolean;
+  sort_order: number;
+  created_at: string;
 };
 
 export type AssignmentRow = {
@@ -94,6 +112,7 @@ export async function getCourseForStudent(courseId: string, userId: string) {
     .maybeSingle();
 
   let assignments: (AssignmentRow & { submission: SubmissionRow | null })[] = [];
+  let lessons: LessonRow[] = [];
 
   if (enrollment?.status === "approved") {
     const { data: assignmentRows } = await supabase
@@ -115,18 +134,39 @@ export async function getCourseForStudent(courseId: string, userId: string) {
       ...(a as AssignmentRow),
       submission: byAssignment.get(a.id) ?? null,
     }));
+
+    const { data: lessonRows } = await supabase
+      .from("course_lessons")
+      .select("*")
+      .eq("course_id", courseId)
+      .eq("is_published", true)
+      .order("sort_order", { ascending: true });
+
+    lessons = (lessonRows ?? []) as LessonRow[];
   }
 
   return {
     course: course as CourseRow,
     enrollment: (enrollment as EnrollmentRow | null) ?? null,
     assignments,
+    lessons,
   };
 }
 
 /** Elèv la mande pou l enskri nan yon kou (kreye/re-aktive yon demand "pending"). */
-export async function requestEnrollment(courseId: string, userId: string) {
+export async function requestEnrollment(
+  courseId: string,
+  userId: string,
+  payment?: { method: string; reference: string; proof_url: string }
+) {
   const supabase = getSupabase();
+  const paymentFields = payment
+    ? {
+        payment_method: payment.method || null,
+        payment_reference: payment.reference || null,
+        payment_proof_url: payment.proof_url || null,
+      }
+    : {};
 
   const { data: existing } = await supabase
     .from("course_enrollments")
@@ -139,7 +179,7 @@ export async function requestEnrollment(courseId: string, userId: string) {
     if (existing.status === "rejected") {
       const { data, error } = await supabase
         .from("course_enrollments")
-        .update({ status: "pending", decided_at: null })
+        .update({ status: "pending", decided_at: null, ...paymentFields })
         .eq("id", existing.id)
         .select()
         .single();
@@ -151,7 +191,7 @@ export async function requestEnrollment(courseId: string, userId: string) {
 
   const { data, error } = await supabase
     .from("course_enrollments")
-    .insert({ course_id: courseId, user_id: userId, status: "pending" })
+    .insert({ course_id: courseId, user_id: userId, status: "pending", ...paymentFields })
     .select()
     .single();
 

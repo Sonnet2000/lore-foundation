@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
-  Megaphone, Calendar, Mail, HandHeart,
+  Megaphone, Calendar, Mail, HandHeart, Image as ImageIcon, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
   Settings, BookOpen, Target, Home, UserCog, BarChart3, Share2, GraduationCap,
 } from "lucide-react";
@@ -23,6 +23,8 @@ import UsersPanel           from "./UsersPanel";
 import AnalyticsPanel       from "./AnalyticsPanel";
 import SiteInfoPanel        from "./SiteInfoPanel";
 import CoursesPanel         from "./CoursesPanel";
+import AdsPanel              from "./AdsPanel";
+import PaymentsPanel         from "./PaymentsPanel";
 
 const TABS = [
   { id: "hero",             label: "Accueil",       icon: Home,         group: "Contenu" },
@@ -36,6 +38,8 @@ const TABS = [
   { id: "seminars",         label: "Séminaires",     icon: Calendar,     group: "Contenu" },
   { id: "site-info",        label: "Coordonnées",    icon: Share2,       group: "Contenu" },
   { id: "courses",          label: "École",          icon: GraduationCap, group: "École" },
+  { id: "ads",              label: "Publicité",      icon: ImageIcon,    group: "Marketing" },
+  { id: "payments",         label: "Paiements",      icon: CreditCard,   group: "Marketing" },
   { id: "sponsors",        label: "Partenaires",   icon: HandHeart,   group: "Engagement" },
   { id: "subscribers",     label: "Abonnés",       icon: Mail,        group: "Engagement" },
   { id: "users",           label: "Utilisateurs",  icon: UserCog,     group: "Utilisateurs" },
@@ -56,6 +60,8 @@ const TAB_META: Record<TabId, { desc: string }> = {
   seminars:          { desc: "Séminaires et formations à venir" },
   "site-info":       { desc: "Telefòn, imèl, adrès ak lyen rezo sosyal (Facebook, TikTok, YouTube, elt.)" },
   courses:           { desc: "Kou yo, enskripsyon elèv yo, devwa ak kòreksyon" },
+  ads:               { desc: "Espas piblisitè — foto, deskripsyon ak lyen ki parèt sou paj akèy la" },
+  payments:          { desc: "Konfigirasyon Binance ak demand peman pou sèvis yo" },
   sponsors:          { desc: "Partenaires d'affaires, clients et organisations collaboratrices" },
   subscribers:       { desc: "Personnes inscrites à la newsletter" },
   users:             { desc: "Tout moun ki gen kont sou espas manm — jere, bloke oswa efase" },
@@ -75,6 +81,7 @@ export default function Dashboard() {
 
   const contentTabs   = TABS.filter(t => t.group === "Contenu");
   const ecoleTabs      = TABS.filter(t => t.group === "École");
+  const marketingTabs  = TABS.filter(t => t.group === "Marketing");
   const engageTabs    = TABS.filter(t => t.group === "Engagement");
   const usersTabs     = TABS.filter(t => t.group === "Utilisateurs");
   const activeTab     = TABS.find(t => t.id === active)!;
@@ -97,6 +104,7 @@ export default function Dashboard() {
         <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-6">
           <SideGroup label="Contenu du site" tabs={contentTabs} active={active} onSelect={setActive} />
           <SideGroup label="École" tabs={ecoleTabs} active={active} onSelect={setActive} />
+          <SideGroup label="Marketing" tabs={marketingTabs} active={active} onSelect={setActive} />
           <SideGroup label="Engagement & Finance" tabs={engageTabs} active={active} onSelect={setActive} />
           <SideGroup label="Utilisateurs & Trafic" tabs={usersTabs} active={active} onSelect={setActive} />
         </nav>
@@ -131,6 +139,7 @@ export default function Dashboard() {
             <nav className="flex-1 overflow-y-auto px-3 py-4 flex flex-col gap-6">
               <SideGroup label="Contenu du site" tabs={contentTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
               <SideGroup label="École" tabs={ecoleTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
+              <SideGroup label="Marketing" tabs={marketingTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
               <SideGroup label="Engagement & Finance" tabs={engageTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
               <SideGroup label="Utilisateurs & Trafic" tabs={usersTabs} active={active} onSelect={(id) => { setActive(id); setSidebarOpen(false); }} />
             </nav>
@@ -225,6 +234,8 @@ export default function Dashboard() {
           {active === "seminars"         && <SeminarsPanel />}
           {active === "site-info"        && <SiteInfoPanel />}
           {active === "courses"          && <CoursesPanel />}
+          {active === "ads"              && <AdsPanel />}
+          {active === "payments"         && <PaymentsPanel />}
           {active === "sponsors"         && <SponsorsPanel />}
           {active === "subscribers"      && <SubscribersPanel />}
           {active === "users"            && <UsersPanel />}
