@@ -144,7 +144,7 @@ export default function DashboardView({
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-white">
-                          Don {d.project ? `— ${d.project.title}` : ""}
+                          Contribution {d.project ? `— ${d.project.title}` : ""}
                         </p>
                         <p className="text-xs text-white/45">
                           {formatDate(d.created_at)} · Réf. {d.reference || "—"}

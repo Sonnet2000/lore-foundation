@@ -12,7 +12,7 @@ html {
 body {
   overflow-x: hidden;
   color: #0b1f33;
-  background-color: #f4f7fb;
+  background-color: #f5f7fa;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -36,7 +36,7 @@ html.dark body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #d4af37, #0f98ff);
+  background: linear-gradient(to bottom, #d4af37, #0ea472);
   border-radius: 999px;
 }
 
@@ -190,6 +190,13 @@ html.dark .glass-card {
 
 .text-gradient-blue {
   background: linear-gradient(135deg, #5ac8ff 0%, #0f98ff 60%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-emerald {
+  background: linear-gradient(135deg, #4ade94 0%, #0ea472 60%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

@@ -33,7 +33,7 @@ function csvEscape(value: string | number) {
 function exportCsv(rows: UserRow[]) {
   const headers = [
     "Non", "Imèl", "Telefòn", "Dat enskripsyon", "Dènye koneksyon", "Bloke",
-    "Kantite don", "Total don (HTG)", "Kantite peman", "Total peman (HTG)", "Enskripsyon seminè",
+    "Kantite kontribisyon", "Total kontribisyon (HTG)", "Kantite peman", "Total peman (HTG)", "Enskripsyon seminè",
   ];
   const lines = rows.map((u) =>
     [
@@ -195,7 +195,7 @@ export default function UsersPanel() {
       <ConfirmModal
         open={!!deleteTarget}
         title="Efase kont sa a definitivman ?"
-        message={`Kont ${deleteTarget?.email} ap efase pou tout tan. Istorik don/peman li yo ap rete (san kont ki lye ak yo), men li p ap ka konekte ankò.`}
+        message={`Kont ${deleteTarget?.email} ap efase pou tout tan. Istorik kontribisyon/peman li yo ap rete (san kont ki lye ak yo), men li p ap ka konekte ankò.`}
         confirmLabel="Efase kont lan"
         danger
         loading={busy}
@@ -207,7 +207,7 @@ export default function UsersPanel() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <StatCard label="Kont enskri" value={items.length} icon={ShieldCheck} />
           <StatCard label="Aktif mwa sa a" value={activeThisMonth} icon={CalendarCheck} />
-          <StatCard label="Moun ki fè don" value={donorsCount} icon={Gift} />
+          <StatCard label="Moun ki kontribye" value={donorsCount} icon={Gift} />
           <StatCard label="Total kontribisyon" value={formatMoney(totalDonations)} icon={CreditCard} />
         </div>
 
@@ -216,7 +216,7 @@ export default function UsersPanel() {
             {(
               [
                 { id: "all", label: `Tout moun (${items.length})` },
-                { id: "donors", label: `Moun ki fè don (${donorsCount})` },
+                { id: "donors", label: `Moun ki kontribye (${donorsCount})` },
                 { id: "banned", label: `Bloke (${items.filter((u) => u.banned).length})` },
               ] as { id: Segment; label: string }[]
             ).map((s) => (
@@ -304,7 +304,7 @@ export default function UsersPanel() {
                       </div>
                       <div className="flex items-center gap-2 text-lore-ink/70 dark:text-white/70">
                         <Gift className="h-3.5 w-3.5 shrink-0" />
-                        {u.donationsCount} don · {formatMoney(u.donationsTotal)}
+                        {u.donationsCount} kontribisyon · {formatMoney(u.donationsTotal)}
                       </div>
                       <div className="flex items-center gap-2 text-lore-ink/70 dark:text-white/70">
                         <CreditCard className="h-3.5 w-3.5 shrink-0" />

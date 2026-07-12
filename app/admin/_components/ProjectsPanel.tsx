@@ -353,7 +353,7 @@ export default function ProjectsPanel() {
       <ConfirmModal
         open={!!deleteTarget}
         title="Supprimer ce projet ?"
-        message={`"${deleteTarget?.title}" et tous ses dons seront supprimés définitivement.`}
+        message={`"${deleteTarget?.title}" et toutes ses contributions liées seront supprimés définitivement.`}
         confirmLabel="Supprimer" danger loading={deleting}
         onConfirm={confirmDelete} onCancel={() => setDeleteTarget(null)}
       />

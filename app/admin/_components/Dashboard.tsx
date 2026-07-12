@@ -51,7 +51,7 @@ const TAB_META: Record<TabId, { desc: string }> = {
   team:              { desc: "Bénévoles, formateurs et coordinateurs" },
   testimonials:      { desc: "Histoires d'impact et témoignages" },
   blog:              { desc: "Créez et gérez les articles du blog" },
-  projects:          { desc: "Projets à financer — gérez médias, objectifs et dons" },
+  projects:          { desc: "Réalisations et projets — gérez médias et contributions liées" },
   announcements:     { desc: "Annonces visibles en haut du site" },
   seminars:          { desc: "Séminaires et formations à venir" },
   "site-info":       { desc: "Telefòn, imèl, adrès ak lyen rezo sosyal (Facebook, TikTok, YouTube, elt.)" },

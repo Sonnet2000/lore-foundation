@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import Hero from "@/components/Hero";
+import EcoleHighlight from "@/components/EcoleHighlight";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import BlogBanner from "@/components/BlogBanner";
 import Services from "@/components/Services";
@@ -28,9 +29,10 @@ export default async function Home() {
       <WelcomeScreen />
       <Navbar announcement={announcement} showSeminaires={showSeminaires} />
       <Hero />
+      <EcoleHighlight />
+      <Services />
       <WhyChooseUs />
       <BlogBanner />
-      <Services />
       <Team />
       <Portfolio />
       <Seminars />

@@ -60,7 +60,7 @@ const CONTRIBUTION_WAYS = [
   },
   {
     icon: GraduationCap,
-    title: "Soutenir les formations",
+    title: "Contribuer aux formations",
     description: "Offrez du matériel pédagogique, des équipements ou des ressources pour nos programmes.",
   },
   {
@@ -234,7 +234,7 @@ export default function PartenaireClient() {
             Comment pouvez-vous contribuer ?
           </h2>
           <p className="text-sm text-lore-ink/50 dark:text-white/50 mb-8">
-            Il existe de nombreuses façons de soutenir notre mission — choisissez ce qui vous correspond.
+            Il existe plusieurs façons de collaborer avec Loré Foundation — choisissez ce qui vous correspond.
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {CONTRIBUTION_WAYS.map((way) => (
