@@ -6,7 +6,7 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, Image as ImageIcon, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
-  Settings, BookOpen, Target, Home, UserCog, BarChart3, Share2, GraduationCap,
+  Settings, BookOpen, Target, Home, UserCog, BarChart3, Share2, GraduationCap, Sparkles,
 } from "lucide-react";
 import PortfolioPanel       from "./PortfolioPanel";
 import HeroPanel            from "./HeroPanel";
@@ -25,6 +25,7 @@ import SiteInfoPanel        from "./SiteInfoPanel";
 import CoursesPanel         from "./CoursesPanel";
 import AdsPanel              from "./AdsPanel";
 import PaymentsPanel         from "./PaymentsPanel";
+import PremiumServicesPanel  from "./PremiumServicesPanel";
 
 const TABS = [
   { id: "hero",             label: "Accueil",       icon: Home,         group: "Contenu" },
@@ -40,6 +41,7 @@ const TABS = [
   { id: "courses",          label: "École",          icon: GraduationCap, group: "École" },
   { id: "ads",              label: "Publicité",      icon: ImageIcon,    group: "Marketing" },
   { id: "payments",         label: "Paiements",      icon: CreditCard,   group: "Marketing" },
+  { id: "premium-services", label: "Services Premium", icon: Sparkles,   group: "Marketing" },
   { id: "sponsors",        label: "Partenaires",   icon: HandHeart,   group: "Engagement" },
   { id: "subscribers",     label: "Abonnés",       icon: Mail,        group: "Engagement" },
   { id: "users",           label: "Utilisateurs",  icon: UserCog,     group: "Utilisateurs" },
@@ -62,6 +64,7 @@ const TAB_META: Record<TabId, { desc: string }> = {
   courses:           { desc: "Kou yo, enskripsyon elèv yo, devwa ak kòreksyon" },
   ads:               { desc: "Espas piblisitè — foto, deskripsyon ak lyen ki parèt sou paj akèy la" },
   payments:          { desc: "Konfigirasyon Binance ak demand peman pou sèvis yo" },
+  "premium-services": { desc: "Sèvis moun ka kòmande dirèkteman (Carte Virtuelle, Booster Publication, elt.)" },
   sponsors:          { desc: "Partenaires d'affaires, clients et organisations collaboratrices" },
   subscribers:       { desc: "Personnes inscrites à la newsletter" },
   users:             { desc: "Tout moun ki gen kont sou espas manm — jere, bloke oswa efase" },
@@ -236,6 +239,7 @@ export default function Dashboard() {
           {active === "courses"          && <CoursesPanel />}
           {active === "ads"              && <AdsPanel />}
           {active === "payments"         && <PaymentsPanel />}
+          {active === "premium-services" && <PremiumServicesPanel />}
           {active === "sponsors"         && <SponsorsPanel />}
           {active === "subscribers"      && <SubscribersPanel />}
           {active === "users"            && <UsersPanel />}

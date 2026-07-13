@@ -13,51 +13,6 @@ type PublicSponsor = {
   website_url: string | null;
 };
 
-const TIERS = [
-  {
-    id: "gold" as const,
-    label: "Gold",
-    emoji: "🥇",
-    price: "25 000 HTG / mois",
-    color: "from-yellow-400/20 to-amber-300/10 border-yellow-400/30",
-    badge: "bg-yellow-400/20 text-yellow-600 dark:text-yellow-300",
-    perks: [
-      "Logo sur le site + réseaux sociaux de la fondation",
-      "Mention d'honneur dans tous nos séminaires et événements",
-      "Lien vers votre site ou organisation",
-      "Certificat de partenariat officiel Loré Foundation",
-      "Co-branding sur nos publications mensuelles",
-    ],
-  },
-  {
-    id: "silver" as const,
-    label: "Silver",
-    emoji: "🥈",
-    price: "12 500 HTG / mois",
-    color: "from-slate-400/20 to-slate-300/10 border-slate-400/30",
-    badge: "bg-slate-400/20 text-slate-600 dark:text-slate-300",
-    perks: [
-      "Logo sur le site de la fondation",
-      "Mention dans nos séminaires et formations",
-      "Lien vers votre site ou organisation",
-      "Certificat de partenariat officiel",
-    ],
-  },
-  {
-    id: "bronze" as const,
-    label: "Bronze",
-    emoji: "🥉",
-    price: "5 000 HTG / mois",
-    color: "from-orange-400/20 to-orange-300/10 border-orange-400/30",
-    badge: "bg-orange-400/20 text-orange-600 dark:text-orange-300",
-    perks: [
-      "Nom visible sur le site de la fondation",
-      "Mention dans nos publications digitales",
-      "Certificat de partenariat officiel",
-    ],
-  },
-];
-
 const emptyForm = {
   name: "", organization: "", email: "", phone: "",
   tier: "bronze" as "bronze" | "silver" | "gold", message: "", website_url: "",
@@ -112,36 +67,23 @@ export default function SponsorsClient({ sponsors }: { sponsors: PublicSponsor[]
           </p>
         </div>
 
-        {/* Tiers */}
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-3 mb-14">
-          {TIERS.map((tier) => (
-            <div key={tier.id}
-              className={`relative rounded-3xl border bg-gradient-to-br ${tier.color} p-6 flex flex-col gap-4`}>
-              <div className="flex items-center justify-between">
-                <span className="text-2xl">{tier.emoji}</span>
-                <span className={`rounded-full px-3 py-1 text-xs font-bold ${tier.badge}`}>
-                  {tier.label}
-                </span>
-              </div>
-              <div>
-                <p className="font-display text-xl font-bold text-lore-ink dark:text-white">{tier.label} Sponsor</p>
-                <p className="mt-1 text-sm font-semibold text-lore-blue">{tier.price}</p>
-              </div>
-              <ul className="flex flex-col gap-2">
-                {tier.perks.map((p) => (
-                  <li key={p} className="flex items-start gap-2 text-sm text-lore-ink/70 dark:text-white/70">
-                    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-lore-blue" />
-                    {p}
-                  </li>
-                ))}
-              </ul>
-              <button type="button"
-                onClick={() => { setForm(f => ({ ...f, tier: tier.id })); setFormOpen(true); }}
-                className="mt-auto rounded-full bg-lore-blue px-5 py-2.5 text-sm font-semibold text-white hover:bg-lore-blue/90 transition-colors">
-                Aplike — {tier.label}
-              </button>
-            </div>
-          ))}
+        {/* CTA partenariat */}
+        <div className="mb-14 flex flex-col items-center gap-4 rounded-3xl border border-lore-dark/5 bg-white p-8 text-center dark:border-white/5 dark:bg-lore-night-surface sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="font-display text-lg font-bold text-lore-ink dark:text-white">
+              Votre entreprise veut être visible auprès de nos étudiants et clients ?
+            </p>
+            <p className="mt-1 text-sm text-lore-ink/50 dark:text-white/50">
+              Logo sur le site, mention dans nos événements, certificat de partenariat officiel.
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setFormOpen(true)}
+            className="shrink-0 rounded-full bg-lore-gold px-6 py-3 text-sm font-bold text-lore-dark transition-transform hover:scale-[1.02]"
+          >
+            Devenir partenaire
+          </button>
         </div>
 
         {/* Sponsors aktyèl */}

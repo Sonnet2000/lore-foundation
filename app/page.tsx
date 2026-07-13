@@ -3,6 +3,7 @@ import WelcomeScreen from "@/components/WelcomeScreen";
 import Hero from "@/components/Hero";
 import EcoleHighlight from "@/components/EcoleHighlight";
 import AdsBanner from "@/components/AdsBanner";
+import PremiumServices from "@/components/PremiumServices";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import BlogBanner from "@/components/BlogBanner";
 import Services from "@/components/Services";
@@ -32,6 +33,7 @@ export default async function Home() {
       <Hero />
       <EcoleHighlight />
       <Services />
+      <PremiumServices />
       <WhyChooseUs />
       <BlogBanner />
       <Team />

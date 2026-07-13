@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import {
   ArrowLeft, Copy, Check, Upload, Loader2, FileText, CheckCircle2, AlertCircle,
 } from "lucide-react";
@@ -37,11 +38,12 @@ function CopyRow({ label, value }: { label: string; value: string }) {
 }
 
 export default function PaiementClient({ settings }: { settings: Settings }) {
+  const searchParams = useSearchParams();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [subject, setSubject] = useState("");
-  const [amount, setAmount] = useState("");
+  const [subject, setSubject] = useState(searchParams.get("subject") ?? "");
+  const [amount, setAmount] = useState(searchParams.get("amount") ?? "");
   const [reference, setReference] = useState("");
   const [proofUrl, setProofUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);

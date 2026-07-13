@@ -313,3 +313,16 @@ export type LessonRow = {
   sort_order: number;
   created_at: string;
 };
+
+export type PremiumServiceRow = {
+  id: string;
+  title: string;
+  description: string;
+  price: string;
+  icon: string;
+  features: string[];
+  is_published: boolean;
+  is_featured: boolean;
+  sort_order: number;
+  created_at: string;
+};

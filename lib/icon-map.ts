@@ -20,6 +20,8 @@ import {
   LineChart,
   Shield,
   Wrench,
+  CreditCard,
+  TrendingUp,
   type LucideIcon,
 } from "lucide-react";
 
@@ -50,6 +52,8 @@ export const iconMap: Record<string, LucideIcon> = {
   LineChart,
   Shield,
   Wrench,
+  CreditCard,
+  TrendingUp,
 };
 
 export const iconNames = Object.keys(iconMap);

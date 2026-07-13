@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getPaymentSettings } from "@/lib/site-info-server";
 import PaiementClient from "./PaiementClient";
 
@@ -12,5 +13,9 @@ export const metadata: Metadata = {
 
 export default async function PaiementPage() {
   const settings = await getPaymentSettings();
-  return <PaiementClient settings={settings} />;
+  return (
+    <Suspense fallback={null}>
+      <PaiementClient settings={settings} />
+    </Suspense>
+  );
 }
