@@ -3,14 +3,36 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Loader2, Save, ImageIcon, Play, Info, CheckCircle2 } from "lucide-react";
-import { FieldLabel, PrimaryButton } from "./ui";
+import { FieldLabel, TextInput, TextArea, PrimaryButton } from "./ui";
 import MediaListField, { MediaItem } from "./MediaListField";
 
 type HeroSettings = {
   media: MediaItem[]; // photo(s) oswa vidéo pou hero section
+  badgeText: string;
+  headlineBefore: string;
+  headlineHighlight: string;
+  headlineAfter: string;
+  description: string;
+  mobileBadgeText: string;
+  floatingBadge1Title: string;
+  floatingBadge1Subtitle: string;
+  floatingBadge2Title: string;
+  floatingBadge2Subtitle: string;
 };
 
-const DEFAULT: HeroSettings = { media: [] };
+const DEFAULT: HeroSettings = {
+  media: [],
+  badgeText: "",
+  headlineBefore: "",
+  headlineHighlight: "",
+  headlineAfter: "",
+  description: "",
+  mobileBadgeText: "",
+  floatingBadge1Title: "",
+  floatingBadge1Subtitle: "",
+  floatingBadge2Title: "",
+  floatingBadge2Subtitle: "",
+};
 
 export default function HeroPanel() {
   const [settings, setSettings] = useState<HeroSettings | null>(null);
@@ -25,7 +47,7 @@ export default function HeroPanel() {
       const res  = await fetch("/api/admin/hero", { credentials: "include" });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) { setSettings(DEFAULT); return; }
-      setSettings({ media: data.media ?? [] });
+      setSettings({ ...DEFAULT, ...data, media: data.media ?? [] });
     } catch {
       setSettings(DEFAULT);
     }
@@ -41,7 +63,7 @@ export default function HeroPanel() {
       method: "PATCH",
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ media: settings.media }),
+      body: JSON.stringify(settings),
     });
 
     const data = await res.json().catch(() => ({}));
@@ -65,6 +87,10 @@ export default function HeroPanel() {
 
   const firstMedia = settings.media[0];
 
+  function field(key: keyof HeroSettings, value: string) {
+    setSettings((s) => (s ? { ...s, [key]: value } : s));
+  }
+
   return (
     <div className="flex flex-col gap-6">
 
@@ -75,6 +101,7 @@ export default function HeroPanel() {
           <strong>Premye média</strong> nan lis la se sa k ap parèt nan section accueil la (kolòn dwat).
           Ou ka mete yon foto oswa yon vidéo kout. Lòt yo nan lis la sèvi kòm backup.
           Foto a dwe gen yon rapò <strong>4:5</strong> pou pi bèl rezilta (ex: 800×1000px).
+          Kite yon chan vid si ou vle kenbe tèks ki deja la a.
         </p>
       </div>
 
@@ -120,6 +147,96 @@ export default function HeroPanel() {
           onChange={(media) => setSettings({ ...settings, media })}
           folder="hero"
         />
+        <p className="mt-2 text-xs text-lore-ink/40 dark:text-white/40">
+          Pou efase yon foto: pase souri ou anwo li epi klike ti X wouj la, epi klike Sauvegarder anba a.
+        </p>
+      </div>
+
+      <hr className="border-lore-dark/10 dark:border-white/10" />
+
+      {/* Tèks Hero */}
+      <div className="flex flex-col gap-4">
+        <FieldLabel>Badge tou anwo (o-dessus du titre)</FieldLabel>
+        <TextInput
+          value={settings.badgeText}
+          onChange={(e) => field("badgeText", e.target.value)}
+          placeholder="🇭🇹 Formation professionnelle & services numériques à Cap-Haïtien"
+        />
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div>
+            <FieldLabel>Tit — 1ye pati</FieldLabel>
+            <TextInput
+              value={settings.headlineBefore}
+              onChange={(e) => field("headlineBefore", e.target.value)}
+              placeholder="Former."
+            />
+          </div>
+          <div>
+            <FieldLabel>Tit — pati an lò (highlight)</FieldLabel>
+            <TextInput
+              value={settings.headlineHighlight}
+              onChange={(e) => field("headlineHighlight", e.target.value)}
+              placeholder="Créer."
+            />
+          </div>
+          <div>
+            <FieldLabel>Tit — dènye pati</FieldLabel>
+            <TextInput
+              value={settings.headlineAfter}
+              onChange={(e) => field("headlineAfter", e.target.value)}
+              placeholder="Réussir."
+            />
+          </div>
+        </div>
+
+        <div>
+          <FieldLabel>Deskripsyon anba tit la</FieldLabel>
+          <TextArea
+            rows={3}
+            value={settings.description}
+            onChange={(e) => field("description", e.target.value)}
+            placeholder="Loré Foundation forme les talents de demain..."
+          />
+        </div>
+
+        <div>
+          <FieldLabel>Badge kout (vèsyon mobile, anndan foto a)</FieldLabel>
+          <TextInput
+            value={settings.mobileBadgeText}
+            onChange={(e) => field("mobileBadgeText", e.target.value)}
+            placeholder="500+ jeunes formés · 80+ projets livrés"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="flex flex-col gap-2 rounded-2xl border border-lore-dark/5 p-4 dark:border-white/5">
+            <FieldLabel>Ti kat flotan #1 (ba agoch)</FieldLabel>
+            <TextInput
+              value={settings.floatingBadge1Title}
+              onChange={(e) => field("floatingBadge1Title", e.target.value)}
+              placeholder="500+ jeunes formés"
+            />
+            <TextInput
+              value={settings.floatingBadge1Subtitle}
+              onChange={(e) => field("floatingBadge1Subtitle", e.target.value)}
+              placeholder="depuis notre création"
+            />
+          </div>
+          <div className="flex flex-col gap-2 rounded-2xl border border-lore-dark/5 p-4 dark:border-white/5">
+            <FieldLabel>Ti kat flotan #2 (anwo adwat)</FieldLabel>
+            <TextInput
+              value={settings.floatingBadge2Title}
+              onChange={(e) => field("floatingBadge2Title", e.target.value)}
+              placeholder="Formation & services pro"
+            />
+            <TextInput
+              value={settings.floatingBadge2Subtitle}
+              onChange={(e) => field("floatingBadge2Subtitle", e.target.value)}
+              placeholder="Cap-Haïtien & au-delà"
+            />
+          </div>
+        </div>
       </div>
 
       {/* Bouton sauvegarder */}

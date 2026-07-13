@@ -16,8 +16,37 @@ const FALLBACK: MediaItem = { url: "/hero-portrait.jpg", type: "image" };
 
 const heroQuote = testimonials[0];
 
+type HeroContent = {
+  badgeText: string;
+  headlineBefore: string;
+  headlineHighlight: string;
+  headlineAfter: string;
+  description: string;
+  mobileBadgeText: string;
+  floatingBadge1Title: string;
+  floatingBadge1Subtitle: string;
+  floatingBadge2Title: string;
+  floatingBadge2Subtitle: string;
+};
+
+// Kontni ki deja la a — sèvi kòm fallback si admin pa ko modifye anyen nan panel la
+const DEFAULT_CONTENT: HeroContent = {
+  badgeText: "🇭🇹 Formation professionnelle & services numériques à Cap-Haïtien",
+  headlineBefore: "Former.",
+  headlineHighlight: "Créer.",
+  headlineAfter: "Réussir.",
+  description:
+    "Loré Foundation forme les talents de demain et accompagne les entreprises haïtiennes avec des services numériques professionnels — développement web, design graphique et bien plus.",
+  mobileBadgeText: "500+ jeunes formés · 80+ projets livrés",
+  floatingBadge1Title: "500+ jeunes formés",
+  floatingBadge1Subtitle: "depuis notre création",
+  floatingBadge2Title: "Formation & services pro",
+  floatingBadge2Subtitle: "Cap-Haïtien & au-delà",
+};
+
 export default function Hero() {
   const [heroMedia, setHeroMedia] = useState<MediaItem>(FALLBACK);
+  const [content, setContent] = useState<HeroContent>(DEFAULT_CONTENT);
 
   useEffect(() => {
     fetch("/api/admin/hero")
@@ -25,6 +54,19 @@ export default function Hero() {
       .then((data) => {
         const first: MediaItem | undefined = data?.media?.[0];
         if (first?.url) setHeroMedia(first);
+
+        setContent((prev) => ({
+          badgeText: data?.badgeText || prev.badgeText,
+          headlineBefore: data?.headlineBefore || prev.headlineBefore,
+          headlineHighlight: data?.headlineHighlight || prev.headlineHighlight,
+          headlineAfter: data?.headlineAfter || prev.headlineAfter,
+          description: data?.description || prev.description,
+          mobileBadgeText: data?.mobileBadgeText || prev.mobileBadgeText,
+          floatingBadge1Title: data?.floatingBadge1Title || prev.floatingBadge1Title,
+          floatingBadge1Subtitle: data?.floatingBadge1Subtitle || prev.floatingBadge1Subtitle,
+          floatingBadge2Title: data?.floatingBadge2Title || prev.floatingBadge2Title,
+          floatingBadge2Subtitle: data?.floatingBadge2Subtitle || prev.floatingBadge2Subtitle,
+        }));
       })
       .catch(() => {/* garde fallback */});
   }, []);
@@ -69,7 +111,7 @@ export default function Hero() {
           >
             <span className="glow-dot" />
             <span className="text-xs font-medium text-white/80 sm:text-sm">
-              🇭🇹 Formation professionnelle & services numériques à Cap-Haïtien
+              {content.badgeText}
             </span>
           </motion.div>
 
@@ -80,16 +122,14 @@ export default function Hero() {
 
           {/* H1 */}
           <h1 className="font-display text-[2.6rem] font-extrabold leading-[1.08] tracking-[-0.02em] text-white sm:text-5xl md:text-6xl lg:text-[3.5rem] xl:text-[4rem]">
-            Former.{" "}
-            <span className="text-gradient-gold">Créer.</span>{" "}
-            Réussir.
+            {content.headlineBefore}{" "}
+            <span className="text-gradient-gold">{content.headlineHighlight}</span>{" "}
+            {content.headlineAfter}
           </h1>
 
           {/* Description */}
           <p className="max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
-            Loré Foundation forme les talents de demain et accompagne les entreprises
-            haïtiennes avec des services numériques professionnels — développement web,
-            design graphique et bien plus.
+            {content.description}
           </p>
 
           {/* CTAs — yon aksyon prensipal byen mete an valè, 2 segondè kòt kòt */}
@@ -207,7 +247,7 @@ export default function Hero() {
                   <GraduationCap className="h-4 w-4" />
                 </span>
                 <p className="text-xs font-semibold leading-snug text-white">
-                  500+ jeunes formés &middot; 80+ projets livrés
+                  {content.mobileBadgeText}
                 </p>
               </div>
             </div>
@@ -241,8 +281,8 @@ export default function Hero() {
                 <GraduationCap className="h-5 w-5" />
               </span>
               <div>
-                <p className="font-display text-sm font-bold text-white">500+ jeunes formés</p>
-                <p className="text-xs text-white/50">depuis notre création</p>
+                <p className="font-display text-sm font-bold text-white">{content.floatingBadge1Title}</p>
+                <p className="text-xs text-white/50">{content.floatingBadge1Subtitle}</p>
               </div>
             </motion.div>
 
@@ -257,9 +297,9 @@ export default function Hero() {
               </span>
               <div>
                 <p className="font-display text-sm font-bold text-lore-ink dark:text-white">
-                  Formation & services pro
+                  {content.floatingBadge2Title}
                 </p>
-                <p className="text-xs text-lore-ink/50 dark:text-white/50">Cap-Haïtien & au-delà</p>
+                <p className="text-xs text-lore-ink/50 dark:text-white/50">{content.floatingBadge2Subtitle}</p>
               </div>
             </motion.div>
           </div>
