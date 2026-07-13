@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import Hero from "@/components/Hero";
@@ -16,6 +17,7 @@ import Sponsors from "@/components/Sponsors";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import CurveDivider from "@/components/ui/CurveDivider";
+import SectionSkeleton from "@/components/ui/SectionSkeleton";
 import { getActiveAnnouncement, hasPublishedSeminars } from "@/lib/site-content";
 
 export const dynamic = "force-dynamic";
@@ -32,29 +34,50 @@ export default async function Home() {
       <WelcomeScreen />
       <Navbar announcement={announcement} showSeminaires={showSeminaires} />
       <Hero />
-      <EcoleHighlight />
-      <Services />
-      <PremiumServices />
+
+      <Suspense fallback={<SectionSkeleton />}>
+        <EcoleHighlight />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Services />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <PremiumServices />
+      </Suspense>
       <WhyChooseUs />
       <AdUnit slot="6310810361" className="py-10" />
       <BlogBanner />
-      <Team />
-      <Portfolio />
-      <AdsBanner />
-      <Seminars />
+      <Suspense fallback={<SectionSkeleton />}>
+        <Team />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Portfolio />
+      </Suspense>
+      <Suspense fallback={null}>
+        <AdsBanner />
+      </Suspense>
+      <Suspense fallback={<SectionSkeleton />}>
+        <Seminars />
+      </Suspense>
 
       <div className="relative">
         <CurveDivider
           colorClassName="text-lore-dark dark:text-[#051a2b]"
           className="relative z-10 -mb-px"
         />
-        <Testimonials />
+        <Suspense fallback={<SectionSkeleton />}>
+          <Testimonials />
+        </Suspense>
         <CurveDivider flip className="relative z-10 -mt-px" />
       </div>
 
-      <Sponsors />
+      <Suspense fallback={null}>
+        <Sponsors />
+      </Suspense>
       <Contact />
-      <Footer />
+      <Suspense fallback={null}>
+        <Footer />
+      </Suspense>
     </main>
   );
 }
