@@ -3,6 +3,7 @@ import WelcomeScreen from "@/components/WelcomeScreen";
 import Hero from "@/components/Hero";
 import EcoleHighlight from "@/components/EcoleHighlight";
 import AdsBanner from "@/components/AdsBanner";
+import AdUnit from "@/components/AdUnit";
 import PremiumServices from "@/components/PremiumServices";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import BlogBanner from "@/components/BlogBanner";
@@ -35,6 +36,7 @@ export default async function Home() {
       <Services />
       <PremiumServices />
       <WhyChooseUs />
+      <AdUnit slot="6310810361" className="py-10" />
       <BlogBanner />
       <Team />
       <Portfolio />

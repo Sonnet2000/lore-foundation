@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 
+export const dynamic = "force-dynamic";
+
 /** Route publique — retourne les méthodes actives pour le site */
 export async function GET() {
   try {

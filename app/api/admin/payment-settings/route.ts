@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 import { DEFAULT_PAYMENT, mergePaymentSettings, type PaymentSettings } from "@/lib/site-info";
 
+export const dynamic = "force-dynamic";
+
 const PAYMENT_KEY = "payment";
 
 export async function GET() {
