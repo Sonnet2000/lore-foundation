@@ -17,6 +17,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     if (typeof body.currency     === "string") u.currency     = body.currency;
     if (Array.isArray(body.media))             u.media        = body.media;
     if (typeof body.cover_url    === "string") u.cover_url    = body.cover_url || null;
+    if (typeof body.pdf_url      === "string" || body.pdf_url === null) u.pdf_url = body.pdf_url || null;
     if (typeof body.location     === "string") u.location     = body.location.trim();
     if (typeof body.beneficiaries=== "number") u.beneficiaries= body.beneficiaries;
     if (typeof body.start_date   === "string") u.start_date   = body.start_date || null;

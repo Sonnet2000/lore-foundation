@@ -7,7 +7,7 @@ export async function GET() {
     const supabase = getSupabase();
     const { data, error } = await supabase
       .from("payment_methods")
-      .select("id, type, label, number, details, instructions, sort_order")
+      .select("id, type, label, number, details, instructions, icon, sort_order")
       .eq("is_active", true)
       .order("sort_order", { ascending: true });
     if (error) return NextResponse.json({ items: [] });

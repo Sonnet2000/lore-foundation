@@ -8,6 +8,7 @@ import {
   ArrowLeft, Copy, Check, Upload, Loader2, FileText, CheckCircle2, AlertCircle,
   Smartphone, Building2, CreditCard, ExternalLink,
 } from "lucide-react";
+import { resolveIcon } from "@/lib/icon-map";
 
 type Settings = {
   binanceEnabled: boolean;
@@ -24,6 +25,7 @@ type LocalMethod = {
   number: string;
   details: string;
   instructions: string;
+  icon: string | null;
   sort_order: number;
 };
 
@@ -240,7 +242,7 @@ export default function PaiementClient({ settings }: { settings: Settings }) {
                 </button>
               )}
               {localMethods?.map((m) => {
-                const Icon = TYPE_META[m.type]?.icon ?? CreditCard;
+                const Icon = m.icon ? resolveIcon(m.icon) : (TYPE_META[m.type]?.icon ?? CreditCard);
                 return (
                   <button key={m.id} type="button" onClick={() => setSelected(m.id)}
                     className={`focus-ring inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-xs font-semibold transition-colors ${

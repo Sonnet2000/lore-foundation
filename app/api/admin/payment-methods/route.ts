@@ -34,6 +34,7 @@ export async function POST(request: Request) {
         number:       (body.number ?? "").trim(),
         details:      (body.details ?? "").trim(),
         instructions: (body.instructions ?? "").trim(),
+        icon:         typeof body.icon === "string" && body.icon.trim() ? body.icon.trim() : null,
         is_active:    body.is_active !== false,
         sort_order:   Number(body.sort_order) || 0,
       })

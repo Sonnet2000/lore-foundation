@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {
   ArrowLeft, MapPin, Users, Calendar, Target,
-  Play, ChevronLeft, ChevronRight, MessageCircle,
+  Play, ChevronLeft, ChevronRight, MessageCircle, FileText, Download,
 } from "lucide-react";
 import type { Project } from "@/app/admin/_components/types";
 import { siteInfo } from "@/lib/data";
@@ -25,7 +25,9 @@ export default function ProjetPage() {
       .catch(() => setLoading(false));
   }, [slug]);
 
-  const media = project?.media ?? [];
+  const media = project?.media && project.media.length > 0
+    ? project.media
+    : (project?.cover_url ? [{ url: project.cover_url, type: "image" as const }] : []);
 
   if (loading) return (
     <div className="flex min-h-screen items-center justify-center bg-lore-cream dark:bg-lore-night">
@@ -171,6 +173,19 @@ export default function ProjetPage() {
               <p className="text-center text-xs text-lore-ink/40 dark:text-white/40">
                 Réponse rapide via WhatsApp
               </p>
+
+              {project.pdf_url && (
+                <a
+                  href={project.pdf_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-full border border-lore-dark/10 px-6 py-3 text-sm font-semibold text-lore-ink hover:bg-lore-dark/5 dark:border-white/10 dark:text-white dark:hover:bg-white/5 transition-colors"
+                >
+                  <FileText className="h-4 w-4" />
+                  Voir le document PDF
+                  <Download className="h-3.5 w-3.5" />
+                </a>
+              )}
             </div>
           </div>
         </div>

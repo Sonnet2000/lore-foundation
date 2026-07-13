@@ -228,6 +228,7 @@ create table if not exists payment_methods (
   number text not null default '',
   details text not null default '',
   instructions text not null default '',
+  icon text,
   is_active boolean not null default true,
   sort_order integer not null default 0,
   created_at timestamptz not null default now()
@@ -235,12 +236,15 @@ create table if not exists payment_methods (
 
 alter table payment_methods enable row level security;
 
+create unique index if not exists payment_methods_unique_entry
+  on payment_methods (type, label, number);
+
 -- Données initiales
 insert into payment_methods (type, label, number, details, instructions, is_active, sort_order) values
   ('moncash',  'MonCash',  '+509 34 83 3501', 'Transfert rapide 24h/24', 'Ouvri MonCash → Transfert → Antre nimewo a → Konfime → Voye referans la', true, 1),
   ('natcash',  'NatCash',  '+509 41 55 9094', 'Transfert instantané sans frais', 'Ouvri NatCash → Transfert Lajan → Antre nimewo a → Valide → Kopye kòd la', true, 2),
   ('sogebank', 'Sogebank', 'Titulaire : LORÉ FOUNDATION' || chr(10) || 'Compte : 2470-0541-6317-0003' || chr(10) || 'Banque : Sogebank', 'Idéal pour les montants importants', 'Ale nan branch Sogebank → Fè vèsman → Non : LORÉ FOUNDATION → Kont : 2470-0541-6317-0003 → Konsève resi a', true, 3)
-on conflict do nothing;
+on conflict (type, label, number) do nothing;
 
 -- ─────────────────────────────────────────────────────────────────────────
 -- Blog & Articles
@@ -285,6 +289,7 @@ create table if not exists projects (
   raised_amount numeric(12,2) not null default 0,
   currency text not null default 'HTG',
   cover_url text,
+  pdf_url text,
   media jsonb not null default '[]',
   location text not null default 'Cap-Haïtien, Haïti',
   beneficiaries integer not null default 0,
@@ -317,6 +322,7 @@ create table if not exists projects (
   currency text not null default 'HTG',
   media jsonb not null default '[]',
   cover_url text,
+  pdf_url text,
   location text not null default 'Cap-Haïtien, Haïti',
   beneficiaries integer not null default 0,
   start_date date,

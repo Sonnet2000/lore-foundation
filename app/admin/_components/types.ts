@@ -119,6 +119,7 @@ export type PaymentMethodRow = {
   number: string;
   details: string;
   instructions: string;
+  icon: string | null;
   is_active: boolean;
   sort_order: number;
   created_at: string;
@@ -199,6 +200,7 @@ export type Project = {
   raised_amount: number;
   currency: string;
   cover_url: string | null;
+  pdf_url: string | null;
   media: ProjectMedia[];
   location: string;
   beneficiaries: number;

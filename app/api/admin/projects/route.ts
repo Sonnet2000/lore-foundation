@@ -40,6 +40,7 @@ export async function POST(request: Request) {
       currency:      body.currency || "HTG",
       media:         Array.isArray(body.media) ? body.media : [],
       cover_url:     body.cover_url || null,
+      pdf_url:       body.pdf_url || null,
       location:      (body.location ?? "Cap-Haïtien, Haïti").trim(),
       beneficiaries: Number(body.beneficiaries) || 0,
       start_date:    body.start_date || null,

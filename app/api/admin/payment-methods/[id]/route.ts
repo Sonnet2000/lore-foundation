@@ -15,6 +15,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
     if (typeof body.number       === "string") updates.number       = body.number.trim();
     if (typeof body.details      === "string") updates.details      = body.details.trim();
     if (typeof body.instructions === "string") updates.instructions = body.instructions.trim();
+    if (typeof body.icon === "string" || body.icon === null) updates.icon = (body.icon || "").trim() || null;
     if (typeof body.is_active    === "boolean") updates.is_active   = body.is_active;
     if (typeof body.sort_order   === "number") updates.sort_order   = body.sort_order;
     if (typeof body.type === "string" && ["moncash","natcash","sogebank","autre"].includes(body.type))

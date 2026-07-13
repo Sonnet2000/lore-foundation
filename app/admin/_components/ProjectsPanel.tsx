@@ -7,6 +7,7 @@ import {
   Upload, Play, Image as ImageIcon, CheckCircle2,
 } from "lucide-react";
 import ConfirmModal from "./ConfirmModal";
+import FileUploadField from "./FileUploadField";
 import { useFileUpload } from "./useFileUpload";
 import type { Project, ProjectCategory, ProjectMedia } from "./types";
 
@@ -36,6 +37,7 @@ const emptyForm = {
   status: "actif" as Project["status"],
   sort_order: 0,
   cover_url: "",
+  pdf_url: "" as string | null,
   media: [] as ProjectMedia[],
 };
 
@@ -79,6 +81,7 @@ export default function ProjectsPanel() {
       is_published: item.is_published, is_featured: item.is_featured,
       status: item.status, sort_order: item.sort_order,
       cover_url: item.cover_url ?? "",
+      pdf_url: item.pdf_url ?? "",
       media: item.media ?? [],
     });
     setError(null);
@@ -264,6 +267,16 @@ export default function ProjectsPanel() {
                 <button type="button" onClick={() => setForm(f => ({ ...f, cover_url: "" }))} className="text-xs text-red-500 hover:underline">Retirer</button>
               )}
             </div>
+          </Field>
+
+          {/* PDF (budget, proposition, etc.) */}
+          <Field label="Document PDF (optionnel)">
+            <FileUploadField
+              label=""
+              value={form.pdf_url || null}
+              onChange={(url) => setForm(f => ({ ...f, pdf_url: url }))}
+              folder="projects"
+            />
           </Field>
 
           {/* Médias (photos + vidéos) */}

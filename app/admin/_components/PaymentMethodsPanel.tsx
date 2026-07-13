@@ -7,6 +7,7 @@ import {
   GripVertical, ChevronUp, ChevronDown,
 } from "lucide-react";
 import ConfirmModal from "./ConfirmModal";
+import { iconNames, resolveIcon } from "@/lib/icon-map";
 import type { PaymentMethodRow } from "./types";
 
 const TYPE_OPTIONS = [
@@ -22,6 +23,7 @@ const emptyForm = {
   number: "",
   details: "",
   instructions: "",
+  icon: "" as string | null,
   is_active: true,
   sort_order: 0,
 };
@@ -60,6 +62,7 @@ export default function PaymentMethodsPanel() {
       number:       item.number,
       details:      item.details,
       instructions: item.instructions,
+      icon:         item.icon ?? "",
       is_active:    item.is_active,
       sort_order:   item.sort_order,
     });
@@ -188,6 +191,16 @@ export default function PaymentMethodsPanel() {
               onChange={e => setForm(f => ({ ...f, details: e.target.value }))}
               placeholder="ex: Transfert rapide 24h/24"
               className={INPUT} />
+          </Field>
+
+          {/* Icône */}
+          <Field label="Icône affichée sur le site">
+            <select value={form.icon ?? ""} onChange={e => setForm(f => ({ ...f, icon: e.target.value }))} className={INPUT}>
+              <option value="">Icône par défaut (selon le type)</option>
+              {iconNames.map((name) => (
+                <option key={name} value={name}>{name}</option>
+              ))}
+            </select>
           </Field>
 
           {/* Instructions */}
@@ -323,8 +336,11 @@ export default function PaymentMethodsPanel() {
                   </div>
 
                   {/* Icon */}
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lore-blue/10 text-xl">
-                    {typeOpt?.label.split(" ")[0]}
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-lore-blue/10 text-lore-blue">
+                    {(() => {
+                      const Icon = item.icon ? resolveIcon(item.icon) : (typeOpt?.icon ?? CreditCard);
+                      return <Icon className="h-5 w-5" />;
+                    })()}
                   </div>
 
                   {/* Info */}
