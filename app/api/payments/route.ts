@@ -22,6 +22,8 @@ export async function POST(request: Request) {
   const amount = (body.amount ?? "").toString().trim().slice(0, 60);
   const reference = (body.reference ?? "").toString().trim().slice(0, 200);
   const proof_url = (body.proof_url ?? "").toString().trim().slice(0, 500);
+  const methodRaw = (body.method ?? "binance").toString().trim().toLowerCase().slice(0, 40);
+  const method = methodRaw || "binance";
 
   if (!full_name) return NextResponse.json({ error: "Non an obligatwa." }, { status: 400 });
   if (!email || !isValidEmail(email)) return NextResponse.json({ error: "Imèl envalid." }, { status: 400 });
@@ -35,7 +37,7 @@ export async function POST(request: Request) {
     .from("payment_requests")
     .insert({
       full_name, email, phone, subject, amount,
-      method: "binance",
+      method,
       reference,
       proof_url: proof_url || null,
       status: "pending",

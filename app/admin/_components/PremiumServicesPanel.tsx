@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { Plus, Loader2, X } from "lucide-react";
 import { FieldLabel, TextInput, TextArea, SelectInput, PrimaryButton, GhostButton, RowCard } from "./ui";
 import ConfirmModal from "./ConfirmModal";
+import ImageUploadField from "./ImageUploadField";
 import { iconNames, resolveIcon } from "@/lib/icon-map";
 import type { PremiumServiceRow } from "./types";
 
@@ -11,6 +13,7 @@ type ServiceForm = {
   title: string;
   description: string;
   price: string;
+  image_url: string | null;
   icon: string;
   features: string[];
   is_published: boolean;
@@ -18,7 +21,7 @@ type ServiceForm = {
 };
 
 const emptyForm: ServiceForm = {
-  title: "", description: "", price: "", icon: "Sparkles", features: [], is_published: true, is_featured: false,
+  title: "", description: "", price: "", image_url: null, icon: "Sparkles", features: [], is_published: true, is_featured: false,
 };
 
 export default function PremiumServicesPanel() {
@@ -43,7 +46,7 @@ export default function PremiumServicesPanel() {
 
   function startEdit(s: PremiumServiceRow) {
     setForm({
-      title: s.title, description: s.description, price: s.price, icon: s.icon,
+      title: s.title, description: s.description, price: s.price, image_url: s.image_url ?? null, icon: s.icon,
       features: s.features ?? [], is_published: s.is_published, is_featured: s.is_featured,
     });
     setFeatureDraft("");
@@ -136,6 +139,15 @@ export default function PremiumServicesPanel() {
             </div>
 
             <div className="mt-4">
+              <ImageUploadField
+                label="Photo du service"
+                value={form.image_url}
+                onChange={(url) => setForm({ ...form, image_url: url })}
+                folder="premium-services"
+              />
+            </div>
+
+            <div className="mt-4">
               <FieldLabel>Description</FieldLabel>
               <TextArea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
             </div>
@@ -203,9 +215,15 @@ export default function PremiumServicesPanel() {
                 title={s.title}
                 subtitle={`${s.price || "Prix non défini"}${s.is_published ? "" : " · Non publié"}${s.is_featured ? " · Mis en avant" : ""}`}
                 thumbnail={
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-lore-gold/10 text-lore-gold-dark">
-                    <Icon className="h-5 w-5" />
-                  </div>
+                  s.image_url ? (
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-lore-gold/10">
+                      <Image src={s.image_url} alt="" fill className="object-cover" unoptimized />
+                    </div>
+                  ) : (
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-lore-gold/10 text-lore-gold-dark">
+                      <Icon className="h-5 w-5" />
+                    </div>
+                  )
                 }
                 onEdit={() => startEdit(s)}
                 onDelete={() => setDeleteTarget(s)}

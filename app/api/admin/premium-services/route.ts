@@ -37,6 +37,7 @@ export async function POST(request: Request) {
       title,
       description: body.description ?? "",
       price: body.price ?? "",
+      image_url: body.image_url || null,
       icon: body.icon || "Sparkles",
       features: Array.isArray(body.features) ? body.features : [],
       is_published: body.is_published ?? true,

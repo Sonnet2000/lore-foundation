@@ -15,6 +15,7 @@ const ALLOWED_EXTENSIONS: Record<string, string> = {
 const ALLOWED_FOLDERS = new Set([
   "hero", "portfolio", "seminars", "team", "services", "testimonials",
   "payments", "misc", "blog", "projects", "courses", "assignments", "ads",
+  "premium-services",
 ]);
 
 function extensionOf(filename: string) {

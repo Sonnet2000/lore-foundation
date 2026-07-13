@@ -79,7 +79,10 @@ export default function SponsorsClient({ sponsors }: { sponsors: PublicSponsor[]
           </div>
           <button
             type="button"
-            onClick={() => setFormOpen(true)}
+            onClick={() => {
+              setFormOpen(true);
+              document.getElementById("partenaire-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
             className="shrink-0 rounded-full bg-lore-gold px-6 py-3 text-sm font-bold text-lore-dark transition-transform hover:scale-[1.02]"
           >
             Devenir partenaire
@@ -99,7 +102,7 @@ export default function SponsorsClient({ sponsors }: { sponsors: PublicSponsor[]
         )}
 
         {/* Fòm aplikasyon */}
-        <div className="rounded-3xl border border-lore-dark/5 bg-white dark:border-white/5 dark:bg-lore-night-surface overflow-hidden">
+        <div id="partenaire-form" className="scroll-mt-24 rounded-3xl border border-lore-dark/5 bg-white dark:border-white/5 dark:bg-lore-night-surface overflow-hidden">
           <button type="button"
             onClick={() => setFormOpen(!formOpen)}
             className="flex w-full items-center justify-between px-8 py-6 text-left">

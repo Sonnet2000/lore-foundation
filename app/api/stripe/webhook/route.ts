@@ -27,21 +27,40 @@ export async function POST(request: Request) {
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
     if (session.payment_status === "paid") {
-      try {
-        const supabase = getSupabase();
-        await supabase.from("payments").insert({
-          purpose:      "sponsor",
-          amount:       (session.amount_total ?? 0) / 100,
-          currency:     (session.currency ?? "usd").toUpperCase(),
-          method:       "autre",
-          sender_name:  session.metadata?.donor_name ?? "Anonyme",
-          sender_phone: "",
-          reference:    session.id,
-          note:         `Stripe · ${session.metadata?.project ?? ""} · session: ${session.id}`,
-          status:       "confirmed",
-        });
-      } catch (e) {
-        console.error("Supabase insert error:", e);
+      const supabase = getSupabase();
+      if (session.metadata?.source === "lore-foundation-service-payment") {
+        try {
+          await supabase.from("payment_requests").insert({
+            full_name: session.metadata?.full_name ?? "Client",
+            email: session.customer_details?.email ?? session.customer_email ?? "",
+            phone: "",
+            subject: session.metadata?.subject ?? "Service Loré Foundation",
+            amount: `${((session.amount_total ?? 0) / 100).toFixed(2)} ${(session.currency ?? "usd").toUpperCase()}`,
+            method: "card",
+            reference: session.id,
+            proof_url: null,
+            status: "confirmed",
+            notes: `Payé par carte via Stripe · session: ${session.id}`,
+          });
+        } catch (e) {
+          console.error("Supabase insert error:", e);
+        }
+      } else {
+        try {
+          await supabase.from("payments").insert({
+            purpose:      "sponsor",
+            amount:       (session.amount_total ?? 0) / 100,
+            currency:     (session.currency ?? "usd").toUpperCase(),
+            method:       "autre",
+            sender_name:  session.metadata?.donor_name ?? "Anonyme",
+            sender_phone: "",
+            reference:    session.id,
+            note:         `Stripe · ${session.metadata?.project ?? ""} · session: ${session.id}`,
+            status:       "confirmed",
+          });
+        } catch (e) {
+          console.error("Supabase insert error:", e);
+        }
       }
     }
   }

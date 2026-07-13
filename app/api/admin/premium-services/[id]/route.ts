@@ -13,6 +13,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (typeof body.title === "string") updates.title = body.title.slice(0, 120);
   if (typeof body.description === "string") updates.description = body.description.slice(0, 500);
   if (typeof body.price === "string") updates.price = body.price.slice(0, 60);
+  if (typeof body.image_url === "string" || body.image_url === null) updates.image_url = body.image_url || null;
   if (typeof body.icon === "string") updates.icon = body.icon;
   if (Array.isArray(body.features)) updates.features = body.features.slice(0, 12);
   if (typeof body.is_published === "boolean") updates.is_published = body.is_published;

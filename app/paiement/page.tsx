@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Paiement",
-  description: "Payez un service Loré Foundation via Binance Pay.",
+  description: "Payez un service Loré Foundation via Binance Pay, MonCash, NatCash, Sogebank ou carte Visa/Mastercard.",
   robots: { index: false, follow: false },
 };
 

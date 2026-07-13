@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Check, Star } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
@@ -16,7 +17,7 @@ export default async function PremiumServices() {
           <SectionHeading
             eyebrow="Services Premium"
             title="Des services prêts à commander"
-            description="Choisissez un service, envoyez votre paiement via Binance, et notre équipe s'occupe du reste."
+            description="Choisissez un service, payez via Binance, MonCash, NatCash, Sogebank ou carte Visa/Mastercard, et notre équipe s'occupe du reste."
           />
         </AnimatedSection>
 
@@ -36,6 +37,12 @@ export default async function PremiumServices() {
                   <span className="absolute -top-3 right-6 inline-flex items-center gap-1 rounded-full bg-lore-gold px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-lore-dark">
                     <Star className="h-2.5 w-2.5" />Populaire
                   </span>
+                )}
+
+                {s.image_url && (
+                  <div className="relative -mx-6 -mt-6 h-40 overflow-hidden rounded-t-3xl">
+                    <Image src={s.image_url} alt={s.title} fill className="object-cover" unoptimized />
+                  </div>
                 )}
 
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lore-gold/10 text-lore-gold-dark dark:text-lore-gold-light">

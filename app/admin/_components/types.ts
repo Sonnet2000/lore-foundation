@@ -319,6 +319,7 @@ export type PremiumServiceRow = {
   title: string;
   description: string;
   price: string;
+  image_url: string | null;
   icon: string;
   features: string[];
   is_published: boolean;
