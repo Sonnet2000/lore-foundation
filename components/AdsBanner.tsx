@@ -20,7 +20,7 @@ export default async function AdsBanner() {
           {ads.map((ad) => {
             // Toujou fè kat la klikab: si pa gen link_url ki defini nan panel admin
             // la, voye moun nan sou paj "Soutenir/Sponsors" pou yo ka kontakte nou.
-            const href = ad.link_url || "/soutenir#sponsors";
+            const href = ad.link_url || "/#sponsors";
             const isExternal = href.startsWith("http");
             const ctaLabel = ad.cta_label || "En savoir plus";
 

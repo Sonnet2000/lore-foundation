@@ -81,7 +81,7 @@ export default function AdUnit({ slot, format = "auto", fullWidthResponsive = tr
 
           {filled === false && (
             <Link
-              href="/soutenir#sponsors"
+              href="/#sponsors"
               className="card-lift group flex flex-col items-center gap-3 rounded-3xl border border-dashed border-lore-gold-dark/30 bg-white/70 px-6 py-10 text-center dark:border-lore-gold-light/20 dark:bg-white/[0.03]"
             >
               <span className="flex h-11 w-11 items-center justify-center rounded-full bg-lore-gold-gradient text-lore-dark shadow-gold">
