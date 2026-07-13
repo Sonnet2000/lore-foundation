@@ -28,14 +28,27 @@ export default function PaymentsPanel() {
 
   const [requests, setRequests] = useState<PaymentRequestRow[] | null>(null);
   const [filter, setFilter] = useState<"pending" | "confirmed" | "rejected" | "all">("pending");
+  const [settingsError, setSettingsError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("/api/admin/payment-settings", { credentials: "include" })
-      .then((r) => r.json())
-      .then((d) => setSettings({ ...emptySettings, ...d }))
-      .finally(() => setLoadingSettings(false));
+    refreshSettings();
     refreshRequests();
   }, []);
+
+  async function refreshSettings() {
+    setLoadingSettings(true);
+    try {
+      const res = await fetch("/api/admin/payment-settings", { credentials: "include", cache: "no-store" });
+      const d = await res.json().catch(() => ({}));
+      if (!res.ok) { setSettingsError(d.error || "Erreur de chargement."); return; }
+      setSettingsError(null);
+      setSettings({ ...emptySettings, ...d });
+    } catch {
+      setSettingsError("Erreur de connexion au serveur.");
+    } finally {
+      setLoadingSettings(false);
+    }
+  }
 
   async function refreshRequests() {
     const res = await fetch("/api/admin/payments", { credentials: "include" });
@@ -45,13 +58,24 @@ export default function PaymentsPanel() {
 
   async function saveSettings() {
     setSavingSettings(true);
-    const res = await fetch("/api/admin/payment-settings", {
-      credentials: "include", method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(settings),
-    });
-    setSavingSettings(false);
-    if (res.ok) { setSettingsSaved(true); setTimeout(() => setSettingsSaved(false), 2000); }
+    setSettingsError(null);
+    try {
+      const res = await fetch("/api/admin/payment-settings", {
+        credentials: "include", method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(settings),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) { setSettingsError(data.error || "Echèk anrejistreman."); return; }
+      // Reconfirme sa ki reyèlman anrejistre nan baz done a (evite yon fo "sove" lokal).
+      await refreshSettings();
+      setSettingsSaved(true);
+      setTimeout(() => setSettingsSaved(false), 2000);
+    } catch {
+      setSettingsError("Erreur de connexion au serveur.");
+    } finally {
+      setSavingSettings(false);
+    }
   }
 
   async function decide(id: string, status: "confirmed" | "rejected") {
@@ -74,6 +98,10 @@ export default function PaymentsPanel() {
           Sa a se yon peman ki verifye manyèlman — pa gen API ki konekte otomatikman ak kont Binance ou a.
           Moun voye lajan sou Pay ID/adrès la, yo soumèt referans/kapti ekran, epi ou konfime li isit la.
         </p>
+
+        {settingsError && (
+          <div className="mb-4 rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-500">{settingsError}</div>
+        )}
 
         {loadingSettings ? (
           <Loader2 className="h-5 w-5 animate-spin text-lore-ink/40" />

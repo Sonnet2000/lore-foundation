@@ -25,6 +25,7 @@ import SiteInfoPanel        from "./SiteInfoPanel";
 import CoursesPanel         from "./CoursesPanel";
 import AdsPanel              from "./AdsPanel";
 import PaymentsPanel         from "./PaymentsPanel";
+import PaymentMethodsPanel   from "./PaymentMethodsPanel";
 import PremiumServicesPanel  from "./PremiumServicesPanel";
 
 const TABS = [
@@ -63,7 +64,7 @@ const TAB_META: Record<TabId, { desc: string }> = {
   "site-info":       { desc: "Telefòn, imèl, adrès ak lyen rezo sosyal (Facebook, TikTok, YouTube, elt.)" },
   courses:           { desc: "Kou yo, enskripsyon elèv yo, devwa ak kòreksyon" },
   ads:               { desc: "Espas piblisitè — foto, deskripsyon ak lyen ki parèt sou paj akèy la" },
-  payments:          { desc: "Konfigirasyon Binance ak demand peman pou sèvis yo" },
+  payments:          { desc: "Binance, MonCash, NatCash, Sogebank, kat elt. ak demand peman pou sèvis yo" },
   "premium-services": { desc: "Sèvis moun ka kòmande dirèkteman (Carte Virtuelle, Booster Publication, elt.)" },
   sponsors:          { desc: "Partenaires d'affaires, clients et organisations collaboratrices" },
   subscribers:       { desc: "Personnes inscrites à la newsletter" },
@@ -238,7 +239,14 @@ export default function Dashboard() {
           {active === "site-info"        && <SiteInfoPanel />}
           {active === "courses"          && <CoursesPanel />}
           {active === "ads"              && <AdsPanel />}
-          {active === "payments"         && <PaymentsPanel />}
+          {active === "payments"         && (
+            <div className="flex flex-col gap-10">
+              <PaymentsPanel />
+              <div className="border-t border-black/5 dark:border-white/5 pt-8">
+                <PaymentMethodsPanel />
+              </div>
+            </div>
+          )}
           {active === "premium-services" && <PremiumServicesPanel />}
           {active === "sponsors"         && <SponsorsPanel />}
           {active === "subscribers"      && <SubscribersPanel />}

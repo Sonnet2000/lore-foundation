@@ -36,16 +36,18 @@ export default function PaymentMethodsPanel() {
   const [error, setError]             = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<PaymentMethodRow | null>(null);
   const [deleting, setDeleting]       = useState(false);
+  const [listError, setListError]     = useState<string | null>(null);
 
   useEffect(() => { refresh(); }, []);
 
   async function refresh() {
     try {
-      const res  = await fetch("/api/admin/payment-methods", { credentials: "include" });
+      const res  = await fetch("/api/admin/payment-methods", { credentials: "include", cache: "no-store" });
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) { setItems([]); return; }
+      if (!res.ok) { setListError(data.error || "Erreur de chargement."); setItems([]); return; }
+      setListError(null);
       setItems(data.items ?? []);
-    } catch { setItems([]); }
+    } catch { setListError("Erreur de connexion au serveur."); setItems([]); }
   }
 
   function startNew() {
@@ -297,7 +299,11 @@ export default function PaymentMethodsPanel() {
           </button>
         </div>
 
-        {items.length === 0 && (
+        {listError && (
+          <div className="rounded-xl bg-red-500/10 px-4 py-3 text-sm text-red-500">{listError}</div>
+        )}
+
+        {items.length === 0 && !listError && (
           <div className="flex flex-col items-center gap-4 py-16 text-center">
             <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-lore-blue/10 text-lore-blue">
               <CreditCard className="h-7 w-7" />

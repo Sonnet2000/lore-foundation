@@ -83,7 +83,7 @@ export default function PaiementClient({ settings }: { settings: Settings }) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch("/api/payment-methods")
+    fetch("/api/payment-methods", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => setLocalMethods(Array.isArray(data.items) ? data.items : []))
       .catch(() => setLocalMethods([]));
