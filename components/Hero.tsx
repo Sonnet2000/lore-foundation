@@ -52,13 +52,13 @@ export default function Hero() {
       {/* Glòb 3D — reprezante enpak global Loré Foundation, an background dous */}
       <Globe3D className="absolute -right-[18%] top-1/2 hidden h-[130%] w-[70%] -translate-y-1/2 md:block lg:-right-[10%] lg:h-[150%] lg:w-[60%]" />
 
-      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-14 px-5 sm:px-8 lg:grid-cols-2 lg:gap-10 lg:px-12">
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:gap-10 lg:px-12">
         {/* Colonne gauche */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="flex flex-col items-start gap-6 text-left"
+          className="order-2 flex flex-col items-start gap-6 text-left lg:order-none"
         >
           {/* Badge mission */}
           <motion.div
@@ -92,8 +92,8 @@ export default function Hero() {
             design graphique et bien plus.
           </p>
 
-          {/* CTAs — grouper an pil pou yon lè plis konpak */}
-          <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
+          {/* CTAs — yon aksyon prensipal byen mete an valè, 2 segondè kòt kòt */}
+          <div className="relative flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
             {/* Ti flèch dekoratif ki pwente sou bouton prensipal la */}
             <svg
               className="pointer-events-none absolute -left-8 -top-9 hidden h-10 w-14 text-lore-gold/70 sm:block"
@@ -112,37 +112,47 @@ export default function Hero() {
             </svg>
             <a
               href="/ecole"
-              className="btn-gold focus-ring group inline-flex items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-105"
+              className="btn-gold focus-ring group inline-flex w-full items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-105 sm:w-auto"
             >
               Découvrir l&apos;École
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </a>
-            <a
-              href="/#services"
-              className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/25"
-            >
-              Nos services
-            </a>
-            <a
-              href="/partenaire"
-              className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-blue-300/20 bg-blue-400/10 px-7 py-3.5 text-sm font-semibold text-blue-200 backdrop-blur-sm transition-all hover:bg-blue-400/20"
-            >
-              <Heart className="h-4 w-4" />
-              Devenir partenaire
-            </a>
+            <div className="grid w-full grid-cols-2 gap-3 sm:contents">
+              <a
+                href="/#services"
+                className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/25 sm:px-7 sm:py-3.5"
+              >
+                Nos services
+              </a>
+              <a
+                href="/partenaire"
+                className="focus-ring group inline-flex items-center justify-center gap-2 rounded-full border border-blue-300/20 bg-blue-400/10 px-5 py-3 text-sm font-semibold text-blue-200 backdrop-blur-sm transition-all hover:bg-blue-400/20 sm:px-7 sm:py-3.5"
+              >
+                <Heart className="h-4 w-4 shrink-0" />
+                <span className="truncate">Devenir partenaire</span>
+              </a>
+            </div>
+          </div>
+
+          {/* Séparateur + etikèt — bay chif yo yon kontèks */}
+          <div className="mt-3 flex w-full items-center gap-3">
+            <span className="h-px flex-1 bg-gradient-to-r from-lore-gold/50 to-transparent" />
+            <span className="font-display text-[10px] font-bold uppercase tracking-[0.25em] text-white/40">
+              Notre impact
+            </span>
           </div>
 
           {/* Stats */}
-          <div className="mt-4 grid w-full grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
             {stats.map((stat, i) => (
               <motion.div
                 key={stat.label}
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.35 + i * 0.08 }}
-                className="glass-card rounded-2xl p-4 card-lift"
+                className="gold-border-top glass-card overflow-hidden rounded-2xl p-4 card-lift"
               >
-                <stat.icon className="mb-2 h-4 w-4 text-blue-200" strokeWidth={2} />
+                <stat.icon className="mb-2 h-4 w-4 text-lore-gold-light" strokeWidth={2} />
                 <p className="font-display text-xl font-bold text-white sm:text-2xl">
                   {stat.value}
                 </p>
@@ -157,7 +167,7 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.93 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="relative mx-auto w-full max-w-md lg:max-w-none"
+          className="order-1 relative mx-auto w-full max-w-sm lg:order-none lg:max-w-none"
         >
           {/* Ti triyang lò — menm siyati "ledger" ak rès sit la */}
           <span
@@ -189,7 +199,17 @@ export default function Hero() {
                   className="object-cover object-top"
                 />
               )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/30 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/70 via-[#031a4a]/5 to-transparent" />
+
+              {/* Badge kontni — vèsyon mobile, rete anndan foto a pou l pa deborde ekran an */}
+              <div className="absolute inset-x-3 bottom-3 flex items-center gap-2.5 rounded-2xl bg-white/10 px-3.5 py-2.5 backdrop-blur-md ring-1 ring-white/15 sm:hidden">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lore-gold/20 text-lore-gold-light">
+                  <GraduationCap className="h-4 w-4" />
+                </span>
+                <p className="text-xs font-semibold leading-snug text-white">
+                  500+ jeunes formés &middot; 80+ projets livrés
+                </p>
+              </div>
             </div>
 
             {/* Kat sitasyon k ap flote — anwo agoch */}
