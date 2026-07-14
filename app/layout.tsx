@@ -8,6 +8,7 @@ import CookieConsent from "@/components/CookieConsent";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const ADS_CLIENT = "ca-pub-7566847755875100";
+const GTM_ID = "GTM-KP8K4NL5";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin"],
@@ -81,6 +82,20 @@ export default function RootLayout({
     >
       <head>
         {/*
+          Google Tag Manager — chaje osi rapid ke posib nan <head>.
+          strategy="afterInteractive" pèmèt Next.js jere l apre hydration,
+          san l pa bloke premye rendering paj la.
+        */}
+        <Script id="gtm-script" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','${GTM_ID}');
+          `}
+        </Script>
+        {/*
           AdSense — strategy="beforeInteractive" force Next.js a injecte
           le script directement dans le HTML rendu côté serveur,
           ce qui le rend visible pour le robot Google AdSense.
@@ -106,6 +121,16 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="bg-lore-cream font-body text-lore-ink antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">
+        {/* Google Tag Manager (noscript) — fallback pou navigatè san JS */}
+        <noscript>
+          <iframe
+            src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+            height="0"
+            width="0"
+            style={{ display: "none", visibility: "hidden" }}
+          />
+        </noscript>
+
         {/* Google Analytics — chaje sèlman apre moun aksepte cookies yo */}
         <GoogleAnalytics />
 
