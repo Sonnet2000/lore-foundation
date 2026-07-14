@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { HandHeart, Globe, ChevronDown, ChevronUp, CheckCircle2, Loader2 } from "lucide-react";
+import SponsorsMarquee from "./SponsorsMarquee";
 
 type PublicSponsor = {
   id: string;
@@ -88,6 +89,9 @@ export default function SponsorsClient({ sponsors }: { sponsors: PublicSponsor[]
             Devenir partenaire
           </button>
         </div>
+
+        {/* Bandeau lojo sponsors yo k ap defile san rete */}
+        <SponsorsMarquee sponsors={sponsors} />
 
         {/* Sponsors aktyèl */}
         {sponsors.length > 0 && (

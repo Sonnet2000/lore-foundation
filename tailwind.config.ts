@@ -63,6 +63,7 @@ const config: Config = {
         twinkle: "twinkle 3s ease-in-out infinite",
         "fade-up": "fadeUp 0.6s ease-out both",
         "gold-line": "goldLine 1.5s ease-out both",
+        "sponsors-marquee": "sponsorsMarquee 30s linear infinite",
       },
       keyframes: {
         float: {
@@ -80,6 +81,10 @@ const config: Config = {
         goldLine: {
           from: { transform: "scaleX(0)", opacity: "0" },
           to: { transform: "scaleX(1)", opacity: "1" },
+        },
+        sponsorsMarquee: {
+          from: { transform: "translateX(0)" },
+          to: { transform: "translateX(-50%)" },
         },
       },
       letterSpacing: {
