@@ -34,17 +34,17 @@ const securityHeaders = [
       // Fonts: Google Fonts
       "font-src 'self' https://fonts.gstatic.com",
 
-      // Images: self + Supabase + Google AdSense image CDN
-      "img-src 'self' data: blob: https://*.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://*.google.com https://*.gstatic.com",
+      // Images: self + Supabase + Google AdSense image CDN + Google Tag Manager beacons (/a, /td)
+      "img-src 'self' data: blob: https://*.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://*.google.com https://*.gstatic.com https://www.googletagmanager.com",
 
       // Videos: self + Supabase Storage
       "media-src 'self' blob: https://*.supabase.co",
 
-      // API calls: self + Supabase + Resend + AdSense + Google Analytics endpoints
-      "connect-src 'self' https://*.supabase.co https://api.resend.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://*.googlesyndication.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com",
+      // API calls: self + Supabase + Resend + AdSense + Google Analytics + GTM endpoints
+      "connect-src 'self' https://*.supabase.co https://api.resend.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://*.googlesyndication.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com",
 
-      // Frames: Google AdSense iframes (required for ad rendering)
-      "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.googlesyndication.com https://www.google.com",
+      // Frames: Google AdSense iframes + GTM noscript fallback iframe (ns.html)
+      "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.googlesyndication.com https://www.google.com https://www.googletagmanager.com",
 
       // frame-ancestors: restricts who can embed THIS site in an iframe
       "frame-ancestors 'self'",
