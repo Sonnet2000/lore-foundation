@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, GraduationCap, Clock3, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, GraduationCap, Clock3, Sparkles, PlayCircle, ClipboardCheck, ShieldCheck } from "lucide-react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { CourseRow } from "@/lib/school";
 
@@ -69,6 +69,37 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
               tou dwat sou platfòm nan.
             </p>
           </motion.div>
+        </div>
+      </div>
+
+      {/* ── Pourquoi l'École Loré ──────────────────────────────────────── */}
+      <div className="border-y border-lore-dark/5 bg-lore-cream/60 py-12 dark:border-white/5 dark:bg-white/[0.02]">
+        <div className="mx-auto grid max-w-5xl gap-8 px-5 sm:grid-cols-3">
+          {[
+            {
+              icon: PlayCircle,
+              title: "Leçons vidyo pa etap",
+              text: "Chak kou gen leson vidyo ak resous ekri, disponib depi w apwouve.",
+            },
+            {
+              icon: ClipboardCheck,
+              title: "Devwa ak koreksyon",
+              text: "Soumèt devwa w epi resevwa nòt ak kòmantè pèsonalize nan men fòmatè a.",
+            },
+            {
+              icon: ShieldCheck,
+              title: "Enskripsyon verifye",
+              text: "Chak demand enskripsyon pase nan men ekip Loré Foundation anvan aksè louvri.",
+            },
+          ].map(({ icon: Icon, title, text }) => (
+            <div key={title} className="flex flex-col items-center gap-3 text-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-lore-blue/10 text-lore-blue dark:bg-lore-blue/15">
+                <Icon className="h-5 w-5" />
+              </div>
+              <h3 className="font-display text-sm font-bold text-lore-ink dark:text-white">{title}</h3>
+              <p className="text-xs text-lore-ink/60 dark:text-white/60">{text}</p>
+            </div>
+          ))}
         </div>
       </div>
 

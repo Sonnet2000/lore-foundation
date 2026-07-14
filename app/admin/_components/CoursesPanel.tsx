@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   Plus, Loader2, GraduationCap, Users, ChevronDown, ClipboardList,
   CheckCircle2, XCircle, Clock, FileText, Link as LinkIcon, Award, PlayCircle, Wallet,
+  BookOpen, UserCheck, Bell,
 } from "lucide-react";
 import {
   FieldLabel, TextInput, TextArea, SelectInput, PrimaryButton, GhostButton, RowCard,
@@ -172,7 +173,20 @@ export default function CoursesPanel() {
   }
 
   async function decideEnrollment(id: string, status: "approved" | "rejected") {
+    const prevStatus = enrollments?.find((e) => e.id === id)?.status;
     setEnrollments((prev) => prev?.map((e) => (e.id === id ? { ...e, status } : e)) ?? null);
+    if (expanded && prevStatus && prevStatus !== status) {
+      setCourses(
+        (prev) =>
+          prev?.map((c) => {
+            if (c.id !== expanded.courseId) return c;
+            const stats = { ...(c.stats ?? { pending: 0, approved: 0, rejected: 0 }) };
+            stats[prevStatus] = Math.max(0, stats[prevStatus] - 1);
+            stats[status] += 1;
+            return { ...c, stats };
+          }) ?? null
+      );
+    }
     await fetch(`/api/admin/enrollments/${id}`, {
       credentials: "include", method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -298,6 +312,16 @@ export default function CoursesPanel() {
     );
   }
 
+  const totals = courses.reduce(
+    (acc, c) => {
+      acc.published += c.is_published ? 1 : 0;
+      acc.pending += c.stats?.pending ?? 0;
+      acc.approved += c.stats?.approved ?? 0;
+      return acc;
+    },
+    { published: 0, pending: 0, approved: 0 }
+  );
+
   return (
     <>
       <ConfirmModal
@@ -328,6 +352,32 @@ export default function CoursesPanel() {
         onConfirm={confirmDeleteLesson}
         onCancel={() => setLessonDeleteTarget(null)}
       />
+
+      <div className="mb-2 grid grid-cols-2 gap-3 sm:grid-cols-4">
+        <div className="rounded-2xl border border-lore-dark/5 bg-white p-4 dark:border-white/5 dark:bg-lore-night-surface">
+          <div className="flex items-center gap-2 text-lore-blue"><BookOpen className="h-4 w-4" /><span className="text-xs font-semibold uppercase tracking-wide">Kou</span></div>
+          <p className="mt-1 font-display text-2xl font-bold text-lore-ink dark:text-white">{courses.length}</p>
+          <p className="text-xs text-lore-ink/40 dark:text-white/40">{totals.published} publye</p>
+        </div>
+        <div className="rounded-2xl border border-lore-dark/5 bg-white p-4 dark:border-white/5 dark:bg-lore-night-surface">
+          <div className="flex items-center gap-2 text-lore-emerald"><UserCheck className="h-4 w-4" /><span className="text-xs font-semibold uppercase tracking-wide">Elèv apwouve</span></div>
+          <p className="mt-1 font-display text-2xl font-bold text-lore-ink dark:text-white">{totals.approved}</p>
+          <p className="text-xs text-lore-ink/40 dark:text-white/40">Nan tout kou yo</p>
+        </div>
+        <div className={`rounded-2xl border p-4 ${totals.pending > 0 ? "border-amber-500/30 bg-amber-500/5" : "border-lore-dark/5 bg-white dark:border-white/5 dark:bg-lore-night-surface"}`}>
+          <div className={`flex items-center gap-2 ${totals.pending > 0 ? "text-amber-600" : "text-lore-ink/40 dark:text-white/40"}`}>
+            {totals.pending > 0 ? <Bell className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
+            <span className="text-xs font-semibold uppercase tracking-wide">An atant</span>
+          </div>
+          <p className="mt-1 font-display text-2xl font-bold text-lore-ink dark:text-white">{totals.pending}</p>
+          <p className="text-xs text-lore-ink/40 dark:text-white/40">{totals.pending > 0 ? "Bezwen desizyon w" : "Tout ajou"}</p>
+        </div>
+        <div className="rounded-2xl border border-lore-dark/5 bg-white p-4 dark:border-white/5 dark:bg-lore-night-surface">
+          <div className="flex items-center gap-2 text-lore-gold-dark dark:text-lore-gold-light"><GraduationCap className="h-4 w-4" /><span className="text-xs font-semibold uppercase tracking-wide">Pa publye</span></div>
+          <p className="mt-1 font-display text-2xl font-bold text-lore-ink dark:text-white">{courses.length - totals.published}</p>
+          <p className="text-xs text-lore-ink/40 dark:text-white/40">Kache pou elèv</p>
+        </div>
+      </div>
 
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
@@ -412,6 +462,11 @@ export default function CoursesPanel() {
                 <button type="button" onClick={() => toggleView(c.id, "enrollments")}
                   className="focus-ring flex items-center gap-1.5 text-xs font-semibold text-lore-emerald hover:text-lore-dark dark:text-lore-emerald-light">
                   <Users className="h-3.5 w-3.5" />Enskripsyon
+                  {(c.stats?.pending ?? 0) > 0 && (
+                    <span className="inline-flex items-center justify-center rounded-full bg-amber-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                      {c.stats?.pending}
+                    </span>
+                  )}
                   <ChevronDown className={`h-3.5 w-3.5 transition-transform ${expanded?.courseId === c.id && expanded.view === "enrollments" ? "rotate-180" : ""}`} />
                 </button>
                 <button type="button" onClick={() => toggleView(c.id, "assignments")}

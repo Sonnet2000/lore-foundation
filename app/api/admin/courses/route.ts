@@ -20,7 +20,32 @@ export async function GET() {
       .order("sort_order", { ascending: true });
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
-    return NextResponse.json({ items: data });
+
+    const courses = data ?? [];
+    const ids = courses.map((c) => c.id);
+
+    const statsByCourse = new Map<string, { pending: number; approved: number; rejected: number }>();
+    if (ids.length) {
+      const { data: enrollments } = await supabase
+        .from("course_enrollments")
+        .select("course_id, status")
+        .in("course_id", ids);
+
+      for (const e of enrollments ?? []) {
+        const cur = statsByCourse.get(e.course_id) ?? { pending: 0, approved: 0, rejected: 0 };
+        if (e.status === "pending") cur.pending += 1;
+        else if (e.status === "approved") cur.approved += 1;
+        else if (e.status === "rejected") cur.rejected += 1;
+        statsByCourse.set(e.course_id, cur);
+      }
+    }
+
+    const items = courses.map((c) => ({
+      ...c,
+      stats: statsByCourse.get(c.id) ?? { pending: 0, approved: 0, rejected: 0 },
+    }));
+
+    return NextResponse.json({ items });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
     return NextResponse.json({ error: msg, items: [] }, { status: 500 });
@@ -58,6 +83,7 @@ export async function POST(request: Request) {
       cover_url: body.cover_url || null,
       price: body.price ?? "",
       duration: body.duration ?? "",
+      format: ["online", "in_person", "hybrid"].includes(body.format) ? body.format : "in_person",
       is_published: body.is_published ?? true,
       sort_order: (maxRow?.sort_order ?? -1) + 1,
     })

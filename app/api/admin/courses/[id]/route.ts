@@ -16,6 +16,9 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if ("cover_url" in body) updates.cover_url = body.cover_url || null;
   if (typeof body.price === "string") updates.price = body.price.slice(0, 60);
   if (typeof body.duration === "string") updates.duration = body.duration.slice(0, 60);
+  if (typeof body.format === "string" && ["online", "in_person", "hybrid"].includes(body.format)) {
+    updates.format = body.format;
+  }
   if (typeof body.is_published === "boolean") updates.is_published = body.is_published;
   if (typeof body.sort_order === "number") updates.sort_order = body.sort_order;
 
