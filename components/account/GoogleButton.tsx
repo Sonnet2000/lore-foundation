@@ -26,7 +26,7 @@ function GoogleIcon() {
   );
 }
 
-export default function GoogleButton({ label = "Continuer avec Google" }: { label?: string }) {
+export default function GoogleButton({ label = "Continuer avec Google", next }: { label?: string; next?: string }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,9 +35,12 @@ export default function GoogleButton({ label = "Continuer avec Google" }: { labe
     setLoading(true);
     try {
       const supabase = createSupabaseBrowserClient();
+      const redirectTo = next
+        ? `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`
+        : `${window.location.origin}/auth/callback`;
       const { error: authError } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: `${window.location.origin}/auth/callback` },
+        options: { redirectTo },
       });
       if (authError) {
         setError("Connexion Google indisponible pour le moment.");

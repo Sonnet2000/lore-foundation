@@ -47,13 +47,14 @@ export default function SignupForm() {
     }
 
     setLoading(true);
+    const nextParam = searchParams.get("next") || "/compte/tableau-de-bord";
     const supabase = createSupabaseBrowserClient();
     const { data, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
         data: { full_name: fullName },
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(nextParam)}`,
       },
     });
 
@@ -93,7 +94,7 @@ export default function SignupForm() {
 
   return (
     <div className="flex flex-col gap-5">
-      <GoogleButton label="S'inscrire avec Google" />
+      <GoogleButton label="S'inscrire avec Google" next={searchParams.get("next") || undefined} />
 
       <div className="flex items-center gap-3">
         <div className="h-px flex-1 bg-white/10" />

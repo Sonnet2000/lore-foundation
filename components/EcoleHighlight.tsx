@@ -65,10 +65,10 @@ export default async function EcoleHighlight() {
                     <p className="line-clamp-2 text-sm text-lore-ink/60 dark:text-white/60">{course.description}</p>
                   )}
                   <Link
-                    href="/ecole"
+                    href={`/ecole/${course.id}/inscription`}
                     className="focus-ring mt-auto inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-lore-emerald hover:text-lore-emerald-dark dark:text-lore-emerald-light"
                   >
-                    En savoir plus <ArrowRight className="h-3.5 w-3.5" />
+                    S&apos;inscrire <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
                 </div>
               </div>

@@ -1,11 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, GraduationCap, Clock3, Sparkles, PlayCircle, ClipboardCheck, ShieldCheck } from "lucide-react";
-import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { CourseRow } from "@/lib/school";
 
 const FADE_UP = {
@@ -14,21 +12,7 @@ const FADE_UP = {
 };
 
 export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
-  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    let supabase;
-    try {
-      supabase = createSupabaseBrowserClient();
-    } catch {
-      setLoggedIn(false);
-      return;
-    }
-    supabase.auth.getUser().then(({ data }) => setLoggedIn(!!data.user));
-  }, []);
-
-  const enrollHref = (courseId: string) =>
-    loggedIn ? `/compte/kou/${courseId}` : `/compte/connexion?next=/compte/kou/${courseId}`;
+  const enrollHref = (courseId: string) => `/ecole/${courseId}/inscription`;
 
   return (
     <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
@@ -112,46 +96,44 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
         ) : (
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {courses.map((course, i) => (
-              <motion.div
-                key={course.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.05 }}
-                className="flex flex-col overflow-hidden rounded-2xl border border-lore-dark/5 bg-white dark:border-white/5 dark:bg-lore-night-surface"
-              >
-                <div className="relative h-40 w-full bg-lore-dark/5 dark:bg-white/5">
-                  {course.cover_url ? (
-                    <Image src={course.cover_url} alt={course.title} fill className="object-cover" unoptimized />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center text-lore-ink/20 dark:text-white/20">
-                      <GraduationCap className="h-10 w-10" />
-                    </div>
-                  )}
-                </div>
-                <div className="flex flex-1 flex-col gap-3 p-5">
-                  {course.format !== "in_person" && (
-                    <span className="w-fit rounded-full bg-lore-emerald/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-lore-emerald">
-                      {course.format === "online" ? "100% en ligne" : "Hybride"}
+              <Link key={course.id} href={enrollHref(course.id)} className="group block">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  className="flex h-full flex-col overflow-hidden rounded-2xl border border-lore-dark/5 bg-white transition-shadow group-hover:shadow-lg dark:border-white/5 dark:bg-lore-night-surface"
+                >
+                  <div className="relative h-40 w-full bg-lore-dark/5 dark:bg-white/5">
+                    {course.cover_url ? (
+                      <Image src={course.cover_url} alt={course.title} fill className="object-cover" unoptimized />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center text-lore-ink/20 dark:text-white/20">
+                        <GraduationCap className="h-10 w-10" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-1 flex-col gap-3 p-5">
+                    {course.format !== "in_person" && (
+                      <span className="w-fit rounded-full bg-lore-emerald/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-lore-emerald">
+                        {course.format === "online" ? "100% en ligne" : "Hybride"}
+                      </span>
+                    )}
+                    <h3 className="font-display text-lg font-bold text-lore-ink dark:text-white">{course.title}</h3>
+                    <p className="flex items-center gap-1.5 text-xs text-lore-ink/50 dark:text-white/50">
+                      <Clock3 className="h-3.5 w-3.5" />
+                      {course.duration || "Dire pa presize"}
+                      {course.price ? ` · ${course.price}` : ""}
+                    </p>
+                    {course.description && (
+                      <p className="line-clamp-3 text-sm text-lore-ink/60 dark:text-white/60">{course.description}</p>
+                    )}
+                    <span className="focus-ring mt-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-lore-gold px-4 py-2 text-xs font-bold text-lore-dark transition-transform group-hover:scale-[1.02]">
+                      Enskri <ArrowRight className="h-3.5 w-3.5" />
                     </span>
-                  )}
-                  <h3 className="font-display text-lg font-bold text-lore-ink dark:text-white">{course.title}</h3>
-                  <p className="flex items-center gap-1.5 text-xs text-lore-ink/50 dark:text-white/50">
-                    <Clock3 className="h-3.5 w-3.5" />
-                    {course.duration || "Dire pa presize"}
-                    {course.price ? ` · ${course.price}` : ""}
-                  </p>
-                  {course.description && (
-                    <p className="line-clamp-3 text-sm text-lore-ink/60 dark:text-white/60">{course.description}</p>
-                  )}
-                  <Link
-                    href={enrollHref(course.id)}
-                    className="focus-ring mt-auto inline-flex w-fit items-center gap-1.5 rounded-full bg-lore-gold px-4 py-2 text-xs font-bold text-lore-dark transition-transform hover:scale-[1.02]"
-                  >
-                    Enskri <ArrowRight className="h-3.5 w-3.5" />
-                  </Link>
-                </div>
-              </motion.div>
+                  </div>
+                </motion.div>
+              </Link>
             ))}
           </div>
         )}

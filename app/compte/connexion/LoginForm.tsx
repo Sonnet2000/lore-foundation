@@ -47,7 +47,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex flex-col gap-5">
-      <GoogleButton label="Continuer avec Google" />
+      <GoogleButton label="Continuer avec Google" next={searchParams.get("next") || undefined} />
 
       <div className="flex items-center gap-3">
         <div className="h-px flex-1 bg-white/10" />

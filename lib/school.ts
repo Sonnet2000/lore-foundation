@@ -81,6 +81,18 @@ export async function listPublishedCourses() {
   return (data ?? []) as CourseRow[];
 }
 
+/** Yon sèl kou piblik (pa id), pou paj enskripsyon piblik la. Null si li pa egziste/pa publye. */
+export async function getPublishedCourseById(courseId: string) {
+  const supabase = getSupabase();
+  const { data } = await supabase
+    .from("courses")
+    .select("*")
+    .eq("id", courseId)
+    .eq("is_published", true)
+    .maybeSingle();
+  return (data as CourseRow | null) ?? null;
+}
+
 /** Tout kou piblik yo, ak estati enskripsyon elèv la (si li konekte). */
 export async function listCoursesForStudent(userId: string) {
   const supabase = getSupabase();
