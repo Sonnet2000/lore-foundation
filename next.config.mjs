@@ -25,8 +25,8 @@ const securityHeaders = [
     value: [
       "default-src 'self'",
 
-      // Scripts: Next.js inline + Google AdSense + Google APIs
-      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://adservice.google.com https://www.google.com https://www.gstatic.com",
+      // Scripts: Next.js inline + Google AdSense + Google Analytics + Google APIs
+      "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagservices.com https://adservice.google.com https://www.google.com https://www.gstatic.com https://www.googletagmanager.com https://www.google-analytics.com",
 
       // Styles: Tailwind + Framer Motion + Google Fonts
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
@@ -40,8 +40,8 @@ const securityHeaders = [
       // Videos: self + Supabase Storage
       "media-src 'self' blob: https://*.supabase.co",
 
-      // API calls: self + Supabase + Resend + AdSense endpoints
-      "connect-src 'self' https://*.supabase.co https://api.resend.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://*.googlesyndication.com",
+      // API calls: self + Supabase + Resend + AdSense + Google Analytics endpoints
+      "connect-src 'self' https://*.supabase.co https://api.resend.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://adservice.google.com https://*.googlesyndication.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com",
 
       // Frames: Google AdSense iframes (required for ad rendering)
       "frame-src 'self' https://googleads.g.doubleclick.net https://tpc.googlesyndication.com https://*.googlesyndication.com https://www.google.com",

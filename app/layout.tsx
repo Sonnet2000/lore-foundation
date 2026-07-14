@@ -24,7 +24,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://lore-foundation.vercel.app"),
+  metadataBase: new URL("https://www.lorefondation.com"),
   title: {
     default: "Loré Foundation — Formation professionnelle & services numériques",
     template: "%s | Loré Foundation",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     title: "Loré Foundation — Former. Créer. Réussir.",
     description:
       "Formations professionnelles et services numériques (développement web, design graphique, support technique) pour particuliers et entreprises à Cap-Haïtien.",
-    url: "https://lore-foundation.vercel.app",
+    url: "https://www.lorefondation.com",
     siteName: "Loré Foundation",
     locale: "fr_FR",
     type: "website",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   verification: {
-    google: "G-7DDF3Q1R44",
+    google: "LjdaACLQJzEUYSODPbR_Hx7OhGEWw7sC7RuzypyVYbk",
   },
   other: {
     // AdSense verification — visible dans le HTML statique pour le robot Google
