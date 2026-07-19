@@ -6,6 +6,7 @@ import ManageCookiesButton from "@/components/ManageCookiesButton";
 export const metadata: Metadata = {
   title: "Politique de confidentialité — Loré Foundation",
   description: "Comment Loré Foundation utilise les cookies et protège vos données de navigation.",
+  alternates: { canonical: "/politique-de-confidentialite" },
 };
 
 const SECTIONS = [

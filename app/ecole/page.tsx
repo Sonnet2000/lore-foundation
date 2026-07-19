@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "École — Loré Foundation",
   description:
     "Découvrez les formations professionnelles offertes par Loré Foundation à Cap-Haïtien : développement web, design graphique, cybersécurité et plus. Inscrivez-vous en ligne.",
+  alternates: { canonical: "/ecole" },
 };
 
 export default async function EcolePage() {

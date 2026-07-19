@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2, Heart, ArrowRight } from "lucide-react";
 
-export const metadata: Metadata = { title: "Don confirmé — Loré Foundation" };
+export const metadata: Metadata = {
+  title: "Don confirmé — Loré Foundation",
+  robots: { index: false, follow: false },
+};
 
 export default function DonSuccesPage() {
   return (

@@ -20,6 +20,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   let blogRoutes: MetadataRoute.Sitemap = [];
+  let projectRoutes: MetadataRoute.Sitemap = [];
 
   try {
     const supabase = tryGetSupabase();
@@ -41,5 +42,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Si Supabase pa reponn pandan build la, nou kite sitemap la ak paj statik yo sèlman.
   }
 
-  return [...staticRoutes, ...blogRoutes];
+  try {
+    const supabase = tryGetSupabase();
+    if (supabase) {
+      const { data } = await supabase
+        .from("projects")
+        .select("slug,updated_at")
+        .eq("is_published", true);
+
+      projectRoutes = (data ?? []).map((project) => ({
+        url: `${SITE_URL}/projects/${project.slug}`,
+        lastModified: project.updated_at ? new Date(project.updated_at) : undefined,
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      }));
+    }
+  } catch {
+    // Si Supabase pa reponn pandan build la, nou kite sitemap la san paj pwojè endividyèl yo.
+  }
+
+  return [...staticRoutes, ...blogRoutes, ...projectRoutes];
 }
