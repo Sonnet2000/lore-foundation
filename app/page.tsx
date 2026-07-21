@@ -3,6 +3,7 @@ import Navbar from "@/components/Navbar";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import Hero from "@/components/Hero";
 import EcoleHighlight from "@/components/EcoleHighlight";
+import AppDownload from "@/components/AppDownload";
 import AdsBanner from "@/components/AdsBanner";
 import AdUnit from "@/components/AdUnit";
 import PremiumServices from "@/components/PremiumServices";
@@ -38,6 +39,7 @@ export default async function Home() {
       <Suspense fallback={<SectionSkeleton />}>
         <EcoleHighlight />
       </Suspense>
+      <AppDownload />
       <Suspense fallback={<SectionSkeleton />}>
         <Services />
       </Suspense>
