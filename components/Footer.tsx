@@ -142,6 +142,9 @@ export default async function Footer() {
             <a href="/politique-de-confidentialite" className="hover:text-white/60 transition-colors">
               Politique de confidentialité
             </a>
+            <a href="/conditions-utilisation" className="hover:text-white/60 transition-colors">
+              Conditions d&apos;utilisation
+            </a>
             <p>Conçu avec soin en Haïti 🇭🇹</p>
           </div>
         </div>

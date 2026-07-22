@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, Cookie, BarChart3, Megaphone, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Cookie, BarChart3, Megaphone, ShieldCheck, UserCircle, Database, Trash2, Mail } from "lucide-react";
 import ManageCookiesButton from "@/components/ManageCookiesButton";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité — Loré Foundation",
-  description: "Comment Loré Foundation utilise les cookies et protège vos données de navigation.",
+  description: "Comment Loré Foundation et l'application Loré School utilisent et protègent vos données personnelles.",
   alternates: { canonical: "/politique-de-confidentialite" },
 };
 
@@ -32,6 +32,29 @@ const SECTIONS = [
   },
 ];
 
+const APP_SECTIONS = [
+  {
+    icon: UserCircle,
+    title: "Connexion avec Google",
+    body: "Lorsque vous vous connectez à l'application Loré School avec votre compte Google, nous recevons uniquement votre nom, votre adresse e-mail et votre photo de profil. Ces informations servent à créer et identifier votre compte dans l'application — nous ne recevons jamais votre mot de passe Google.",
+  },
+  {
+    icon: Database,
+    title: "Où sont stockées vos données",
+    body: "Les données de votre compte et de l'application (profil, résultats scolaires, informations de l'établissement) sont hébergées de façon sécurisée par Supabase, notre fournisseur de base de données, et ne sont jamais vendues ni partagées avec des tiers à des fins publicitaires.",
+  },
+  {
+    icon: Trash2,
+    title: "Suppression de vos données",
+    body: "Vous pouvez demander la suppression complète de votre compte et des données associées à tout moment en nous contactant. Nous traitons chaque demande dans un délai raisonnable.",
+  },
+  {
+    icon: Mail,
+    title: "Nous contacter",
+    body: "Pour toute question concernant vos données personnelles, l'utilisation de l'application Loré School, ou pour exercer vos droits, écrivez-nous à l'adresse indiquée en bas de cette page.",
+  },
+];
+
 export default function PolitiqueConfidentialitePage() {
   return (
     <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
@@ -50,25 +73,49 @@ export default function PolitiqueConfidentialitePage() {
       <div className="mx-auto flex max-w-3xl flex-col gap-10 px-5 py-14">
         <div>
           <h1 className="font-display text-3xl font-extrabold text-lore-ink dark:text-white md:text-4xl">
-            Cookies &amp; confidentialité
+            Politique de confidentialité
           </h1>
           <p className="mt-3 text-lore-ink/60 dark:text-white/60">
-            Cette page explique simplement quelles données de navigation Loré Foundation collecte et pourquoi.
+            Cette page explique quelles données Loré Foundation et l&apos;application mobile Loré School collectent, comment elles sont utilisées, et comment vous pouvez les gérer.
           </p>
         </div>
 
-        <div className="flex flex-col gap-6">
-          {SECTIONS.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="flex gap-4 rounded-2xl border border-lore-dark/5 bg-white p-5 dark:border-white/5 dark:bg-lore-night-surface">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lore-emerald/10 text-lore-emerald dark:text-lore-emerald-light">
-                <Icon className="h-5 w-5" />
+        <div>
+          <h2 className="font-display text-xl font-bold text-lore-ink dark:text-white">
+            Votre compte et l&apos;application Loré School
+          </h2>
+          <div className="mt-5 flex flex-col gap-6">
+            {APP_SECTIONS.map(({ icon: Icon, title, body }) => (
+              <div key={title} className="flex gap-4 rounded-2xl border border-lore-dark/5 bg-white p-5 dark:border-white/5 dark:bg-lore-night-surface">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lore-gold/10 text-lore-gold-dark dark:text-lore-gold">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-display text-base font-bold text-lore-ink dark:text-white">{title}</h3>
+                  <p className="mt-1.5 text-sm text-lore-ink/60 dark:text-white/60">{body}</p>
+                </div>
               </div>
-              <div>
-                <h2 className="font-display text-base font-bold text-lore-ink dark:text-white">{title}</h2>
-                <p className="mt-1.5 text-sm text-lore-ink/60 dark:text-white/60">{body}</p>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <h2 className="font-display text-xl font-bold text-lore-ink dark:text-white">
+            Cookies du site web
+          </h2>
+          <div className="mt-5 flex flex-col gap-6">
+            {SECTIONS.map(({ icon: Icon, title, body }) => (
+              <div key={title} className="flex gap-4 rounded-2xl border border-lore-dark/5 bg-white p-5 dark:border-white/5 dark:bg-lore-night-surface">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-lore-emerald/10 text-lore-emerald dark:text-lore-emerald-light">
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-display text-base font-bold text-lore-ink dark:text-white">{title}</h3>
+                  <p className="mt-1.5 text-sm text-lore-ink/60 dark:text-white/60">{body}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <div className="flex flex-col items-start gap-3 rounded-2xl border border-dashed border-lore-dark/15 p-5 dark:border-white/15">
