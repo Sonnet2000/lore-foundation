@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { listPublishedCourses } from "@/lib/school";
+import SiteChrome from "@/components/SiteChrome";
 import EcoleClient from "./EcoleClient";
 
 export const dynamic = "force-dynamic";
@@ -13,5 +14,9 @@ export const metadata: Metadata = {
 
 export default async function EcolePage() {
   const courses = await listPublishedCourses();
-  return <EcoleClient courses={courses} />;
+  return (
+    <SiteChrome>
+      <EcoleClient courses={courses} />
+    </SiteChrome>
+  );
 }

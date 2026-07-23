@@ -31,7 +31,7 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
   }
 
   const links = showSeminaires
-    ? [...navLinks.slice(0, 3), { label: "Séminaires", href: "#seminaires" }, ...navLinks.slice(3)]
+    ? [...navLinks.slice(0, 3), { label: "Séminaires", href: "/#seminaires" }, ...navLinks.slice(3)]
     : navLinks;
 
   const showBanner = announcement !== null && !bannerDismissed;
@@ -104,7 +104,7 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
 
       <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
         {/* Logo */}
-        <a href="#accueil" className="flex items-center gap-2.5 focus-ring rounded-lg group">
+        <a href="/#accueil" className="flex items-center gap-2.5 focus-ring rounded-lg group">
           <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10 transition-all group-hover:ring-lore-gold/40">
             <Image
               src="/logo.png"
@@ -137,7 +137,7 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
           <ThemeToggle />
           <AccountNavLink />
           <a
-            href="#contact"
+            href="/#contact"
             className="btn-gold focus-ring rounded-full px-6 py-2.5 text-sm font-bold transition-transform duration-200 hover:scale-105"
           >
             Commencer
@@ -202,7 +202,7 @@ export default function Navbar({ announcement = null, showSeminaires = false }: 
                   <AccountNavLink variant="mobile" />
                 </div>
                 <a
-                  href="#contact"
+                  href="/#contact"
                   onClick={() => setOpen(false)}
                   className="btn-gold focus-ring rounded-full py-4 text-center text-base font-bold"
                 >

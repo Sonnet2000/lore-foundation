@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
 import { getBlogPostBySlug } from "@/lib/blog";
+import SiteChrome from "@/components/SiteChrome";
 import BlogArticleClient from "./BlogArticleClient";
 
 export const dynamic = "force-dynamic";
@@ -42,15 +43,21 @@ export default async function BlogArticlePage({ params }: Props) {
 
   if (!post) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-lore-cream dark:bg-lore-night px-5 text-center">
-        <BookOpen className="h-16 w-16 text-lore-ink/20 dark:text-white/20" />
-        <h1 className="font-display text-2xl font-bold text-lore-ink dark:text-white">Article non trouvé</h1>
-        <Link href="/blog" className="rounded-full bg-lore-blue px-6 py-3 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
-          Retour au blog
-        </Link>
-      </div>
+      <SiteChrome>
+        <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-lore-cream dark:bg-lore-night px-5 text-center">
+          <BookOpen className="h-16 w-16 text-lore-ink/20 dark:text-white/20" />
+          <h1 className="font-display text-2xl font-bold text-lore-ink dark:text-white">Article non trouvé</h1>
+          <Link href="/blog" className="rounded-full bg-lore-blue px-6 py-3 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
+            Retour au blog
+          </Link>
+        </div>
+      </SiteChrome>
     );
   }
 
-  return <BlogArticleClient post={post} />;
+  return (
+    <SiteChrome>
+      <BlogArticleClient post={post} />
+    </SiteChrome>
+  );
 }

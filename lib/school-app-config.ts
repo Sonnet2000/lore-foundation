@@ -8,6 +8,10 @@
 //   3. Mete vèsyon ak gwosè fichye a (jis pou afichaj — pa obligatwa
 //      pou l egzat 100%, men bon pou moun konnen sa y ap telechaje)
 
+// ⚠️ DEPRIYE — pa itilize ankò. Konfigirasyon app la kounye a jere depi
+// Admin (paj "App mobile (APK)") epi estoke nan Supabase (site_settings,
+// kle "app_download"). Gade lib/site-info-server.ts → getAppDownloadSettings().
+// Fichye sa a rete la sèlman kòm referans istorik.
 export const schoolAppConfig = {
   // Chemen relatif anndan /public — Next.js sèvi l dirèkteman kòm
   // /downloads/lore-school.apk san nou pa bezwen konfigire anyen lòt.

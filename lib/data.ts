@@ -335,13 +335,13 @@ export const socialLinks = [
 ];
 
 export const navLinks = [
-  { label: "Accueil",      href: "#accueil" },
+  { label: "Accueil",      href: "/#accueil" },
   { label: "À propos",     href: "/a-propos" },
   { label: "École",        href: "/ecole" },
-  { label: "Services",     href: "#services" },
+  { label: "Services",     href: "/#services" },
   { label: "Projets",      href: "/projects" },
   { label: "Blog",         href: "/blog" },
-  { label: "Contact",      href: "#contact" },
+  { label: "Contact",      href: "/#contact" },
 ];
 
 export const siteInfo = {

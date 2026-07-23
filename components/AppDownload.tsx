@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Smartphone, Download, ShieldCheck, WifiOff, BellRing } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { schoolAppConfig } from "@/lib/school-app-config";
+import { getAppDownloadSettings } from "@/lib/site-info-server";
 
 const features = [
   {
@@ -23,7 +23,8 @@ const features = [
   },
 ];
 
-export default function AppDownload() {
+export default async function AppDownload() {
+  const appConfig = await getAppDownloadSettings();
   return (
     <section
       id="app"
@@ -62,18 +63,25 @@ export default function AppDownload() {
 
           <AnimatedSection direction="left" delay={0.2}>
             <div className="mt-10 flex flex-wrap items-center gap-4">
-              <a
-                href={schoolAppConfig.apkPath}
-                download
-                className="btn-gold focus-ring inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-sm font-bold text-lore-ink transition-transform hover:scale-[1.02]"
-              >
-                <Download className="h-5 w-5" />
-                Télécharger pour Android
-              </a>
+              {appConfig.apkUrl ? (
+                <a
+                  href={appConfig.apkUrl}
+                  download
+                  className="btn-gold focus-ring inline-flex items-center gap-2.5 rounded-full px-8 py-4 text-sm font-bold text-lore-ink transition-transform hover:scale-[1.02]"
+                >
+                  <Download className="h-5 w-5" />
+                  Télécharger pour Android
+                </a>
+              ) : (
+                <span className="inline-flex items-center gap-2.5 rounded-full border border-white/15 px-8 py-4 text-sm font-semibold text-white/50">
+                  <Download className="h-5 w-5" />
+                  Téléchargement bientôt disponible
+                </span>
+              )}
 
-              {schoolAppConfig.playStoreUrl ? (
+              {appConfig.playStoreUrl ? (
                 <Link
-                  href={schoolAppConfig.playStoreUrl}
+                  href={appConfig.playStoreUrl}
                   className="focus-ring inline-flex items-center gap-2.5 rounded-full border border-white/20 px-7 py-4 text-sm font-semibold text-white/90 transition-colors hover:bg-white/10"
                 >
                   <Smartphone className="h-5 w-5" />
@@ -87,7 +95,7 @@ export default function AppDownload() {
             </div>
 
             <p className="mt-4 text-xs text-white/40">
-              Version {schoolAppConfig.version} · ~{schoolAppConfig.approxSizeMb} Mo · Android 8 et plus
+              Version {appConfig.version} · ~{appConfig.approxSizeMb} Mo · Android 8 et plus
             </p>
           </AnimatedSection>
         </div>

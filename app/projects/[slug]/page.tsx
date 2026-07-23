@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Target } from "lucide-react";
 import { getProjectBySlug } from "@/lib/projects";
+import SiteChrome from "@/components/SiteChrome";
 import ProjetClient from "./ProjetClient";
 
 export const dynamic = "force-dynamic";
@@ -37,15 +38,21 @@ export default async function ProjetPage({ params }: Props) {
 
   if (!project) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-lore-cream dark:bg-lore-night px-5 text-center">
-        <Target className="h-16 w-16 text-lore-ink/20 dark:text-white/20" />
-        <h1 className="font-display text-2xl font-bold text-lore-ink dark:text-white">Projet non trouvé</h1>
-        <Link href="/projects" className="rounded-full bg-lore-blue px-6 py-3 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
-          Voir tous les projets
-        </Link>
-      </div>
+      <SiteChrome>
+        <div className="flex min-h-screen flex-col items-center justify-center gap-5 bg-lore-cream dark:bg-lore-night px-5 text-center">
+          <Target className="h-16 w-16 text-lore-ink/20 dark:text-white/20" />
+          <h1 className="font-display text-2xl font-bold text-lore-ink dark:text-white">Projet non trouvé</h1>
+          <Link href="/projects" className="rounded-full bg-lore-blue px-6 py-3 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
+            Voir tous les projets
+          </Link>
+        </div>
+      </SiteChrome>
     );
   }
 
-  return <ProjetClient project={project} />;
+  return (
+    <SiteChrome>
+      <ProjetClient project={project} />
+    </SiteChrome>
+  );
 }

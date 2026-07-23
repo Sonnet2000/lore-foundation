@@ -56,7 +56,7 @@ export default function FileUploadField({ label, value, onChange, folder }: File
         <input
           ref={inputRef}
           type="file"
-          accept=".pdf,.doc,.docx,.ppt,.pptx,.zip,.jpg,.jpeg,.png,.webp,.gif"
+          accept=".pdf,.doc,.docx,.ppt,.pptx,.zip,.apk,.jpg,.jpeg,.png,.webp,.gif"
           className="hidden"
           onChange={(e) => handleFile(e.target.files?.[0])}
         />

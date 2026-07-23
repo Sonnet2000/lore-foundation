@@ -125,3 +125,36 @@ export function mergePaymentSettings(partial: Partial<PaymentSettings> | null | 
     instructions: partial.instructions || DEFAULT_PAYMENT.instructions,
   };
 }
+
+/**
+ * Konfigirasyon telechajman app mobil Loré School — jere depi Admin la
+ * (Upload APK) olye chanje yon fichye kòd. Estoke nan site_settings, kle
+ * "app_download".
+ */
+export type AppDownloadSettings = {
+  apkUrl: string | null;
+  version: string;
+  approxSizeMb: number;
+  playStoreUrl: string | null;
+};
+
+export const DEFAULT_APP_DOWNLOAD: AppDownloadSettings = {
+  apkUrl: null,
+  version: "1.0.0",
+  approxSizeMb: 40,
+  playStoreUrl: null,
+};
+
+export function mergeAppDownloadSettings(
+  partial: Partial<AppDownloadSettings> | null | undefined
+): AppDownloadSettings {
+  if (!partial) return DEFAULT_APP_DOWNLOAD;
+  return {
+    apkUrl: typeof partial.apkUrl === "string" && partial.apkUrl.trim() ? partial.apkUrl : null,
+    version: partial.version || DEFAULT_APP_DOWNLOAD.version,
+    approxSizeMb: typeof partial.approxSizeMb === "number" && partial.approxSizeMb > 0
+      ? partial.approxSizeMb
+      : DEFAULT_APP_DOWNLOAD.approxSizeMb,
+    playStoreUrl: typeof partial.playStoreUrl === "string" && partial.playStoreUrl.trim() ? partial.playStoreUrl : null,
+  };
+}

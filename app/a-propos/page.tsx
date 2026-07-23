@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteChrome from "@/components/SiteChrome";
 import AProposClient from "./AProposClient";
 
 export const metadata: Metadata = {
@@ -9,5 +10,9 @@ export const metadata: Metadata = {
 };
 
 export default function AProposPage() {
-  return <AProposClient />;
+  return (
+    <SiteChrome>
+      <AProposClient />
+    </SiteChrome>
+  );
 }

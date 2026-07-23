@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, FileText, UserCheck, ShieldAlert, Scale, Mail } from "lucide-react";
+import SiteChrome from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "Conditions d'utilisation — Loré Foundation",
@@ -38,6 +39,7 @@ const SECTIONS = [
 
 export default function ConditionsUtilisationPage() {
   return (
+    <SiteChrome>
     <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
       <div className="sticky top-0 z-20 border-b border-lore-dark/5 bg-white/90 backdrop-blur-md dark:border-white/5 dark:bg-lore-night/90">
         <div className="mx-auto flex max-w-3xl items-center gap-4 px-5 py-4">
@@ -82,5 +84,6 @@ export default function ConditionsUtilisationPage() {
         </p>
       </div>
     </div>
+    </SiteChrome>
   );
 }

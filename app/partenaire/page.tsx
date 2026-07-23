@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteChrome from "@/components/SiteChrome";
 import PartenaireClient from "./PartenaireClient";
 
 export const metadata: Metadata = {
@@ -8,5 +9,9 @@ export const metadata: Metadata = {
 };
 
 export default function PartenairePage() {
-  return <PartenaireClient />;
+  return (
+    <SiteChrome>
+      <PartenaireClient />
+    </SiteChrome>
+  );
 }

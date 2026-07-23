@@ -39,7 +39,9 @@ export default async function Home() {
       <Suspense fallback={<SectionSkeleton />}>
         <EcoleHighlight />
       </Suspense>
-      <AppDownload />
+      <Suspense fallback={<SectionSkeleton />}>
+        <AppDownload />
+      </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <Services />
       </Suspense>

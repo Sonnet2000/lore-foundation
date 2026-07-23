@@ -27,7 +27,7 @@ export default async function Footer() {
         >
           {/* Brand */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <a href="#accueil" className="flex items-center gap-2.5 focus-ring rounded-lg group">
+            <a href="/#accueil" className="flex items-center gap-2.5 focus-ring rounded-lg group">
               <span className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-white/8 ring-1 ring-white/10 transition-all group-hover:ring-lore-gold/30">
                 <Image
                   src="/logo.png"
@@ -101,7 +101,7 @@ export default async function Footer() {
               {services.slice(0, 5).map((s) => (
                 <li key={s.title}>
                   <a
-                    href="#services"
+                    href="/#services"
                     className="focus-ring rounded text-sm text-white/50 transition-colors hover:text-white"
                   >
                     {s.title}
