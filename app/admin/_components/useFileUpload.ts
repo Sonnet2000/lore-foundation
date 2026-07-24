@@ -3,8 +3,9 @@
 import { useRef, useState } from "react";
 import { MEDIA_BUCKET } from "@/lib/supabase-bucket";
 
-const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
-const MAX_VIDEO_BYTES = 80 * 1024 * 1024;
+const MAX_IMAGE_BYTES    = 12 * 1024 * 1024;
+const MAX_VIDEO_BYTES    = 80 * 1024 * 1024;
+const MAX_DOCUMENT_BYTES = 150 * 1024 * 1024; // pdf, doc, zip, apk...
 
 /** Petite pause entre chaque upload pour éviter le rate-limiting Supabase */
 function sleep(ms: number) {
@@ -18,13 +19,25 @@ export function useFileUpload(folder: string) {
   const [progress, setProgress]   = useState<string | null>(null); // "2/5"
 
   async function uploadSingle(file: File): Promise<string | null> {
-    const isVideo  = file.type.startsWith("video/");
-    const maxBytes = isVideo ? MAX_VIDEO_BYTES : MAX_IMAGE_BYTES;
+    const isVideo = file.type.startsWith("video/");
+    const isImage = file.type.startsWith("image/");
+    // APK envoyés depuis certains navigateurs mobiles arrivent parfois avec
+    // un type MIME vide — on se fie aussi à l'extension du fichier.
+    const isApk = file.type === "application/vnd.android.package-archive" || file.name.toLowerCase().endsWith(".apk");
+
+    const maxBytes = isVideo
+      ? MAX_VIDEO_BYTES
+      : isImage
+        ? MAX_IMAGE_BYTES
+        : MAX_DOCUMENT_BYTES;
 
     if (file.size > maxBytes) {
+      const limitMb = Math.round(maxBytes / (1024 * 1024));
       setError(isVideo
-        ? "La vidéo dépasse 80 Mo."
-        : `"${file.name}" dépasse 12 Mo.`);
+        ? `La vidéo dépasse ${limitMb} Mo.`
+        : isImage
+          ? `"${file.name}" dépasse ${limitMb} Mo.`
+          : `"${file.name}" dépasse ${limitMb} Mo (limite fichiers${isApk ? " APK" : ""}).`);
       return null;
     }
 

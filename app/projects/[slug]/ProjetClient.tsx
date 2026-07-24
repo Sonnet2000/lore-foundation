@@ -21,7 +21,7 @@ export default function ProjetClient({ project }: { project: Project }) {
     <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
 
       {/* Header */}
-      <div className="sticky top-0 z-20 border-b border-lore-dark/5 bg-white/90 backdrop-blur-md dark:border-white/5 dark:bg-lore-night/90">
+      <div className="relative z-10 border-b border-lore-dark/5 bg-white/90 backdrop-blur-md dark:border-white/5 dark:bg-lore-night/90">
         <div className="mx-auto flex max-w-5xl items-center gap-4 px-5 py-4">
           <Link href="/projects" className="text-lore-ink/50 hover:text-lore-ink dark:text-white/50 dark:hover:text-white transition-colors">
             <ArrowLeft className="h-5 w-5" />

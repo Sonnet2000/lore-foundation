@@ -19,6 +19,8 @@ export default async function SiteChrome({ children }: { children: React.ReactNo
   return (
     <>
       <Navbar announcement={announcement} showSeminaires={showSeminaires} />
+      {/* Espas pou konpanse Navbar ki 'fixed' — evite kontni paj yo kache anba l */}
+      <div className={announcement ? "h-28 sm:h-24" : "h-16"} aria-hidden="true" />
       {children}
       <Footer />
     </>
