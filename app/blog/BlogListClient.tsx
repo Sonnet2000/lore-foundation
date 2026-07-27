@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Clock, Eye, Tag, ArrowRight, BookOpen, Search } from "lucide-react";
@@ -32,13 +32,20 @@ function formatDate(d: string | null) {
   return new Date(d).toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
 }
 
-export default function BlogListClient() {
-  const [posts, setPosts]         = useState<BlogPost[]>([]);
-  const [loading, setLoading]     = useState(true);
+export default function BlogListClient({ initialPosts = [] }: { initialPosts?: BlogPost[] }) {
+  const [posts, setPosts]         = useState<BlogPost[]>(initialPosts);
+  const [loading, setLoading]     = useState(false);
   const [category, setCategory]   = useState<string>("all");
   const [search, setSearch]       = useState("");
+  const isFirstRun = useRef(true);
 
   useEffect(() => {
+    // Premye rendering: nou deja gen "initialPosts" ki soti nan sèvè a
+    // (kategori "all"), pa gen rezon fè yon fetch anplis pou anyen.
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      if (category === "all") return;
+    }
     setLoading(true);
     const url = category === "all"
       ? "/api/blog?limit=50"

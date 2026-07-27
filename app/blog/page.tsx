@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import SiteChrome from "@/components/SiteChrome";
 import BlogListClient from "./BlogListClient";
+import { listPublishedPosts } from "@/lib/blog";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Blog — Loré Foundation",
@@ -8,10 +11,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/blog" },
 };
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const initialPosts = await listPublishedPosts(50);
   return (
     <SiteChrome>
-      <BlogListClient />
+      <BlogListClient initialPosts={initialPosts} />
     </SiteChrome>
   );
 }

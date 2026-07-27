@@ -25,16 +25,22 @@ const CAT_COLORS: Record<string, string> = {
   autre:      "bg-slate-500/15 text-slate-500",
 };
 
-export default function ProjetsClient() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [loading, setLoading]   = useState(true);
+export default function ProjetsClient({ initialProjects = [] }: { initialProjects?: Project[] }) {
+  const [projects, setProjects] = useState<Project[]>(initialProjects);
+  const [loading, setLoading]   = useState(false);
   const [cat, setCat]           = useState<string>("all");
 
   useEffect(() => {
+    // Deja gen "initialProjects" ki soti nan sèvè a (SSR) — se sèlman si
+    // sa vid nou fè yon fetch klasik kòm sekou (pa egzanp si build la pa
+    // t gen aksè Supabase pou kèk rezon).
+    if (initialProjects.length > 0) return;
+    setLoading(true);
     fetch("/api/projects?limit=50")
       .then(r => r.json())
       .then(d => { setProjects(d.items ?? []); setLoading(false); })
       .catch(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const filtered = cat === "all" ? projects : projects.filter(p => p.category === cat);
