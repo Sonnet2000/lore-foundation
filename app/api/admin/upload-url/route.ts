@@ -11,12 +11,13 @@ const ALLOWED_EXTENSIONS: Record<string, string> = {
   pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
   zip: "application/zip",
   apk: "application/vnd.android.package-archive",
+  exe: "application/vnd.microsoft.portable-executable",
 };
 
 const ALLOWED_FOLDERS = new Set([
   "hero", "portfolio", "seminars", "team", "services", "testimonials",
   "payments", "misc", "blog", "projects", "courses", "assignments", "ads",
-  "premium-services", "app",
+  "premium-services", "app", "apps-catalog",
 ]);
 
 function extensionOf(filename: string) {

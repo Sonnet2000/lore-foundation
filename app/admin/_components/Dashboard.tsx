@@ -6,7 +6,7 @@ import {
   FolderKanban, Layers, Users, Quote, LogOut, ExternalLink,
   Megaphone, Calendar, Mail, HandHeart, Image as ImageIcon, CreditCard,
   LayoutDashboard, ChevronRight, AlertTriangle, CheckCircle2,
-  Settings, BookOpen, Target, Home, UserCog, BarChart3, Share2, GraduationCap, Sparkles, Smartphone,
+  Settings, BookOpen, Target, Home, UserCog, BarChart3, Share2, GraduationCap, Sparkles, Smartphone, AppWindow,
 } from "lucide-react";
 import PortfolioPanel       from "./PortfolioPanel";
 import HeroPanel            from "./HeroPanel";
@@ -28,6 +28,7 @@ import PaymentsPanel         from "./PaymentsPanel";
 import PaymentMethodsPanel   from "./PaymentMethodsPanel";
 import PremiumServicesPanel  from "./PremiumServicesPanel";
 import AppUpdatePanel        from "./AppUpdatePanel";
+import AppsCatalogPanel      from "./AppsCatalogPanel";
 
 const TABS = [
   { id: "hero",             label: "Accueil",       icon: Home,         group: "Contenu" },
@@ -45,6 +46,7 @@ const TABS = [
   { id: "payments",         label: "Paiements",      icon: CreditCard,   group: "Marketing" },
   { id: "premium-services", label: "Services Premium", icon: Sparkles,   group: "Marketing" },
   { id: "app-download",    label: "App mobile (APK)", icon: Smartphone, group: "Marketing" },
+  { id: "apps-catalog",    label: "Nos Applications", icon: AppWindow, group: "Marketing" },
   { id: "sponsors",        label: "Partenaires",   icon: HandHeart,   group: "Engagement" },
   { id: "subscribers",     label: "Abonnés",       icon: Mail,        group: "Engagement" },
   { id: "users",           label: "Utilisateurs",  icon: UserCog,     group: "Utilisateurs" },
@@ -69,6 +71,7 @@ const TAB_META: Record<TabId, { desc: string }> = {
   payments:          { desc: "Binance, MonCash, NatCash, Sogebank, kat elt. ak demand peman pou sèvis yo" },
   "premium-services": { desc: "Sèvis moun ka kòmande dirèkteman (Carte Virtuelle, Booster Publication, elt.)" },
   "app-download":    { desc: "Upload dènye vèsyon APK app Loré School la, san bezwen touche kòd la" },
+  "apps-catalog":    { desc: "Ajoute plizyè app ak imaj, fichye .exe (Windows) ak .apk (Android) — sit la chwazi bon fichye a otomatikman" },
   sponsors:          { desc: "Partenaires d'affaires, clients et organisations collaboratrices" },
   subscribers:       { desc: "Personnes inscrites à la newsletter" },
   users:             { desc: "Tout moun ki gen kont sou espas manm — jere, bloke oswa efase" },
@@ -252,6 +255,7 @@ export default function Dashboard() {
           )}
           {active === "premium-services" && <PremiumServicesPanel />}
           {active === "app-download"     && <AppUpdatePanel />}
+          {active === "apps-catalog"     && <AppsCatalogPanel />}
           {active === "sponsors"         && <SponsorsPanel />}
           {active === "subscribers"      && <SubscribersPanel />}
           {active === "users"            && <UsersPanel />}
