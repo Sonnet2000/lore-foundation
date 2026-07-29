@@ -206,7 +206,7 @@ export default function AppsCatalogPanel() {
             </div>
 
             <div className="mt-4">
-              <FieldLabel>Site web / page de l'app (optionnel)</FieldLabel>
+              <FieldLabel>Site web / page de l&apos;app (optionnel)</FieldLabel>
               <TextInput value={form.website_url} onChange={(e) => setForm({ ...form, website_url: e.target.value })} placeholder="https://..." />
             </div>
 
