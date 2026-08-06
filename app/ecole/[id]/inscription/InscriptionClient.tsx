@@ -11,11 +11,12 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import GoogleButton from "@/components/account/GoogleButton";
 import type { CourseRow, EnrollmentRow } from "@/lib/school";
 
-type PaymentSettings = {
-  binanceEnabled: boolean;
-  binancePayId: string;
-  binanceWalletAddress: string;
-  binanceQrUrl: string;
+type PaymentMethod = {
+  id: string;
+  type: "moncash" | "natcash" | "sogebank" | "autre";
+  label: string;
+  number: string;
+  details: string;
   instructions: string;
 };
 
@@ -40,7 +41,8 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
   const [showPassword, setShowPassword] = useState(false);
 
   // Peman
-  const [settings, setSettings] = useState<PaymentSettings | null>(null);
+  const [methods, setMethods] = useState<PaymentMethod[] | null>(null);
+  const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
   const [reference, setReference] = useState("");
   const [proofUrl, setProofUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -72,7 +74,14 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
 
   useEffect(() => {
     if (!free && (step === "payment")) {
-      fetch("/api/payment-settings").then((r) => r.json()).then(setSettings).catch(() => setSettings(null));
+      fetch("/api/payment-methods")
+        .then((r) => r.json())
+        .then((data) => {
+          const items: PaymentMethod[] = data.items ?? [];
+          setMethods(items);
+          setSelectedMethod((prev) => prev ?? items[0] ?? null);
+        })
+        .catch(() => setMethods([]));
     }
   }, [free, step]);
 
@@ -140,6 +149,10 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
 
   async function handleEnrollSubmit() {
     setError(null);
+    if (!free && !selectedMethod) {
+      setError("Chwazi yon metòd peman.");
+      return;
+    }
     if (!free && !reference.trim() && !proofUrl) {
       setError("Ajoute referans tranzaksyon an oswa yon kapti ekran.");
       return;
@@ -151,7 +164,13 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(
-          free ? {} : { payment_method: "binance", payment_reference: reference, payment_proof_url: proofUrl ?? "" }
+          free
+            ? {}
+            : {
+                payment_method: selectedMethod?.type ?? "autre",
+                payment_reference: reference,
+                payment_proof_url: proofUrl ?? "",
+              }
         ),
       });
       const data = await res.json().catch(() => ({}));
@@ -309,28 +328,53 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
                 <p className="mt-1 text-sm text-lore-ink/50 dark:text-white/50">
                   Peye pri kou a ({course.price}), epi ajoute referans tranzaksyon an oswa yon kapti ekran anba a.
                 </p>
-                {!settings ? (
+                {!methods ? (
                   <div className="mt-4"><Loader2 className="h-4 w-4 animate-spin text-lore-ink/40 dark:text-white/40" /></div>
-                ) : !settings.binanceEnabled ? (
+                ) : methods.length === 0 ? (
                   <p className="mt-4 text-xs text-lore-ink/50 dark:text-white/50">Peman anliy pa aktive kounye a. Kontakte nou dirèkteman.</p>
                 ) : (
-                  <div className="mt-4 flex flex-col gap-3 rounded-xl bg-lore-cream/60 p-4 dark:bg-white/5">
-                    <p className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-lore-gold-dark dark:text-lore-gold-light">
-                      <Wallet className="h-3.5 w-3.5" />Peye ak Binance Pay ID: <span className="font-mono">{settings.binancePayId}</span>
-                    </p>
-                    <input
-                      value={reference} onChange={(e) => setReference(e.target.value)}
-                      placeholder="Referans tranzaksyon an"
-                      className="rounded-lg border border-lore-dark/10 bg-white px-3 py-2 text-sm text-lore-ink outline-none focus:border-lore-gold dark:border-white/10 dark:bg-white/5 dark:text-white"
-                    />
-                    <div className="flex items-center gap-2">
-                      <label className="focus-ring inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-lore-dark/15 px-3 py-1.5 text-xs font-semibold text-lore-ink/70 hover:bg-lore-dark/5 dark:border-white/15 dark:text-white/70 dark:hover:bg-white/5">
-                        {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
-                        {proofUrl ? "Ranplase kapti a" : "Ajoute kapti ekran"}
-                        <input ref={fileInputRef} type="file" accept="image/*,.pdf" className="hidden" onChange={(e) => handleUploadProof(e.target.files?.[0])} />
-                      </label>
-                      {proofUrl && <FileText className="h-3.5 w-3.5 text-lore-gold-dark dark:text-lore-gold-light" />}
+                  <div className="mt-4 flex flex-col gap-3">
+                    <div className="flex flex-wrap gap-2">
+                      {methods.map((m) => (
+                        <button
+                          key={m.id} type="button" onClick={() => setSelectedMethod(m)}
+                          className={`focus-ring rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                            selectedMethod?.id === m.id
+                              ? "border-lore-gold bg-lore-gold/15 text-lore-gold-dark dark:text-lore-gold-light"
+                              : "border-lore-dark/15 text-lore-ink/60 hover:bg-lore-dark/5 dark:border-white/15 dark:text-white/60 dark:hover:bg-white/5"
+                          }`}
+                        >
+                          {m.label}
+                        </button>
+                      ))}
                     </div>
+
+                    {selectedMethod && (
+                      <div className="flex flex-col gap-3 rounded-xl bg-lore-cream/60 p-4 dark:bg-white/5">
+                        <p className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-lore-gold-dark dark:text-lore-gold-light">
+                          <Wallet className="h-3.5 w-3.5" />Peye ak {selectedMethod.label}: <span className="font-mono">{selectedMethod.number}</span>
+                        </p>
+                        {selectedMethod.instructions && (
+                          <p className="text-xs text-lore-ink/60 dark:text-white/60">{selectedMethod.instructions}</p>
+                        )}
+                        <input
+                          value={reference} onChange={(e) => setReference(e.target.value)}
+                          placeholder="Referans tranzaksyon an"
+                          className="rounded-lg border border-lore-dark/10 bg-white px-3 py-2 text-sm text-lore-ink outline-none focus:border-lore-gold dark:border-white/10 dark:bg-white/5 dark:text-white"
+                        />
+                        <div className="flex items-center gap-2">
+                          <label className="focus-ring inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-lore-dark/15 px-3 py-1.5 text-xs font-semibold text-lore-ink/70 hover:bg-lore-dark/5 dark:border-white/15 dark:text-white/70 dark:hover:bg-white/5">
+                            {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+                            {proofUrl ? "Ranplase kapti a" : "Ajoute kapti ekran"}
+                            <input ref={fileInputRef} type="file" accept="image/*,.pdf" className="hidden" onChange={(e) => handleUploadProof(e.target.files?.[0])} />
+                          </label>
+                          {proofUrl && <FileText className="h-3.5 w-3.5 text-lore-gold-dark dark:text-lore-gold-light" />}
+                        </div>
+                        <p className="text-[11px] text-lore-ink/40 dark:text-white/40">
+                          Ou ka tou peye kach nan biwo Loré Foundation lan epi mande yon resi nan men yon admin — resi a ap voye ba w pa imèl tou.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
               </>

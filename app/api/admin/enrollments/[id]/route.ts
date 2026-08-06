@@ -34,14 +34,18 @@ export async function PATCH(request: Request, { params }: { params: { id: string
 }
 
 async function notifyStudentOfDecision(enrollment: {
+  id: string;
   course_id: string;
   user_id: string;
   status: string;
+  payment_method: string | null;
+  payment_reference: string | null;
+  decided_at: string | null;
 }) {
   try {
     const supabase = getSupabase();
     const [{ data: course }, { data: userData }] = await Promise.all([
-      supabase.from("courses").select("title").eq("id", enrollment.course_id).maybeSingle(),
+      supabase.from("courses").select("title, price").eq("id", enrollment.course_id).maybeSingle(),
       supabase.auth.admin.getUserById(enrollment.user_id),
     ]);
 
@@ -50,6 +54,21 @@ async function notifyStudentOfDecision(enrollment: {
 
     const courseTitle = course?.title ?? "kou a";
     const approved = enrollment.status === "approved";
+    // Nimewo resi jenere apati ID enskripsyon an — pa bezwen okenn chanjman nan baz done a.
+    const receiptNo = `LF-${enrollment.id.slice(0, 8).toUpperCase()}`;
+    const decidedDate = enrollment.decided_at
+      ? new Date(enrollment.decided_at).toLocaleDateString("fr-HT", { year: "numeric", month: "long", day: "numeric" })
+      : "";
+
+    const receiptBlock = approved
+      ? `<br/><br/>——<br/>
+         <strong>Resi #${receiptNo}</strong><br/>
+         Kou: ${courseTitle}${course?.price ? `<br/>Montan: ${course.price}` : ""}${
+           enrollment.payment_method ? `<br/>Metòd peman: ${enrollment.payment_method}` : ""
+         }${enrollment.payment_reference ? `<br/>Referans: ${enrollment.payment_reference}` : ""}${
+           decidedDate ? `<br/>Dat: ${decidedDate}` : ""
+         }<br/>——`
+      : "";
 
     await sendBulkNotification({
       recipients: [email],
@@ -57,7 +76,7 @@ async function notifyStudentOfDecision(enrollment: {
       html: emailLayout({
         heading: approved ? "Demand enskripsyon w apwouve!" : "Demand enskripsyon w pa apwouve",
         body: approved
-          ? `Bòn nouvèl! Demand enskripsyon w pou <strong>${courseTitle}</strong> apwouve. Ou ka kounye a antre nan kou a pou wè leçons ak devwa yo.`
+          ? `Bòn nouvèl! Demand enskripsyon w pou <strong>${courseTitle}</strong> apwouve. Ou ka kounye a antre nan kou a pou wè leçons ak devwa yo.${receiptBlock}`
           : `Demand enskripsyon w pou <strong>${courseTitle}</strong> pa t apwouve, souvan paske enfo peman an pa t konplè oswa pa t verifye. Ou ka soumèt yon nouvo demand ak enfo peman ki kòrèk, oswa kontakte nou si w kwè gen yon erè.`,
         ctaLabel: approved ? "Antre nan kou a" : "Gade kou m yo",
         ctaUrl: `${SITE_URL}/compte/kou`,
