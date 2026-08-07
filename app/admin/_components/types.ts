@@ -224,6 +224,7 @@ export type CourseRow = {
   cover_url: string | null;
   price: string;
   duration: string;
+  schedule: string;
   format: CourseFormat;
   is_published: boolean;
   sort_order: number;
@@ -245,6 +246,9 @@ export type EnrollmentRow = {
   full_name: string;
   phone: string;
   email: string;
+  address: string;
+  birth_date: string | null;
+  id_document_url: string | null;
 };
 
 export type AssignmentRow = {

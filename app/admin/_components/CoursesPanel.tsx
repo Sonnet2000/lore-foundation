@@ -21,12 +21,13 @@ type CourseForm = {
   cover_url: string | null;
   price: string;
   duration: string;
+  schedule: string;
   format: CourseFormat;
   is_published: boolean;
 };
 
 const emptyCourseForm: CourseForm = {
-  title: "", slug: "", description: "", cover_url: null, price: "", duration: "", format: "in_person", is_published: true,
+  title: "", slug: "", description: "", cover_url: null, price: "", duration: "", schedule: "", format: "in_person", is_published: true,
 };
 
 type LessonForm = {
@@ -117,7 +118,7 @@ export default function CoursesPanel() {
   function startEditCourse(c: CourseRow) {
     setForm({
       title: c.title, slug: c.slug, description: c.description, cover_url: c.cover_url,
-      price: c.price, duration: c.duration, format: c.format, is_published: c.is_published,
+      price: c.price, duration: c.duration, schedule: c.schedule ?? "", format: c.format, is_published: c.is_published,
     });
     setEditingId(c.id);
     setError(null);
@@ -403,6 +404,10 @@ export default function CoursesPanel() {
                 <TextInput value={form.duration} onChange={(e) => setForm({ ...form, duration: e.target.value })} placeholder="8 semenn" />
               </div>
             </div>
+            <div className="mt-4">
+              <FieldLabel>Orè kou a (opsyonèl)</FieldLabel>
+              <TextInput value={form.schedule} onChange={(e) => setForm({ ...form, schedule: e.target.value })} placeholder="Semèn: 3è-5è pm · Wikenn: 10è am-3è pm" />
+            </div>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
               <div>
                 <FieldLabel>Slug (URL)</FieldLabel>
@@ -449,7 +454,7 @@ export default function CoursesPanel() {
             <div key={c.id} className="flex flex-col gap-2">
               <RowCard
                 title={c.title}
-                subtitle={`${c.duration || "Dire pa presize"}${c.is_published ? "" : " · Pa publye"}`}
+                subtitle={`${c.duration || "Dire pa presize"}${c.schedule ? ` · ${c.schedule}` : ""}${c.is_published ? "" : " · Pa publye"}`}
                 thumbnail={
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-lore-blue/10 text-lore-blue dark:bg-lore-blue/15">
                     <GraduationCap className="h-5 w-5" />
@@ -494,6 +499,16 @@ export default function CoursesPanel() {
                           <div>
                             <p className="text-sm font-semibold text-lore-ink dark:text-white">{e.full_name || e.email}</p>
                             <p className="text-xs text-lore-ink/50 dark:text-white/50">{e.email}{e.phone ? ` · ${e.phone}` : ""}</p>
+                            {(e.address || e.birth_date) && (
+                              <p className="text-xs text-lore-ink/50 dark:text-white/50">
+                                {e.address}{e.birth_date ? `${e.address ? " · " : ""}Nesans: ${e.birth_date}` : ""}
+                              </p>
+                            )}
+                            {e.id_document_url && (
+                              <a href={e.id_document_url} target="_blank" rel="noopener noreferrer" className="mt-0.5 inline-flex items-center gap-1 text-xs font-medium text-lore-blue hover:underline">
+                                <FileText className="h-3 w-3" />Dokiman idantite
+                              </a>
+                            )}
                             {(e.payment_reference || e.payment_proof_url) && (
                               <p className="mt-1 flex items-center gap-2 text-xs text-lore-gold-dark dark:text-lore-gold-light">
                                 <Wallet className="h-3 w-3" />

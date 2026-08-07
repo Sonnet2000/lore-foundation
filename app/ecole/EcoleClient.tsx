@@ -125,6 +125,12 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
                       {course.duration || "Dire pa presize"}
                       {course.price ? ` · ${course.price}` : ""}
                     </p>
+                    {course.schedule && (
+                      <p className="flex items-center gap-1.5 text-xs text-lore-ink/50 dark:text-white/50">
+                        <Clock3 className="h-3.5 w-3.5 opacity-0" />
+                        {course.schedule}
+                      </p>
+                    )}
                     {course.description && (
                       <p className="line-clamp-3 text-sm text-lore-ink/60 dark:text-white/60">{course.description}</p>
                     )}

@@ -40,6 +40,15 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  // Enfo elèv (vrè fòmilè enskripsyon — mande menm si moun lan gen kont deja)
+  const [studentName, setStudentName] = useState("");
+  const [studentPhone, setStudentPhone] = useState("");
+  const [studentAddress, setStudentAddress] = useState("");
+  const [studentBirthDate, setStudentBirthDate] = useState("");
+  const [studentIdDocUrl, setStudentIdDocUrl] = useState<string | null>(null);
+  const [uploadingIdDoc, setUploadingIdDoc] = useState(false);
+  const idDocInputRef = useRef<HTMLInputElement>(null);
+
   // Peman
   const [methods, setMethods] = useState<PaymentMethod[] | null>(null);
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
@@ -71,6 +80,18 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
     })();
     return () => { cancelled = true; };
   }, [course.id]);
+
+  useEffect(() => {
+    if (fullName) setStudentName((prev) => prev || fullName);
+  }, [fullName]);
+
+  useEffect(() => {
+    const supabase = createSupabaseBrowserClient();
+    supabase.auth.getUser().then(({ data }) => {
+      const metaName = data.user?.user_metadata?.full_name;
+      if (metaName) setStudentName((prev) => prev || metaName);
+    });
+  }, []);
 
   useEffect(() => {
     if (!free && (step === "payment")) {
@@ -147,8 +168,36 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
     }
   }
 
+  async function handleUploadIdDoc(file: File | undefined) {
+    if (!file) return;
+    setUploadingIdDoc(true);
+    setError(null);
+    try {
+      const signRes = await fetch("/api/account/upload-url", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ filename: file.name, size: file.size }),
+      });
+      const signData = await signRes.json();
+      if (!signRes.ok) throw new Error(signData.error || "Echèk upload.");
+
+      const up = await fetch(signData.signedUrl, { method: "PUT", headers: { "Content-Type": signData.contentType }, body: file });
+      if (!up.ok) throw new Error("Echèk upload.");
+      setStudentIdDocUrl(signData.publicUrl);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Echèk upload.");
+    } finally {
+      setUploadingIdDoc(false);
+    }
+  }
+
   async function handleEnrollSubmit() {
     setError(null);
+    if (!studentName.trim() || !studentPhone.trim()) {
+      setError("Ranpli non konplè ak nimewo telefòn ou.");
+      return;
+    }
     if (!free && !selectedMethod) {
       setError("Chwazi yon metòd peman.");
       return;
@@ -163,15 +212,20 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(
-          free
+        body: JSON.stringify({
+          full_name: studentName,
+          phone: studentPhone,
+          address: studentAddress,
+          birth_date: studentBirthDate,
+          id_document_url: studentIdDocUrl ?? "",
+          ...(free
             ? {}
             : {
                 payment_method: selectedMethod?.type ?? "autre",
                 payment_reference: reference,
                 payment_proof_url: proofUrl ?? "",
-              }
-        ),
+              }),
+        }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Echèk soumèt demand lan.");
@@ -215,6 +269,7 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
             <p className="text-xs text-lore-ink/50 dark:text-white/50">
               {course.duration || "Dire pa presize"}{course.price ? ` · ${course.price}` : " · Gratis"}
             </p>
+            {course.schedule && <p className="text-xs text-lore-ink/50 dark:text-white/50">{course.schedule}</p>}
           </div>
         </div>
 
@@ -318,6 +373,43 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
             <h2 className="font-display text-lg font-bold text-lore-ink dark:text-white">
               {free ? "Konfime enskripsyon ou" : "Peye pou konfime enskripsyon ou"}
             </h2>
+
+            <div className="mt-4 flex flex-col gap-3 rounded-xl bg-lore-cream/60 p-4 dark:bg-white/5">
+              <p className="text-xs font-semibold uppercase tracking-wide text-lore-ink/50 dark:text-white/50">Enfo elèv</p>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input
+                  value={studentName} onChange={(e) => setStudentName(e.target.value)}
+                  placeholder="Non konplè *"
+                  className="rounded-lg border border-lore-dark/10 bg-white px-3 py-2 text-sm text-lore-ink outline-none focus:border-lore-gold dark:border-white/10 dark:bg-white/5 dark:text-white"
+                />
+                <input
+                  value={studentPhone} onChange={(e) => setStudentPhone(e.target.value)}
+                  placeholder="Nimewo telefòn *"
+                  className="rounded-lg border border-lore-dark/10 bg-white px-3 py-2 text-sm text-lore-ink outline-none focus:border-lore-gold dark:border-white/10 dark:bg-white/5 dark:text-white"
+                />
+                <input
+                  value={studentAddress} onChange={(e) => setStudentAddress(e.target.value)}
+                  placeholder="Adrès (opsyonèl)"
+                  className="rounded-lg border border-lore-dark/10 bg-white px-3 py-2 text-sm text-lore-ink outline-none focus:border-lore-gold dark:border-white/10 dark:bg-white/5 dark:text-white"
+                />
+                <input
+                  type="date" value={studentBirthDate} onChange={(e) => setStudentBirthDate(e.target.value)}
+                  placeholder="Dat nesans (opsyonèl)"
+                  className="rounded-lg border border-lore-dark/10 bg-white px-3 py-2 text-sm text-lore-ink outline-none focus:border-lore-gold dark:border-white/10 dark:bg-white/5 dark:text-white"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <label className="focus-ring inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-lore-dark/15 px-3 py-1.5 text-xs font-semibold text-lore-ink/70 hover:bg-lore-dark/5 dark:border-white/15 dark:text-white/70 dark:hover:bg-white/5">
+                  {uploadingIdDoc ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+                  {studentIdDocUrl ? "Ranplase dokiman an" : "Ajoute dokiman idantite (opsyonèl)"}
+                  <input ref={idDocInputRef} type="file" accept="image/*,.pdf" className="hidden" onChange={(e) => handleUploadIdDoc(e.target.files?.[0])} />
+                </label>
+                {studentIdDocUrl && <FileText className="h-3.5 w-3.5 text-lore-gold-dark dark:text-lore-gold-light" />}
+              </div>
+              <p className="text-[11px] text-lore-ink/40 dark:text-white/40">
+                Acte de naissance, kat elektoral, oswa paspò. Ou ka toujou pote orijinal la lè w vin enskri an pèsòn.
+              </p>
+            </div>
 
             {free ? (
               <p className="mt-1 text-sm text-lore-ink/50 dark:text-white/50">

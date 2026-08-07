@@ -28,8 +28,8 @@ export async function GET(_request: Request, { params }: { params: { id: string 
 
   const items = (enrollments ?? []).map((e) => ({
     ...e,
-    full_name: profileMap.get(e.user_id)?.full_name || "",
-    phone: profileMap.get(e.user_id)?.phone || "",
+    full_name: e.full_name || profileMap.get(e.user_id)?.full_name || "",
+    phone: e.phone || profileMap.get(e.user_id)?.phone || "",
     email: emailMap.get(e.user_id) || "",
   }));
 

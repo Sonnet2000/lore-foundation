@@ -83,6 +83,7 @@ export async function POST(request: Request) {
       cover_url: body.cover_url || null,
       price: body.price ?? "",
       duration: body.duration ?? "",
+      schedule: body.schedule ?? "",
       format: ["online", "in_person", "hybrid"].includes(body.format) ? body.format : "in_person",
       is_published: body.is_published ?? true,
       sort_order: (maxRow?.sort_order ?? -1) + 1,

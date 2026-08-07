@@ -11,6 +11,7 @@ export type CourseRow = {
   cover_url: string | null;
   price: string;
   duration: string;
+  schedule: string;
   format: CourseFormat;
   is_published: boolean;
   sort_order: number;
@@ -28,6 +29,11 @@ export type EnrollmentRow = {
   payment_method: string | null;
   payment_reference: string | null;
   payment_proof_url: string | null;
+  full_name: string;
+  phone: string;
+  address: string;
+  birth_date: string | null;
+  id_document_url: string | null;
   created_at: string;
   decided_at: string | null;
 };
@@ -175,7 +181,8 @@ export async function getCourseForStudent(courseId: string, userId: string) {
 export async function requestEnrollment(
   courseId: string,
   userId: string,
-  payment?: { method: string; reference: string; proof_url: string }
+  payment?: { method: string; reference: string; proof_url: string },
+  student?: { full_name: string; phone: string; address: string; birth_date: string; id_document_url: string }
 ) {
   const supabase = getSupabase();
   const paymentFields = payment
@@ -183,6 +190,15 @@ export async function requestEnrollment(
         payment_method: payment.method || null,
         payment_reference: payment.reference || null,
         payment_proof_url: payment.proof_url || null,
+      }
+    : {};
+  const studentFields = student
+    ? {
+        full_name: student.full_name || "",
+        phone: student.phone || "",
+        address: student.address || "",
+        birth_date: student.birth_date || null,
+        id_document_url: student.id_document_url || null,
       }
     : {};
 
@@ -197,7 +213,7 @@ export async function requestEnrollment(
     if (existing.status === "rejected") {
       const { data, error } = await supabase
         .from("course_enrollments")
-        .update({ status: "pending", decided_at: null, ...paymentFields })
+        .update({ status: "pending", decided_at: null, ...paymentFields, ...studentFields })
         .eq("id", existing.id)
         .select()
         .single();
@@ -209,7 +225,7 @@ export async function requestEnrollment(
 
   const { data, error } = await supabase
     .from("course_enrollments")
-    .insert({ course_id: courseId, user_id: userId, status: "pending", ...paymentFields })
+    .insert({ course_id: courseId, user_id: userId, status: "pending", ...paymentFields, ...studentFields })
     .select()
     .single();
 
