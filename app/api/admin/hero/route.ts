@@ -22,6 +22,11 @@ const DEFAULT_VALUE = {
 };
 
 export async function GET() {
+  const noStoreHeaders = {
+    "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0",
+    Pragma: "no-cache",
+    Expires: "0",
+  };
   try {
     const supabase = getSupabase();
     const { data, error } = await supabase
@@ -30,13 +35,13 @@ export async function GET() {
       .eq("key", SETTING_KEY)
       .maybeSingle();
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: error.message }, { status: 500, headers: noStoreHeaders });
 
     const value = { ...DEFAULT_VALUE, ...(data?.value ?? {}) };
-    return NextResponse.json(value);
+    return NextResponse.json(value, { headers: noStoreHeaders });
   } catch (e: unknown) {
     const msg = e instanceof Error ? e.message : String(e);
-    return NextResponse.json({ error: msg, ...DEFAULT_VALUE }, { status: 500 });
+    return NextResponse.json({ error: msg, ...DEFAULT_VALUE }, { status: 500, headers: noStoreHeaders });
   }
 }
 
