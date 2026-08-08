@@ -41,7 +41,7 @@ export async function POST(request: Request, { params }: { params: { id: string 
 
   // Verifikasyon sèvè: yon kou peyan dwe gen omwen yon referans tranzaksyon oswa yon kapti ekran
   // anvan demand lan ka soumèt (pa fè konfyans sèlman nan verifikasyon kote kliyan an).
-  if (!isFreeCoursePrice(course.price) && !reference && !proof_url) {
+  if (!isFreeCoursePrice(course.registration_fee) && !reference && !proof_url) {
     return NextResponse.json(
       { error: "Ajoute referans tranzaksyon an oswa yon kapti ekran pou konfime peman an." },
       { status: 400 }

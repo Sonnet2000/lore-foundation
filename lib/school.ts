@@ -10,6 +10,8 @@ export type CourseRow = {
   description: string;
   cover_url: string | null;
   price: string;
+  registration_fee: string;
+  materials_fee: string;
   duration: string;
   schedule: string;
   format: CourseFormat;
@@ -19,6 +21,15 @@ export type CourseRow = {
 };
 
 export type EnrollmentStatus = "pending" | "approved" | "rejected";
+
+export type FeeEntry = {
+  status: "unpaid" | "pending" | "paid" | "rejected";
+  method?: string;
+  reference?: string;
+  proof_url?: string;
+  submitted_at?: string;
+  decided_at?: string;
+};
 
 export type EnrollmentRow = {
   id: string;
@@ -34,6 +45,7 @@ export type EnrollmentRow = {
   address: string;
   birth_date: string | null;
   id_document_url: string | null;
+  fees: Record<string, FeeEntry>;
   created_at: string;
   decided_at: string | null;
 };
@@ -201,6 +213,21 @@ export async function requestEnrollment(
         id_document_url: student.id_document_url || null,
       }
     : {};
+  // Frè enskripsyon an antre nan `fees.registration` tou, pou l swiv menm modèl
+  // ak frè patisipasyon/materyèl yo (chak youn verifye poukont li pa admin).
+  const feesFields = payment
+    ? {
+        fees: {
+          registration: {
+            status: "pending" as const,
+            method: payment.method || undefined,
+            reference: payment.reference || undefined,
+            proof_url: payment.proof_url || undefined,
+            submitted_at: new Date().toISOString(),
+          },
+        },
+      }
+    : {};
 
   const { data: existing } = await supabase
     .from("course_enrollments")
@@ -211,9 +238,10 @@ export async function requestEnrollment(
 
   if (existing) {
     if (existing.status === "rejected") {
+      const mergedFees = { ...(existing.fees ?? {}), ...(feesFields.fees ?? {}) };
       const { data, error } = await supabase
         .from("course_enrollments")
-        .update({ status: "pending", decided_at: null, ...paymentFields, ...studentFields })
+        .update({ status: "pending", decided_at: null, ...paymentFields, ...studentFields, fees: mergedFees })
         .eq("id", existing.id)
         .select()
         .single();
@@ -225,7 +253,51 @@ export async function requestEnrollment(
 
   const { data, error } = await supabase
     .from("course_enrollments")
-    .insert({ course_id: courseId, user_id: userId, status: "pending", ...paymentFields, ...studentFields })
+    .insert({ course_id: courseId, user_id: userId, status: "pending", ...paymentFields, ...studentFields, ...feesFields })
+    .select()
+    .single();
+
+  if (error) throw new Error(error.message);
+  return data as EnrollmentRow;
+}
+
+/**
+ * Elèv la soumèt peman pou yon frè espesifik (patisipasyon/materyèl) sou yon
+ * enskripsyon ki deja egziste — endepandan de frè enskripsyon an. Sa pèmèt
+ * moun nan peye enskripsyon kounye a epi peye rès frè yo pita.
+ */
+export async function submitFeePayment(
+  courseId: string,
+  userId: string,
+  feeKey: string,
+  payment: { method: string; reference: string; proof_url: string }
+) {
+  const supabase = getSupabase();
+  const { data: existing, error: findError } = await supabase
+    .from("course_enrollments")
+    .select("*")
+    .eq("course_id", courseId)
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  if (findError) throw new Error(findError.message);
+  if (!existing) throw new Error("Ou dwe enskri nan kou a anvan ou peye lòt frè yo.");
+
+  const mergedFees: Record<string, FeeEntry> = {
+    ...(existing.fees ?? {}),
+    [feeKey]: {
+      status: "pending",
+      method: payment.method || undefined,
+      reference: payment.reference || undefined,
+      proof_url: payment.proof_url || undefined,
+      submitted_at: new Date().toISOString(),
+    },
+  };
+
+  const { data, error } = await supabase
+    .from("course_enrollments")
+    .update({ fees: mergedFees })
+    .eq("id", existing.id)
     .select()
     .single();
 

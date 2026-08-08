@@ -20,6 +20,8 @@ type CourseForm = {
   description: string;
   cover_url: string | null;
   price: string;
+  registration_fee: string;
+  materials_fee: string;
   duration: string;
   schedule: string;
   format: CourseFormat;
@@ -27,7 +29,7 @@ type CourseForm = {
 };
 
 const emptyCourseForm: CourseForm = {
-  title: "", slug: "", description: "", cover_url: null, price: "", duration: "", schedule: "", format: "in_person", is_published: true,
+  title: "", slug: "", description: "", cover_url: null, price: "", registration_fee: "", materials_fee: "", duration: "", schedule: "", format: "in_person", is_published: true,
 };
 
 type LessonForm = {
@@ -118,7 +120,8 @@ export default function CoursesPanel() {
   function startEditCourse(c: CourseRow) {
     setForm({
       title: c.title, slug: c.slug, description: c.description, cover_url: c.cover_url,
-      price: c.price, duration: c.duration, schedule: c.schedule ?? "", format: c.format, is_published: c.is_published,
+      price: c.price, registration_fee: c.registration_fee ?? "", materials_fee: c.materials_fee ?? "",
+      duration: c.duration, schedule: c.schedule ?? "", format: c.format, is_published: c.is_published,
     });
     setEditingId(c.id);
     setError(null);
@@ -192,6 +195,20 @@ export default function CoursesPanel() {
       credentials: "include", method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
+    });
+  }
+
+  async function decideFee(id: string, fee: "participation" | "materials", fee_status: "paid" | "rejected") {
+    setEnrollments(
+      (prev) =>
+        prev?.map((e) =>
+          e.id === id ? { ...e, fees: { ...e.fees, [fee]: { ...e.fees?.[fee], status: fee_status } } } : e
+        ) ?? null
+    );
+    await fetch(`/api/admin/enrollments/${id}`, {
+      credentials: "include", method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ fee, fee_status }),
     });
   }
 
@@ -414,8 +431,18 @@ export default function CoursesPanel() {
                 <TextInput value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value })} placeholder="devlopman-web (kite vid pou otomatik)" />
               </div>
               <div>
-                <FieldLabel>Pri (opsyonèl)</FieldLabel>
+                <FieldLabel>Frè patisipasyon (opsyonèl)</FieldLabel>
                 <TextInput value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} placeholder="Gratis, oswa 2 500 HTG" />
+              </div>
+            </div>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2">
+              <div>
+                <FieldLabel>Frè enskripsyon (opsyonèl)</FieldLabel>
+                <TextInput value={form.registration_fee} onChange={(e) => setForm({ ...form, registration_fee: e.target.value })} placeholder="1 000 HTG" />
+              </div>
+              <div>
+                <FieldLabel>Frè maliyo/badj (opsyonèl)</FieldLabel>
+                <TextInput value={form.materials_fee} onChange={(e) => setForm({ ...form, materials_fee: e.target.value })} placeholder="1 500 HTG" />
               </div>
             </div>
             <div className="mt-4">
@@ -495,7 +522,8 @@ export default function CoursesPanel() {
                   ) : (
                     <div className="flex flex-col gap-3">
                       {enrollments.map((e) => (
-                        <div key={e.id} className="flex flex-col gap-2 border-b border-lore-dark/5 pb-3 last:border-0 dark:border-white/5 sm:flex-row sm:items-center sm:justify-between">
+                        <div key={e.id} className="flex flex-col gap-2 border-b border-lore-dark/5 pb-3 last:border-0 dark:border-white/5">
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                           <div>
                             <p className="text-sm font-semibold text-lore-ink dark:text-white">{e.full_name || e.email}</p>
                             <p className="text-xs text-lore-ink/50 dark:text-white/50">{e.email}{e.phone ? ` · ${e.phone}` : ""}</p>
@@ -535,6 +563,34 @@ export default function CoursesPanel() {
                               <button onClick={() => decideEnrollment(e.id, "rejected")} className="focus-ring rounded-full bg-red-500/10 px-3 py-1.5 text-xs font-semibold text-red-500 hover:bg-red-500/20">Rejte</button>
                             )}
                           </div>
+                        </div>
+                        {(["participation", "materials"] as const).map((feeKey) => {
+                          const feeEntry = e.fees?.[feeKey];
+                          if (!feeEntry) return null;
+                          const feeLabel = feeKey === "participation" ? "Frè patisipasyon" : "Frè maliyo/badj";
+                          return (
+                            <div key={feeKey} className="flex flex-wrap items-center gap-2 rounded-lg bg-lore-cream/50 px-3 py-1.5 text-xs dark:bg-white/5">
+                              <span className="font-semibold text-lore-ink/70 dark:text-white/70">{feeLabel}:</span>
+                              {feeEntry.reference && <span className="font-mono text-lore-gold-dark dark:text-lore-gold-light">{feeEntry.reference}</span>}
+                              {feeEntry.proof_url && (
+                                <a href={feeEntry.proof_url} target="_blank" rel="noopener noreferrer" className="text-lore-blue underline">Gade prèv</a>
+                              )}
+                              <span className={`ml-auto inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                                feeEntry.status === "paid" ? "bg-lore-emerald/10 text-lore-emerald" :
+                                feeEntry.status === "rejected" ? "bg-red-500/10 text-red-500" :
+                                "bg-amber-500/10 text-amber-600"
+                              }`}>
+                                {feeEntry.status === "paid" ? "Peye" : feeEntry.status === "rejected" ? "Rejte" : "An atant"}
+                              </span>
+                              {feeEntry.status === "pending" && (
+                                <>
+                                  <button onClick={() => decideFee(e.id, feeKey, "paid")} className="focus-ring rounded-full bg-lore-emerald/10 px-2.5 py-1 text-[11px] font-semibold text-lore-emerald hover:bg-lore-emerald/20">Apwouve</button>
+                                  <button onClick={() => decideFee(e.id, feeKey, "rejected")} className="focus-ring rounded-full bg-red-500/10 px-2.5 py-1 text-[11px] font-semibold text-red-500 hover:bg-red-500/20">Rejte</button>
+                                </>
+                              )}
+                            </div>
+                          );
+                        })}
                         </div>
                       ))}
                     </div>

@@ -223,6 +223,8 @@ export type CourseRow = {
   description: string;
   cover_url: string | null;
   price: string;
+  registration_fee: string;
+  materials_fee: string;
   duration: string;
   schedule: string;
   format: CourseFormat;
@@ -249,6 +251,7 @@ export type EnrollmentRow = {
   address: string;
   birth_date: string | null;
   id_document_url: string | null;
+  fees: Record<string, { status: string; method?: string; reference?: string; proof_url?: string; submitted_at?: string; decided_at?: string }>;
 };
 
 export type AssignmentRow = {

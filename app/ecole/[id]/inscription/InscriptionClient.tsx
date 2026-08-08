@@ -29,7 +29,7 @@ type Step = "loading" | "account" | "awaiting-confirmation" | "payment" | "statu
 
 export default function InscriptionClient({ course }: { course: CourseRow }) {
   const next = `/ecole/${course.id}/inscription`;
-  const free = isFreeCourse(course.price);
+  const free = isFreeCourse(course.registration_fee);
 
   const [step, setStep] = useState<Step>("loading");
   const [enrollment, setEnrollment] = useState<EnrollmentRow | null>(null);
@@ -59,6 +59,10 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Peye frè patisipasyon/materyèl apre yo deja enskri (aksyon endepandan)
+  const [activeFee, setActiveFee] = useState<"participation" | "materials" | null>(null);
+  const [feeSubmitting, setFeeSubmitting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -94,7 +98,7 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
   }, []);
 
   useEffect(() => {
-    if (!free && (step === "payment")) {
+    if ((!free && step === "payment") || activeFee) {
       fetch("/api/payment-methods")
         .then((r) => r.json())
         .then((data) => {
@@ -104,7 +108,7 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
         })
         .catch(() => setMethods([]));
     }
-  }, [free, step]);
+  }, [free, step, activeFee]);
 
   async function handleAccountSubmit() {
     setError(null);
@@ -165,6 +169,37 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
       setError(e instanceof Error ? e.message : "Echèk upload.");
     } finally {
       setUploading(false);
+    }
+  }
+
+  async function handleFeeSubmit() {
+    if (!activeFee) return;
+    setError(null);
+    if (!selectedMethod) { setError("Chwazi yon metòd peman."); return; }
+    if (!reference.trim() && !proofUrl) { setError("Ajoute referans tranzaksyon an oswa yon kapti ekran."); return; }
+    setFeeSubmitting(true);
+    try {
+      const res = await fetch(`/api/account/courses/${course.id}/pay-fee`, {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fee: activeFee,
+          payment_method: selectedMethod.type,
+          payment_reference: reference,
+          payment_proof_url: proofUrl ?? "",
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Echèk soumèt peman an.");
+      setEnrollment(data.enrollment);
+      setActiveFee(null);
+      setReference("");
+      setProofUrl(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Echèk soumèt peman an.");
+    } finally {
+      setFeeSubmitting(false);
     }
   }
 
@@ -418,7 +453,7 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
             ) : (
               <>
                 <p className="mt-1 text-sm text-lore-ink/50 dark:text-white/50">
-                  Peye pri kou a ({course.price}), epi ajoute referans tranzaksyon an oswa yon kapti ekran anba a.
+                  Peye frè enskripsyon an ({course.registration_fee}), epi ajoute referans tranzaksyon an oswa yon kapti ekran anba a. Frè patisipasyon ak frè maliyo/badj yo ap disponib pou peye apre.
                 </p>
                 {!methods ? (
                   <div className="mt-4"><Loader2 className="h-4 w-4 animate-spin text-lore-ink/40 dark:text-white/40" /></div>
@@ -508,6 +543,84 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
                 </Link>
               </>
             )}
+          </div>
+        )}
+
+        {step === "status" && enrollment && (course.price || course.materials_fee) && (
+          <div className="mt-4 flex flex-col gap-3">
+            {([
+              { key: "participation" as const, label: "Frè patisipasyon", price: course.price },
+              { key: "materials" as const, label: "Frè maliyo/badj", price: course.materials_fee },
+            ]).map(({ key, label, price }) => {
+              if (!price || isFreeCourse(price)) return null;
+              const feeEntry = enrollment.fees?.[key];
+              const status = feeEntry?.status ?? "unpaid";
+              return (
+                <div key={key} className="rounded-2xl border border-lore-dark/5 bg-white p-4 dark:border-white/5 dark:bg-lore-night-surface">
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <p className="text-sm font-semibold text-lore-ink dark:text-white">{label}</p>
+                      <p className="text-xs text-lore-ink/50 dark:text-white/50">{price}</p>
+                    </div>
+                    {status === "paid" ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-lore-emerald/10 px-2.5 py-1 text-[11px] font-semibold text-lore-emerald"><CheckCircle2 className="h-3 w-3" />Peye</span>
+                    ) : status === "pending" ? (
+                      <span className="inline-flex items-center gap-1 rounded-full bg-amber-500/10 px-2.5 py-1 text-[11px] font-semibold text-amber-600"><Clock3 className="h-3 w-3" />An atant verifikasyon</span>
+                    ) : activeFee === key ? null : (
+                      <button onClick={() => { setActiveFee(key); setError(null); }} className="focus-ring rounded-full bg-lore-gold px-3.5 py-1.5 text-xs font-bold text-lore-dark transition-transform hover:scale-[1.02]">Peye kounye a</button>
+                    )}
+                  </div>
+
+                  {activeFee === key && status === "unpaid" && (
+                    <div className="mt-3 flex flex-col gap-3">
+                      {!methods ? (
+                        <Loader2 className="h-4 w-4 animate-spin text-lore-ink/40 dark:text-white/40" />
+                      ) : (
+                        <div className="flex flex-wrap gap-2">
+                          {methods.map((m) => (
+                            <button key={m.id} type="button" onClick={() => setSelectedMethod(m)}
+                              className={`focus-ring rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+                                selectedMethod?.id === m.id
+                                  ? "border-lore-gold bg-lore-gold/15 text-lore-gold-dark dark:text-lore-gold-light"
+                                  : "border-lore-dark/15 text-lore-ink/60 hover:bg-lore-dark/5 dark:border-white/15 dark:text-white/60 dark:hover:bg-white/5"
+                              }`}
+                            >{m.label}</button>
+                          ))}
+                        </div>
+                      )}
+                      {selectedMethod && (
+                        <div className="flex flex-col gap-3 rounded-xl bg-lore-cream/60 p-4 dark:bg-white/5">
+                          <p className="flex flex-wrap items-center gap-1.5 text-xs font-semibold text-lore-gold-dark dark:text-lore-gold-light">
+                            <Wallet className="h-3.5 w-3.5" />Peye ak {selectedMethod.label}: <span className="font-mono">{selectedMethod.number}</span>
+                          </p>
+                          <input
+                            value={reference} onChange={(e) => setReference(e.target.value)}
+                            placeholder="Referans tranzaksyon an"
+                            className="rounded-lg border border-lore-dark/10 bg-white px-3 py-2 text-sm text-lore-ink outline-none focus:border-lore-gold dark:border-white/10 dark:bg-white/5 dark:text-white"
+                          />
+                          <div className="flex items-center gap-2">
+                            <label className="focus-ring inline-flex cursor-pointer items-center gap-1.5 rounded-full border border-lore-dark/15 px-3 py-1.5 text-xs font-semibold text-lore-ink/70 hover:bg-lore-dark/5 dark:border-white/15 dark:text-white/70 dark:hover:bg-white/5">
+                              {uploading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+                              {proofUrl ? "Ranplase kapti a" : "Ajoute kapti ekran"}
+                              <input type="file" accept="image/*,.pdf" className="hidden" onChange={(e) => handleUploadProof(e.target.files?.[0])} />
+                            </label>
+                            {proofUrl && <FileText className="h-3.5 w-3.5 text-lore-gold-dark dark:text-lore-gold-light" />}
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <button onClick={handleFeeSubmit} disabled={feeSubmitting}
+                              className="focus-ring flex-1 rounded-full bg-lore-gold px-4 py-2 text-xs font-bold text-lore-dark transition-transform hover:scale-[1.02] disabled:opacity-60">
+                              {feeSubmitting ? <Loader2 className="mx-auto h-3.5 w-3.5 animate-spin" /> : "Soumèt peman"}
+                            </button>
+                            <button onClick={() => { setActiveFee(null); setError(null); }} className="focus-ring rounded-full px-3 py-2 text-xs font-semibold text-lore-ink/50 hover:bg-lore-dark/5 dark:text-white/50 dark:hover:bg-white/5">Anile</button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+            {error && activeFee && <p className="text-center text-xs font-medium text-red-500">{error}</p>}
           </div>
         )}
       </div>

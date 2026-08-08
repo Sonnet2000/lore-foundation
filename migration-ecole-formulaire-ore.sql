@@ -15,3 +15,11 @@ alter table course_enrollments add column if not exists phone text not null defa
 alter table course_enrollments add column if not exists address text not null default '';
 alter table course_enrollments add column if not exists birth_date date;
 alter table course_enrollments add column if not exists id_document_url text;
+
+-- 3) Frè separe: enskripsyon, patisipasyon (`price` ki te la deja), ak
+--    maliyo+badj/lòt materyèl — chak youn ka soumèt/verifye poukont li,
+--    pa gen obligasyon peye tout yo yon sèl kou.
+alter table courses add column if not exists registration_fee text not null default '';
+alter table courses add column if not exists materials_fee text not null default '';
+alter table course_enrollments add column if not exists fees jsonb not null default '{}'::jsonb;
+
