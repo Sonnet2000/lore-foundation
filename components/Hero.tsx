@@ -4,9 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, Heart, Users, Star, GraduationCap } from "lucide-react";
 import { useEffect, useState } from "react";
-import Sparkle from "@/components/ui/Sparkle";
 import CurveDivider from "@/components/ui/CurveDivider";
-import Globe3D from "@/components/ui/Globe3D";
 import { stats, siteInfo, testimonials } from "@/lib/data";
 
 type MediaItem = { url: string; type: "image" | "video" };
@@ -74,33 +72,46 @@ export default function Hero() {
   return (
     <section
       id="accueil"
-      className="relative overflow-hidden pb-24 pt-32 sm:pb-28 sm:pt-40 lg:pb-36"
-      style={{
-        background:
-          "radial-gradient(ellipse at 20% 50%, rgba(4,60,158,0.18) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(24,166,255,0.15) 0%, transparent 40%), linear-gradient(135deg, #031a4a 0%, #043C9E 50%, #0a5bc4 100%)",
-      }}
+      className="relative flex min-h-[600px] items-center overflow-hidden pb-20 pt-32 sm:min-h-[680px] sm:pb-24 sm:pt-40 lg:min-h-[780px] lg:pb-28"
     >
-      {/* Circuit grid overlay */}
-      <div className="hero-grid absolute inset-0 pointer-events-none" />
+      {/* Média an background, sou tout lajè seksyon an — menm apwòch ak Pixabay */}
+      <div className="absolute inset-0">
+        {heroMedia.type === "video" ? (
+          <video
+            src={heroMedia.url}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <Image
+            src={heroMedia.url}
+            alt="Équipe Loré Foundation"
+            fill
+            priority
+            className="object-cover"
+          />
+        )}
+        {/* Vwal koulè mak la, pou tèks la rete lizib sou nenpòt imaj/videyo */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(100deg, rgba(3,26,74,0.96) 0%, rgba(3,26,74,0.86) 30%, rgba(4,60,158,0.55) 58%, rgba(4,60,158,0.25) 78%, rgba(4,60,158,0.15) 100%)",
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/90 via-transparent to-[#031a4a]/10" />
+        <div className="hero-grid absolute inset-0 pointer-events-none opacity-40" />
+      </div>
 
-      {/* Ambient glow */}
-      <div className="absolute -left-32 top-1/3 h-96 w-96 rounded-full bg-blue-400/8 blur-3xl pointer-events-none" />
-      <div className="absolute -right-20 top-10 h-80 w-80 rounded-full bg-sky-400/10 blur-3xl pointer-events-none" />
-
-      <Sparkle className="absolute left-[8%] top-28 hidden sm:block" size={28} />
-      <Sparkle className="absolute right-[12%] top-44 hidden sm:block" size={20} />
-      <Sparkle className="absolute left-[42%] top-16 hidden lg:block" size={16} />
-
-      {/* Glòb 3D — reprezante enpak global Loré Foundation, an background dous */}
-      <Globe3D className="absolute -right-[18%] top-1/2 hidden h-[130%] w-[70%] -translate-y-1/2 md:block lg:-right-[10%] lg:h-[150%] lg:w-[60%]" />
-
-      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-[0.95fr_1.3fr] lg:gap-10 lg:px-12">
-        {/* Colonne gauche */}
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="order-2 flex flex-col items-start gap-6 text-left lg:order-none"
+          className="flex max-w-2xl flex-col items-start gap-6 text-left"
         >
           {/* Badge mission */}
           <motion.div
@@ -128,7 +139,7 @@ export default function Hero() {
           </h1>
 
           {/* Description */}
-          <p className="max-w-lg text-base leading-relaxed text-white/70 sm:text-lg">
+          <p className="max-w-lg text-base leading-relaxed text-white/80 sm:text-lg">
             {content.description}
           </p>
 
@@ -200,113 +211,71 @@ export default function Hero() {
               </motion.div>
             ))}
           </div>
-        </motion.div>
 
-        {/* Colonne droite — photo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.93 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-          className="order-1 relative mx-auto w-full max-w-sm lg:order-none lg:max-w-none"
-        >
-          {/* Ti triyang lò — menm siyati "ledger" ak rès sit la */}
-          <span
-            className="absolute -right-2 -top-2 h-11 w-11 rotate-45 rounded-sm sm:h-14 sm:w-14"
-            style={{
-              background: "linear-gradient(135deg, #f2d272, #d4af37)",
-              boxShadow: "-3px 3px 10px -2px rgba(0,0,0,0.4), inset 1px 1px 0 rgba(255,255,255,0.4)",
-            }}
-            aria-hidden="true"
-          />
-
-          <div className="relative aspect-[4/5] w-full lg:aspect-[4/3.4] xl:aspect-[16/12]">
-            <div className="tab-corner relative h-full w-full overflow-hidden shadow-premium">
-              {heroMedia.type === "video" ? (
-                <video
-                  src={heroMedia.url}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="h-full w-full object-cover object-top"
-                />
-              ) : (
-                <Image
-                  src={heroMedia.url}
-                  alt="Équipe Loré Foundation"
-                  fill
-                  priority
-                  className="object-cover object-top"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/70 via-[#031a4a]/5 to-transparent" />
-
-              {/* Badge kontni — vèsyon mobile, rete anndan foto a pou l pa deborde ekran an */}
-              <div className="absolute inset-x-3 bottom-3 flex items-center gap-2.5 rounded-2xl bg-white/10 px-3.5 py-2.5 backdrop-blur-md ring-1 ring-white/15 sm:hidden">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lore-gold/20 text-lore-gold-light">
-                  <GraduationCap className="h-4 w-4" />
-                </span>
-                <p className="text-xs font-semibold leading-snug text-white">
-                  {content.mobileBadgeText}
-                </p>
-              </div>
-            </div>
-
-            {/* Kat sitasyon k ap flote — anwo agoch */}
-            <motion.div
-              className="absolute -left-6 top-8 hidden max-w-[190px] rounded-2xl bg-white/95 p-3.5 shadow-gold sm:block md:-left-12 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
-              animate={{ y: [0, -10, 0] }}
-              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <div className="flex gap-0.5 text-lore-gold">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-3 w-3 fill-current" />
-                ))}
-              </div>
-              <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-lore-ink/70 dark:text-white/70">
-                &ldquo;{heroQuote.quote}&rdquo;
-              </p>
-              <p className="mt-1.5 font-display text-[11px] font-bold text-lore-ink dark:text-white">
-                {heroQuote.name}
-              </p>
-            </motion.div>
-
-            {/* Badge flottant — ba agoch, estatistik prensipal */}
-            <motion.div
-              className="absolute -bottom-4 -left-4 hidden rounded-2xl bg-lore-dark/95 px-4 py-3 shadow-premium ring-1 ring-blue-400/20 sm:flex sm:items-center sm:gap-3 md:-left-8"
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/15 text-blue-300">
-                <GraduationCap className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="font-display text-sm font-bold text-white">{content.floatingBadge1Title}</p>
-                <p className="text-xs text-white/50">{content.floatingBadge1Subtitle}</p>
-              </div>
-            </motion.div>
-
-            {/* Badge flottant — anwo adwat, kominote a */}
-            <motion.div
-              className="absolute -right-4 top-10 hidden rounded-2xl bg-white/95 px-4 py-3 shadow-gold sm:flex sm:items-center sm:gap-3 md:-right-10 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
-              animate={{ y: [0, -8, 0] }}
-              transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-            >
-              <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                <Users className="h-5 w-5" />
-              </span>
-              <div>
-                <p className="font-display text-sm font-bold text-lore-ink dark:text-white">
-                  {content.floatingBadge2Title}
-                </p>
-                <p className="text-xs text-lore-ink/50 dark:text-white/50">{content.floatingBadge2Subtitle}</p>
-              </div>
-            </motion.div>
+          {/* Badge kontni — vèsyon mobile, ranplase kat ki te sou foto a anvan */}
+          <div className="flex items-center gap-2.5 rounded-2xl bg-white/10 px-3.5 py-2.5 backdrop-blur-md ring-1 ring-white/15 sm:hidden">
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lore-gold/20 text-lore-gold-light">
+              <GraduationCap className="h-4 w-4" />
+            </span>
+            <p className="text-xs font-semibold leading-snug text-white">
+              {content.mobileBadgeText}
+            </p>
           </div>
         </motion.div>
       </div>
 
-      <CurveDivider className="absolute bottom-0 left-0" />
+      {/* Kat sitasyon k ap flote — anwo adwat, sou imaj/videyo a */}
+      <motion.div
+        className="absolute right-6 top-28 z-10 hidden max-w-[190px] rounded-2xl bg-white/95 p-3.5 shadow-gold sm:block lg:right-12 lg:top-36 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <div className="flex gap-0.5 text-lore-gold">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star key={i} className="h-3 w-3 fill-current" />
+          ))}
+        </div>
+        <p className="mt-1.5 line-clamp-2 text-[11px] leading-snug text-lore-ink/70 dark:text-white/70">
+          &ldquo;{heroQuote.quote}&rdquo;
+        </p>
+        <p className="mt-1.5 font-display text-[11px] font-bold text-lore-ink dark:text-white">
+          {heroQuote.name}
+        </p>
+      </motion.div>
+
+      {/* Badj flottant — anba adwat, sou imaj/videyo a */}
+      <motion.div
+        className="absolute bottom-24 right-6 z-10 hidden rounded-2xl bg-lore-dark/95 px-4 py-3 shadow-premium ring-1 ring-blue-400/20 sm:flex sm:items-center sm:gap-3 lg:right-12"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+      >
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/15 text-blue-300">
+          <GraduationCap className="h-5 w-5" />
+        </span>
+        <div>
+          <p className="font-display text-sm font-bold text-white">{content.floatingBadge1Title}</p>
+          <p className="text-xs text-white/50">{content.floatingBadge1Subtitle}</p>
+        </div>
+      </motion.div>
+
+      {/* Badj flottant — anba pi lwen adwat, kominote a */}
+      <motion.div
+        className="absolute bottom-8 right-6 z-10 hidden rounded-2xl bg-white/95 px-4 py-3 shadow-gold sm:flex sm:items-center sm:gap-3 lg:right-12 dark:bg-lore-night-surface dark:ring-1 dark:ring-blue-400/20"
+        animate={{ y: [0, -8, 0] }}
+        transition={{ duration: 6.5, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+      >
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+          <Users className="h-5 w-5" />
+        </span>
+        <div>
+          <p className="font-display text-sm font-bold text-lore-ink dark:text-white">
+            {content.floatingBadge2Title}
+          </p>
+          <p className="text-xs text-lore-ink/50 dark:text-white/50">{content.floatingBadge2Subtitle}</p>
+        </div>
+      </motion.div>
+
+      <CurveDivider className="absolute bottom-0 left-0 z-10" />
     </section>
   );
 }
