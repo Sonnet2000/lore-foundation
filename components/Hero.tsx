@@ -47,7 +47,7 @@ export default function Hero() {
   const [content, setContent] = useState<HeroContent>(DEFAULT_CONTENT);
 
   useEffect(() => {
-    fetch("/api/admin/hero")
+    fetch("/api/admin/hero", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {
         const first: MediaItem | undefined = data?.media?.[0];
