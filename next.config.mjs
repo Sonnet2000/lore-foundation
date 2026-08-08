@@ -62,6 +62,15 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
 
+  // Anpeche cache navigasyon (Link) la kenbe vye done sou paj dinamik yo
+  // (egzanp: /ecole apre yon nouvo kou fèk ajoute nan admin).
+  experimental: {
+    staleTimes: {
+      dynamic: 0,
+      static: 180,
+    },
+  },
+
   // Harden HTTP headers on every response
   async headers() {
     return [
