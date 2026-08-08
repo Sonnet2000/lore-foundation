@@ -102,10 +102,10 @@ export default function Hero() {
           className="absolute inset-0 hidden sm:block"
           style={{
             background:
-              "linear-gradient(100deg, rgba(3,26,74,0.97) 0%, rgba(3,26,74,0.92) 32%, rgba(4,60,158,0.72) 60%, rgba(4,60,158,0.48) 80%, rgba(4,60,158,0.35) 100%)",
+              "linear-gradient(100deg, rgba(3,26,74,0.90) 0%, rgba(3,26,74,0.78) 28%, rgba(4,60,158,0.45) 52%, rgba(4,60,158,0.18) 72%, rgba(4,60,158,0.05) 100%)",
           }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/70 via-transparent to-[#031a4a]/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#031a4a]/45 via-transparent to-[#031a4a]/10" />
         <div className="hero-grid absolute inset-0 pointer-events-none opacity-40" />
       </div>
 

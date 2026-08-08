@@ -2,7 +2,6 @@ import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import Hero from "@/components/Hero";
-import EcoleHighlight from "@/components/EcoleHighlight";
 import AppDownload from "@/components/AppDownload";
 import AppsShowcase from "@/components/AppsShowcase";
 import AdsBanner from "@/components/AdsBanner";
@@ -37,9 +36,6 @@ export default async function Home() {
       <Navbar announcement={announcement} showSeminaires={showSeminaires} />
       <Hero />
 
-      <Suspense fallback={<SectionSkeleton />}>
-        <EcoleHighlight />
-      </Suspense>
       <Suspense fallback={<SectionSkeleton />}>
         <AppDownload />
       </Suspense>
