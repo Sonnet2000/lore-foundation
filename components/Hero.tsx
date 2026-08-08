@@ -83,7 +83,7 @@ export default function Hero() {
             muted
             loop
             playsInline
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover object-[center_30%] sm:object-center"
           />
         ) : (
           <Image
@@ -91,12 +91,14 @@ export default function Hero() {
             alt="Équipe Loré Foundation"
             fill
             priority
-            className="object-cover"
+            className="object-cover object-[center_30%] sm:object-center"
           />
         )}
-        {/* Vwal koulè mak la, pou tèks la rete lizib sou nenpòt imaj/videyo */}
+        {/* Vwal mobil — tenn inifòm ki fè tèks la lizib kèlkeswa imaj/videyo a */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#031a4a]/92 via-[#031a4a]/80 to-[#031a4a]/92 sm:hidden" />
+        {/* Vwal koulè mak la sou desktop/laptop, pou tèks la rete lizib sou nenpòt imaj/videyo */}
         <div
-          className="absolute inset-0"
+          className="absolute inset-0 hidden sm:block"
           style={{
             background:
               "linear-gradient(100deg, rgba(3,26,74,0.96) 0%, rgba(3,26,74,0.86) 30%, rgba(4,60,158,0.55) 58%, rgba(4,60,158,0.25) 78%, rgba(4,60,158,0.15) 100%)",
@@ -118,7 +120,7 @@ export default function Hero() {
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="glass-card flex items-center gap-3 rounded-full px-4 py-2"
+            className="glass-card flex items-center gap-3 rounded-2xl px-4 py-2.5 sm:rounded-full sm:py-2"
           >
             <span className="glow-dot" />
             <span className="text-xs font-medium text-white/80 sm:text-sm">
@@ -212,14 +214,26 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Badge kontni — vèsyon mobile, ranplase kat ki te sou foto a anvan */}
-          <div className="flex items-center gap-2.5 rounded-2xl bg-white/10 px-3.5 py-2.5 backdrop-blur-md ring-1 ring-white/15 sm:hidden">
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-lore-gold/20 text-lore-gold-light">
-              <GraduationCap className="h-4 w-4" />
-            </span>
-            <p className="text-xs font-semibold leading-snug text-white">
-              {content.mobileBadgeText}
-            </p>
+          {/* Kat rezime — vèsyon mobil, ranplase kat/badj ki flote sou desktop yo */}
+          <div className="flex flex-col gap-3 rounded-2xl bg-white/10 p-4 backdrop-blur-md ring-1 ring-white/15 sm:hidden">
+            <div className="flex items-center gap-2.5">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-lore-gold/20 text-lore-gold-light">
+                <GraduationCap className="h-4.5 w-4.5" />
+              </span>
+              <p className="text-xs font-semibold leading-snug text-white">
+                {content.mobileBadgeText}
+              </p>
+            </div>
+            <div className="flex items-start gap-2 border-t border-white/10 pt-3">
+              <div className="mt-0.5 flex shrink-0 gap-0.5 text-lore-gold">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <Star key={i} className="h-2.5 w-2.5 fill-current" />
+                ))}
+              </div>
+              <p className="line-clamp-2 text-[11px] leading-snug text-white/70">
+                &ldquo;{heroQuote.quote}&rdquo; <span className="font-semibold text-white/90">— {heroQuote.name}</span>
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>
