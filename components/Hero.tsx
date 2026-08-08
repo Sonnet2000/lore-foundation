@@ -94,7 +94,7 @@ export default function Hero() {
       {/* Glòb 3D — reprezante enpak global Loré Foundation, an background dous */}
       <Globe3D className="absolute -right-[18%] top-1/2 hidden h-[130%] w-[70%] -translate-y-1/2 md:block lg:-right-[10%] lg:h-[150%] lg:w-[60%]" />
 
-      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-2 lg:gap-10 lg:px-12">
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-10 px-5 sm:px-8 lg:grid-cols-[0.95fr_1.3fr] lg:gap-10 lg:px-12">
         {/* Colonne gauche */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
@@ -219,7 +219,7 @@ export default function Hero() {
             aria-hidden="true"
           />
 
-          <div className="relative aspect-[4/5] w-full">
+          <div className="relative aspect-[4/5] w-full lg:aspect-[4/3.4] xl:aspect-[16/12]">
             <div className="tab-corner relative h-full w-full overflow-hidden shadow-premium">
               {heroMedia.type === "video" ? (
                 <video
