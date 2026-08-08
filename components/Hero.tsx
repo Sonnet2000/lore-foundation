@@ -70,9 +70,10 @@ export default function Hero() {
   }, []);
 
   return (
+    <>
     <section
       id="accueil"
-      className="relative flex min-h-[600px] items-center overflow-hidden pb-20 pt-32 sm:min-h-[680px] sm:pb-24 sm:pt-40 lg:min-h-[780px] lg:pb-28"
+      className="relative flex min-h-[460px] items-center overflow-hidden pb-14 pt-28 sm:min-h-[620px] sm:pb-20 sm:pt-40 lg:min-h-[720px] lg:pb-24"
     >
       {/* Média an background, sou tout lajè seksyon an — menm apwòch ak Pixabay */}
       <div className="absolute inset-0">
@@ -186,55 +187,6 @@ export default function Hero() {
               </a>
             </div>
           </div>
-
-          {/* Séparateur + etikèt — bay chif yo yon kontèks */}
-          <div className="mt-3 flex w-full items-center gap-3">
-            <span className="h-px flex-1 bg-gradient-to-r from-lore-gold/50 to-transparent" />
-            <span className="font-display text-[10px] font-bold uppercase tracking-[0.25em] text-white/40">
-              Notre impact
-            </span>
-          </div>
-
-          {/* Stats */}
-          <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-            {stats.map((stat, i) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.35 + i * 0.08 }}
-                className="gold-border-top glass-card overflow-hidden rounded-2xl p-4 card-lift"
-              >
-                <stat.icon className="mb-2 h-4 w-4 text-lore-gold-light" strokeWidth={2} />
-                <p className="font-display text-xl font-bold text-white sm:text-2xl">
-                  {stat.value}
-                </p>
-                <p className="text-xs text-white/50 sm:text-sm">{stat.label}</p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Kat rezime — vèsyon mobil, ranplase kat/badj ki flote sou desktop yo */}
-          <div className="flex flex-col gap-3 rounded-2xl bg-white/10 p-4 backdrop-blur-md ring-1 ring-white/15 sm:hidden">
-            <div className="flex items-center gap-2.5">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-lore-gold/20 text-lore-gold-light">
-                <GraduationCap className="h-4.5 w-4.5" />
-              </span>
-              <p className="text-xs font-semibold leading-snug text-white">
-                {content.mobileBadgeText}
-              </p>
-            </div>
-            <div className="flex items-start gap-2 border-t border-white/10 pt-3">
-              <div className="mt-0.5 flex shrink-0 gap-0.5 text-lore-gold">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="h-2.5 w-2.5 fill-current" />
-                ))}
-              </div>
-              <p className="line-clamp-2 text-[11px] leading-snug text-white/70">
-                &ldquo;{heroQuote.quote}&rdquo; <span className="font-semibold text-white/90">— {heroQuote.name}</span>
-              </p>
-            </div>
-          </div>
         </motion.div>
       </div>
 
@@ -291,5 +243,61 @@ export default function Hero() {
 
       <CurveDivider className="absolute bottom-0 left-0 z-10" />
     </section>
+
+    <section className="relative bg-[#031a4a] px-5 py-9 sm:px-8 sm:py-11 lg:px-12">
+      <div className="mx-auto flex max-w-7xl flex-col gap-5">
+        {/* Séparateur + etikèt — bay chif yo yon kontèks */}
+        <div className="flex w-full items-center gap-3">
+          <span className="h-px flex-1 bg-gradient-to-r from-lore-gold/50 to-transparent" />
+          <span className="font-display text-[10px] font-bold uppercase tracking-[0.25em] text-white/40">
+            Notre impact
+          </span>
+          <span className="h-px flex-1 bg-gradient-to-l from-lore-gold/50 to-transparent sm:hidden" />
+        </div>
+
+        {/* Stats */}
+        <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          {stats.map((stat, i) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: i * 0.08 }}
+              className="gold-border-top glass-card overflow-hidden rounded-2xl p-4 card-lift"
+            >
+              <stat.icon className="mb-2 h-4 w-4 text-lore-gold-light" strokeWidth={2} />
+              <p className="font-display text-xl font-bold text-white sm:text-2xl">
+                {stat.value}
+              </p>
+              <p className="text-xs text-white/50 sm:text-sm">{stat.label}</p>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Kat rezime — vèsyon mobil, ranplase kat/badj ki flote sou desktop yo */}
+        <div className="flex flex-col gap-3 rounded-2xl bg-white/10 p-4 backdrop-blur-md ring-1 ring-white/15 sm:hidden">
+          <div className="flex items-center gap-2.5">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-lore-gold/20 text-lore-gold-light">
+              <GraduationCap className="h-4.5 w-4.5" />
+            </span>
+            <p className="text-xs font-semibold leading-snug text-white">
+              {content.mobileBadgeText}
+            </p>
+          </div>
+          <div className="flex items-start gap-2 border-t border-white/10 pt-3">
+            <div className="mt-0.5 flex shrink-0 gap-0.5 text-lore-gold">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star key={i} className="h-2.5 w-2.5 fill-current" />
+              ))}
+            </div>
+            <p className="line-clamp-2 text-[11px] leading-snug text-white/70">
+              &ldquo;{heroQuote.quote}&rdquo; <span className="font-semibold text-white/90">— {heroQuote.name}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    </>
   );
 }
