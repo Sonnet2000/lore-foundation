@@ -76,9 +76,9 @@ export default function AppUpdatePanel() {
       <div className="flex items-start gap-3 rounded-2xl border border-blue-200/60 bg-blue-50 p-4 dark:border-blue-400/20 dark:bg-blue-500/10">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 dark:text-blue-400" />
         <p className="text-xs leading-relaxed text-blue-700 dark:text-blue-300">
-          Lè w bilding yon nouvo vèsyon app <strong>Loré School</strong> (fichye <code>.apk</code>), telechaje l isit la.
-          Bouton &laquo;&nbsp;Télécharger pour Android&nbsp;&raquo; sou sit la ap otomatikman pwente sou dènye vèsyon
-          ou upload la — pa gen bezwen touche kòd la ni refè yon deplwaman.
+          Depi <code>eas webhook</code> konfigire (yon sèl fwa), chak nouvo build Android ki
+          fini sou EAS ap otomatikman mete lyen "Télécharger pour Android" a ajou — <strong>ou pa bezwen
+          fè anyen</strong>. Zouti anba a rete la kòm sekou, si w vle mete yon lyen alamen.
         </p>
       </div>
 
