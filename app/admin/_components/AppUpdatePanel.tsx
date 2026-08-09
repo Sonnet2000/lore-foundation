@@ -105,6 +105,18 @@ export default function AppUpdatePanel() {
         folder="app"
       />
 
+      <div>
+        <FieldLabel>Oswa kole yon lyen dirèkteman (ex: lyen build EAS)</FieldLabel>
+        <TextInput
+          value={settings.apkUrl ?? ""}
+          onChange={(e) => setSettings({ ...settings, apkUrl: e.target.value })}
+          placeholder="https://expo.dev/artifacts/eas/xxxxxxxxx.apk"
+        />
+        <p className="mt-1 text-[11px] text-lore-ink/40 dark:text-white/40">
+          Sa a ranplase/ranpli menm chan ak fichye w ta telechaje anwo a — itilize youn oswa lòt la.
+        </p>
+      </div>
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <FieldLabel>Nimewo vèsyon (ex: 1.2.0)</FieldLabel>
