@@ -17,6 +17,7 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   if (typeof body.price === "string") updates.price = body.price.slice(0, 60);
   if (typeof body.registration_fee === "string") updates.registration_fee = body.registration_fee.slice(0, 60);
   if (typeof body.materials_fee === "string") updates.materials_fee = body.materials_fee.slice(0, 60);
+  if (typeof body.entry_fee === "string") updates.entry_fee = body.entry_fee.slice(0, 60);
   if (typeof body.duration === "string") updates.duration = body.duration.slice(0, 60);
   if (typeof body.schedule === "string") updates.schedule = body.schedule.slice(0, 200);
   if (typeof body.format === "string" && ["online", "in_person", "hybrid"].includes(body.format)) {

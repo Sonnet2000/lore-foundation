@@ -22,6 +22,7 @@ type CourseForm = {
   price: string;
   registration_fee: string;
   materials_fee: string;
+  entry_fee: string;
   duration: string;
   schedule: string;
   format: CourseFormat;
@@ -29,7 +30,7 @@ type CourseForm = {
 };
 
 const emptyCourseForm: CourseForm = {
-  title: "", slug: "", description: "", cover_url: null, price: "", registration_fee: "", materials_fee: "", duration: "", schedule: "", format: "in_person", is_published: true,
+  title: "", slug: "", description: "", cover_url: null, price: "", registration_fee: "", materials_fee: "", entry_fee: "", duration: "", schedule: "", format: "in_person", is_published: true,
 };
 
 type LessonForm = {
@@ -120,7 +121,7 @@ export default function CoursesPanel() {
   function startEditCourse(c: CourseRow) {
     setForm({
       title: c.title, slug: c.slug, description: c.description, cover_url: c.cover_url,
-      price: c.price, registration_fee: c.registration_fee ?? "", materials_fee: c.materials_fee ?? "",
+      price: c.price, registration_fee: c.registration_fee ?? "", materials_fee: c.materials_fee ?? "", entry_fee: c.entry_fee ?? "",
       duration: c.duration, schedule: c.schedule ?? "", format: c.format, is_published: c.is_published,
     });
     setEditingId(c.id);
@@ -443,6 +444,10 @@ export default function CoursesPanel() {
               <div>
                 <FieldLabel>Frè maliyo/badj (opsyonèl)</FieldLabel>
                 <TextInput value={form.materials_fee} onChange={(e) => setForm({ ...form, materials_fee: e.target.value })} placeholder="1 500 HTG" />
+              </div>
+              <div>
+                <FieldLabel>Frè d'entrée (opsyonèl)</FieldLabel>
+                <TextInput value={form.entry_fee} onChange={(e) => setForm({ ...form, entry_fee: e.target.value })} placeholder="Frè antre jeneral lekòl la, si genyen" />
               </div>
             </div>
             <div className="mt-4">

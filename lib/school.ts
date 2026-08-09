@@ -12,6 +12,7 @@ export type CourseRow = {
   price: string;
   registration_fee: string;
   materials_fee: string;
+  entry_fee: string;
   duration: string;
   schedule: string;
   format: CourseFormat;

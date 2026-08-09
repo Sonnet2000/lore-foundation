@@ -84,6 +84,7 @@ export async function POST(request: Request) {
       price: body.price ?? "",
       registration_fee: body.registration_fee ?? "",
       materials_fee: body.materials_fee ?? "",
+      entry_fee: body.entry_fee ?? "",
       duration: body.duration ?? "",
       schedule: body.schedule ?? "",
       format: ["online", "in_person", "hybrid"].includes(body.format) ? body.format : "in_person",

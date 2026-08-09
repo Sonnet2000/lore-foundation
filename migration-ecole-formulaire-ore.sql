@@ -23,3 +23,7 @@ alter table courses add column if not exists registration_fee text not null defa
 alter table courses add column if not exists materials_fee text not null default '';
 alter table course_enrollments add column if not exists fees jsonb not null default '{}'::jsonb;
 
+-- 4) Frè d'entrée lekòl la — yon chan enfòmatif apa (pa mele ak swivi peman
+--    otomatik yo), pou mansyone yon frè jeneral admisyon lekòl la si genyen.
+alter table courses add column if not exists entry_fee text not null default '';
+

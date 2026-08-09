@@ -125,11 +125,20 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
                       {course.duration || "Dire pa presize"}
                       {course.price ? ` · ${course.price}` : ""}
                     </p>
-                    {course.schedule && (
-                      <p className="flex items-center gap-1.5 text-xs text-lore-ink/50 dark:text-white/50">
-                        <Clock3 className="h-3.5 w-3.5 opacity-0" />
-                        {course.schedule}
-                      </p>
+                    {(course.schedule || course.entry_fee) && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {course.schedule && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-lore-blue/10 px-2.5 py-1 text-[11px] font-semibold text-lore-blue dark:bg-lore-blue/15 dark:text-lore-gold-light">
+                            <Clock3 className="h-3 w-3" />
+                            {course.schedule}
+                          </span>
+                        )}
+                        {course.entry_fee && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-lore-gold/10 px-2.5 py-1 text-[11px] font-semibold text-lore-gold-dark">
+                            Frè d'entrée: {course.entry_fee}
+                          </span>
+                        )}
+                      </div>
                     )}
                     {course.description && (
                       <p className="line-clamp-3 text-sm text-lore-ink/60 dark:text-white/60">{course.description}</p>

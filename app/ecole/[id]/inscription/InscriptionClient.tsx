@@ -25,6 +25,16 @@ function isFreeCourse(price: string) {
   return !p || /gratis|gratuit|free|0 htg|0\$/.test(p);
 }
 
+// Kou a totalman gratis SÈLMAN si okenn nan 3 frè yo pa defini —
+// pa jis "Frè patisipasyon" a apa.
+function isCourseFullyFree(course: CourseRow) {
+  return (
+    isFreeCourse(course.registration_fee) &&
+    isFreeCourse(course.price) &&
+    isFreeCourse(course.materials_fee)
+  );
+}
+
 type Step = "loading" | "account" | "awaiting-confirmation" | "payment" | "status";
 
 export default function InscriptionClient({ course }: { course: CourseRow }) {
@@ -302,9 +312,25 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
           <div>
             <h1 className="font-display text-base font-bold text-lore-ink dark:text-white">{course.title}</h1>
             <p className="text-xs text-lore-ink/50 dark:text-white/50">
-              {course.duration || "Dire pa presize"}{course.price ? ` · ${course.price}` : " · Gratis"}
+              {course.duration || "Dire pa presize"}
+              {course.price ? ` · ${course.price}` : isCourseFullyFree(course) ? " · Gratis" : ""}
             </p>
-            {course.schedule && <p className="text-xs text-lore-ink/50 dark:text-white/50">{course.schedule}</p>}
+            {(course.schedule || course.entry_fee) && (
+              <div className="mt-1.5 flex flex-wrap gap-1.5">
+                {course.schedule && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-lore-blue/10 px-2.5 py-1 text-[11px] font-semibold text-lore-blue dark:bg-lore-blue/15 dark:text-lore-gold-light">
+                    <Clock3 className="h-3 w-3" />
+                    {course.schedule}
+                  </span>
+                )}
+                {course.entry_fee && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-lore-gold/10 px-2.5 py-1 text-[11px] font-semibold text-lore-gold-dark dark:text-lore-gold-light">
+                    <Wallet className="h-3 w-3" />
+                    Frè d'entrée: {course.entry_fee}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
