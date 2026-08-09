@@ -98,10 +98,10 @@ export default function HeroPanel() {
       <div className="flex items-start gap-3 rounded-2xl border border-blue-200/60 bg-blue-50 p-4 dark:border-blue-400/20 dark:bg-blue-500/10">
         <Info className="mt-0.5 h-4 w-4 shrink-0 text-blue-500 dark:text-blue-400" />
         <p className="text-xs leading-relaxed text-blue-700 dark:text-blue-300">
-          <strong>Premye média</strong> nan lis la se sa k ap parèt nan section accueil la (kolòn dwat).
-          Ou ka mete yon foto oswa yon vidéo kout. Lòt yo nan lis la sèvi kòm backup.
-          Foto a dwe gen yon rapò <strong>4:5</strong> pou pi bèl rezilta (ex: 800×1000px).
-          Kite yon chan vid si ou vle kenbe tèks ki deja la a.
+          Mete plizyè foto/vidéo — yo ap <strong>defile otomatikman youn apre lòt</strong> nan
+          section accueil la (chak ~8 segond), nan menm lòd yo parèt anba a.
+          Ou ka mete yon foto oswa yon kout vidéo. Foto a dwe gen yon rapò <strong>4:5</strong> pou pi
+          bèl rezilta (ex: 800×1000px). Kite yon chan vid si ou vle kenbe tèks ki deja la a.
         </p>
       </div>
 

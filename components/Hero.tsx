@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ArrowRight, Heart, Users, Star, GraduationCap } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -11,6 +11,9 @@ type MediaItem = { url: string; type: "image" | "video" };
 
 // Média statik pou fallback si pa gen done nan DB
 const FALLBACK: MediaItem = { url: "/hero-portrait.jpg", type: "image" };
+
+// Konbyen tan (an ms) chak foto/vidéo rete afiche anvan pwochen an vin otomatikman.
+const ROTATE_MS = 8000;
 
 const heroQuote = testimonials[0];
 
@@ -43,15 +46,16 @@ const DEFAULT_CONTENT: HeroContent = {
 };
 
 export default function Hero() {
-  const [heroMedia, setHeroMedia] = useState<MediaItem>(FALLBACK);
+  const [mediaList, setMediaList] = useState<MediaItem[]>([FALLBACK]);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [content, setContent] = useState<HeroContent>(DEFAULT_CONTENT);
 
   useEffect(() => {
     fetch("/api/admin/hero", { cache: "no-store" })
       .then((r) => r.json())
       .then((data) => {
-        const first: MediaItem | undefined = data?.media?.[0];
-        if (first?.url) setHeroMedia(first);
+        const items: MediaItem[] = Array.isArray(data?.media) ? data.media.filter((m: MediaItem) => m?.url) : [];
+        if (items.length) setMediaList(items);
 
         setContent((prev) => ({
           badgeText: data?.badgeText || prev.badgeText,
@@ -69,6 +73,17 @@ export default function Hero() {
       .catch(() => {/* garde fallback */});
   }, []);
 
+  // Defile otomatikman ant tout foto/vidéo yo, youn apre lòt, an bouk.
+  useEffect(() => {
+    if (mediaList.length <= 1) return;
+    const timer = setTimeout(() => {
+      setActiveIndex((i) => (i + 1) % mediaList.length);
+    }, ROTATE_MS);
+    return () => clearTimeout(timer);
+  }, [activeIndex, mediaList]);
+
+  const heroMedia = mediaList[activeIndex] ?? mediaList[0] ?? FALLBACK;
+
   return (
     <>
     <section
@@ -77,24 +92,35 @@ export default function Hero() {
     >
       {/* Média an background, sou tout lajè seksyon an — menm apwòch ak Pixabay */}
       <div className="absolute inset-0">
-        {heroMedia.type === "video" ? (
-          <video
-            src={heroMedia.url}
-            autoPlay
-            muted
-            loop
-            playsInline
-            className="h-full w-full object-cover object-[center_30%] sm:object-center"
-          />
-        ) : (
-          <Image
-            src={heroMedia.url}
-            alt="Équipe Loré Foundation"
-            fill
-            priority
-            className="object-cover object-[center_30%] sm:object-center"
-          />
-        )}
+        <AnimatePresence mode="sync">
+          <motion.div
+            key={activeIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="absolute inset-0"
+          >
+            {heroMedia.type === "video" ? (
+              <video
+                src={heroMedia.url}
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="h-full w-full object-cover object-[center_30%] sm:object-center"
+              />
+            ) : (
+              <Image
+                src={heroMedia.url}
+                alt="Équipe Loré Foundation"
+                fill
+                priority
+                className="object-cover object-[center_30%] sm:object-center"
+              />
+            )}
+          </motion.div>
+        </AnimatePresence>
         {/* Vwal mobil — tenn INIFÒM ki fè tèks la lizib kèlkeswa imaj/videyo a (pa gen "twou" nan mitan) */}
         <div className="absolute inset-0 bg-[#031a4a]/88 sm:hidden" />
         {/* Vwal koulè mak la sou desktop/laptop, pou tèks la rete lizib sou nenpòt imaj/videyo */}

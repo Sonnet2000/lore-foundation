@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import { ImagePlus, Loader2, X, ChevronLeft, ChevronRight, Play, Film } from "lucide-react";
+import { ImagePlus, Loader2, X, ChevronLeft, ChevronRight, Play, Film, Link2, Plus } from "lucide-react";
 import { useFileUpload } from "./useFileUpload";
 
 export type MediaItem = { url: string; type: "image" | "video" };
@@ -15,6 +16,17 @@ type MediaListFieldProps = {
 
 export default function MediaListField({ label, values, onChange, folder }: MediaListFieldProps) {
   const { inputRef, uploading, error, progress, uploadMany } = useFileUpload(folder);
+  const [showLinkForm, setShowLinkForm] = useState(false);
+  const [linkUrl, setLinkUrl] = useState("");
+  const [linkType, setLinkType] = useState<"image" | "video">("video");
+
+  function addLink() {
+    const url = linkUrl.trim();
+    if (!url) return;
+    onChange([...values, { url, type: linkType }]);
+    setLinkUrl("");
+    setShowLinkForm(false);
+  }
 
   async function handleFiles(files: FileList | null) {
     if (!files || files.length === 0) return;
@@ -148,7 +160,48 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
           className="hidden"
           onChange={(e) => handleFiles(e.target.files)}
         />
+
+        {/* Bouton ajouter ak lyen */}
+        <button
+          type="button"
+          onClick={() => setShowLinkForm((v) => !v)}
+          className="focus-ring flex h-20 w-20 shrink-0 flex-col items-center justify-center gap-1 rounded-2xl border-2 border-dashed border-lore-blue/30 text-lore-blue transition-colors hover:bg-lore-blue/10 dark:text-lore-gold-light"
+        >
+          <Link2 className="h-4 w-4" />
+          <span className="text-[10px] font-semibold">Ajoute lyen</span>
+        </button>
       </div>
+
+      {showLinkForm && (
+        <div className="mt-3 flex flex-col gap-2 rounded-xl border border-lore-dark/10 p-3 dark:border-white/10 sm:flex-row sm:items-center">
+          <div className="flex gap-1.5">
+            <button
+              type="button"
+              onClick={() => setLinkType("video")}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${linkType === "video" ? "bg-lore-blue text-white" : "bg-lore-dark/5 text-lore-ink/60 dark:bg-white/10 dark:text-white/60"}`}
+            >Vidéo</button>
+            <button
+              type="button"
+              onClick={() => setLinkType("image")}
+              className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${linkType === "image" ? "bg-lore-blue text-white" : "bg-lore-dark/5 text-lore-ink/60 dark:bg-white/10 dark:text-white/60"}`}
+            >Foto</button>
+          </div>
+          <input
+            value={linkUrl}
+            onChange={(e) => setLinkUrl(e.target.value)}
+            placeholder="https://..."
+            className="flex-1 rounded-lg border border-lore-dark/10 bg-white px-3 py-2 text-sm text-lore-ink outline-none focus:border-lore-blue dark:border-white/10 dark:bg-white/5 dark:text-white"
+          />
+          <button
+            type="button"
+            onClick={addLink}
+            className="focus-ring inline-flex items-center justify-center gap-1 rounded-full bg-lore-blue px-3.5 py-2 text-xs font-semibold text-white hover:bg-lore-blue/90"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Ajoute
+          </button>
+        </div>
+      )}
 
       {/* Compteur */}
       {values.length > 0 && (
@@ -157,7 +210,7 @@ export default function MediaListField({ label, values, onChange, folder }: Medi
           {values.filter((m) => m.type === "video").length > 0
             ? ` · ${values.filter((m) => m.type === "video").length} vidéo`
             : ""}
-          {" "}· Premye a ap parèt kòm thumbnail
+          {" "}· Yo ap defile nan lòd sa a sou sit la
         </p>
       )}
 
