@@ -135,7 +135,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
                         )}
                         {course.entry_fee && (
                           <span className="inline-flex items-center gap-1 rounded-full bg-lore-gold/10 px-2.5 py-1 text-[11px] font-semibold text-lore-gold-dark">
-                            Frè d'entrée: {course.entry_fee}
+                            Frè d&apos;entrée: {course.entry_fee}
                           </span>
                         )}
                       </div>

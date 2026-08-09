@@ -446,7 +446,7 @@ export default function CoursesPanel() {
                 <TextInput value={form.materials_fee} onChange={(e) => setForm({ ...form, materials_fee: e.target.value })} placeholder="1 500 HTG" />
               </div>
               <div>
-                <FieldLabel>Frè d'entrée (opsyonèl)</FieldLabel>
+                <FieldLabel>Frè d&apos;entrée (opsyonèl)</FieldLabel>
                 <TextInput value={form.entry_fee} onChange={(e) => setForm({ ...form, entry_fee: e.target.value })} placeholder="Frè antre jeneral lekòl la, si genyen" />
               </div>
             </div>

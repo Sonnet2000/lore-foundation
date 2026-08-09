@@ -326,7 +326,7 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
                 {course.entry_fee && (
                   <span className="inline-flex items-center gap-1 rounded-full bg-lore-gold/10 px-2.5 py-1 text-[11px] font-semibold text-lore-gold-dark dark:text-lore-gold-light">
                     <Wallet className="h-3 w-3" />
-                    Frè d'entrée: {course.entry_fee}
+                    Frè d&apos;entrée: {course.entry_fee}
                   </span>
                 )}
               </div>
