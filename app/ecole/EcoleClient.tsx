@@ -87,6 +87,27 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
         </div>
       </div>
 
+      {/* ── Enskripsyon jeneral (fòmilè konplè, pa mare ak yon kou espesifik) ── */}
+      <div className="mx-auto max-w-5xl px-5 pt-12">
+        <div className="flex flex-col items-center gap-4 rounded-2xl border border-lore-blue/15 bg-lore-blue/5 p-6 text-center dark:border-lore-blue/20 dark:bg-lore-blue/10 sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <h2 className="font-display text-base font-bold text-lore-ink dark:text-white">
+              Ou vle ranpli yon fòmilè enskripsyon konplè kounye a?
+            </h2>
+            <p className="mt-1 text-xs text-lore-ink/60 dark:text-white/60">
+              Sèvi ak fòmilè enskripsyon jeneral la pou bay tout enfòmasyon w yo ak chwazi fòmasyon w vle a, san ou pa bezwen kreye yon kont anvan.
+            </p>
+          </div>
+          <a
+            href="/inscription-generale.html"
+            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-lore-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-lore-blue/90"
+          >
+            Enskripsyon Jeneral
+            <ArrowRight className="h-4 w-4" />
+          </a>
+        </div>
+      </div>
+
       {/* ── Catalogue ───────────────────────────────────────────────── */}
       <div className="mx-auto max-w-5xl px-5 py-16">
         {courses.length === 0 ? (

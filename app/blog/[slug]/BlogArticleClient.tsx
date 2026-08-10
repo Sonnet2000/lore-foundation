@@ -8,6 +8,7 @@ import {
   Share2, Heart, ArrowRight,
 } from "lucide-react";
 import type { BlogPost } from "@/app/admin/_components/types";
+import { safeTextToHtml } from "@/lib/text";
 
 const CAT_COLORS: Record<string, string> = {
   technologie:    "bg-blue-500/15 text-blue-600 dark:text-blue-300",
@@ -127,7 +128,7 @@ export default function BlogArticleClient({ post }: { post: BlogPost }) {
             prose-img:rounded-2xl prose-img:shadow-lg
             prose-ul:text-lore-ink/80 dark:prose-ul:text-white/75
             prose-li:marker:text-lore-blue"
-          dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, "<br/>") }}
+          dangerouslySetInnerHTML={{ __html: safeTextToHtml(post.content) }}
         />
 
         {/* Tags */}

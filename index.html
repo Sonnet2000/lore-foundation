@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>École Professionnelle — Formulaire d'inscription</title>
+<meta name="description" content="Formulaire d'inscription en ligne — École Professionnelle">
+
+<!-- ===================================================================
+  Polices Google Fonts (optionnelles). Si le WebView n'a pas de connexion
+  internet au moment du chargement, le navigateur retombe automatiquement
+  sur la pile de polices systèmes définie dans --font-display / --font-body.
+==================================================================== -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" onerror="this.remove()">
+
+<style>
+/* =========================================================================
+   1. DESIGN TOKENS
+========================================================================= */
+:root{
+  --navy-950:#061229;
+  --navy-900:#0a1c3d;
+  --navy-800:#102a56;
+  --royal-600:#1e4fd8;
+  --royal-500:#2a5ff0;
+  --royal-400:#4c78ff;
+  --blue-100:#eaf1ff;
+  --blue-50:#f4f8ff;
+  --cyan-400:#22d3ee;
+  --gold-400:#d9b45c;
+  --white:#ffffff;
+  --ink-900:#0c1830;
+  --ink-600:#4a5875;
+  --ink-400:#8593ad;
+  --line:#dbe6f7;
+  --ok-500:#1fa971;
+  --err-500:#e0473f;
+
+  --font-display:'Sora', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-body:'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+  --radius-sm:10px;
+  --radius-md:16px;
+  --radius-lg:24px;
+  --shadow-sm:0 2px 8px rgba(10,28,61,.06);
+  --shadow-md:0 8px 24px rgba(10,28,61,.10);
+  --shadow-lg:0 20px 48px rgba(10,28,61,.16);
+  --safe-b:env(safe-area-inset-bottom, 0px);
+}
+
+/* Piège à robots (honeypot) — invisible pour un humain, visible pour un
+   robot qui remplit tout le HTML sans regarder le CSS. */
+.hp-field{position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;}
+
+*,*::before,*::after{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  margin:0;
+  font-family:var(--font-body);
+  color:var(--ink-900);
+  background:var(--blue-50);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  padding-bottom:96px; /* space for sticky mobile nav */
+}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;color:var(--navy-900);}
+p{margin:0;}
+button{font-family:inherit;}
+img{max-width:100%;display:block;}
+:focus-visible{outline:3px solid var(--cyan-400);outline-offset:2px;border-radius:6px;}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+
+/* =========================================================================
+   2. HEADER
+========================================================================= */
+.site-header{
+  background:linear-gradient(155deg,var(--navy-950) 0%,var(--navy-900) 55%,var(--navy-800) 100%);
+  color:var(--white);
+  padding:28px 20px 84px;
+  position:relative;
+  overflow:hidden;
+}
+.site-header::before{
+  content:"";
+  position:absolute; inset:auto -20% -60% auto;
+  width:60%;padding-bottom:60%;
+  background:radial-gradient(circle, rgba(76,120,255,.35), transparent 65%);
+  border-radius:50%;
+  pointer-events:none;
+}
+.header-inner{max-width:720px;margin:0 auto;position:relative;z-index:1;}
+.brand-row{display:flex;align-items:center;gap:14px;margin-bottom:22px;}
+.logo-placeholder{
+  width:56px;height:56px;flex:none;border-radius:14px;
+  background:rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;
+  padding:8px;
+}
+.logo-placeholder img{width:100%;height:100%;object-fit:contain;}
+/* Logo Loré déjà intégré ci-dessous (image encodée en base64, donc le
+   fichier reste 100% autonome). Pour le remplacer par un autre logo,
+   changez uniquement l'attribut src de la balise <img> dans le HTML
+   (voir commentaire "LOGO" plus bas) — vous pouvez y mettre un lien vers
+   un fichier externe (ex: "logo.png") ou une autre image en base64. */
+.brand-text .eyebrow{
+  font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--cyan-400);margin-bottom:4px;
+}
+.brand-text h1{font-size:22px;font-weight:800;letter-spacing:.01em;color:var(--white);}
+.header-copy h2{
+  font-size:clamp(24px,6vw,34px);
+  font-weight:800;color:var(--white);line-height:1.15;margin-bottom:10px;
+}
+.header-copy .tagline{color:rgba(255,255,255,.72);font-size:15.5px;max-width:52ch;}
+
+/* Progress indicator ------------------------------------------------- */
+.progress-wrap{
+  max-width:720px;margin:26px auto 0;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:var(--radius-md);
+  padding:16px 18px;
+  position:relative;z-index:1;
+}
+.progress-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+.progress-top .step-label{font-size:13px;color:rgba(255,255,255,.85);font-weight:600;}
+.progress-top .step-name{font-size:12.5px;color:var(--cyan-400);font-weight:600;}
+.progress-track{height:8px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;}
+.progress-fill{
+  height:100%;border-radius:99px;
+  background:linear-gradient(90deg,var(--royal-500),var(--cyan-400));
+  width:12.5%;transition:width .45s cubic-bezier(.65,0,.35,1);
+}
+.progress-dots{display:flex;justify-content:space-between;margin-top:10px;}
+.progress-dots span{
+  width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .3s, transform .3s;
+}
+.progress-dots span.is-done{background:var(--cyan-400);}
+.progress-dots span.is-current{background:var(--white);transform:scale(1.3);}
+
+/* =========================================================================
+   3. LAYOUT / CARD
+========================================================================= */
+.form-shell{max-width:720px;margin:-56px auto 40px;padding:0 16px;position:relative;z-index:2;}
+.card{
+  background:var(--white);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);
+  padding:26px 20px 30px;
+}
+@media(min-width:600px){.card{padding:36px 40px 42px;}}
+
+.step-head{margin-bottom:22px;}
+.step-head .step-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--royal-600);margin-bottom:8px;
+}
+.step-head h3{font-size:21px;font-weight:800;}
+.step-head .step-desc{color:var(--ink-600);font-size:14.5px;margin-top:6px;}
+
+.step-panel{display:none;animation:fadeSlide .35s ease;}
+.step-panel.is-active{display:block;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+/* Form grid ------------------------------------------------------------ */
+.grid{display:grid;grid-template-columns:1fr;gap:16px;}
+@media(min-width:560px){.grid.cols-2{grid-template-columns:1fr 1fr;}}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field label{font-size:13.5px;font-weight:600;color:var(--navy-900);}
+.field label .req{color:var(--err-500);}
+.field .hint{font-size:12px;color:var(--ink-400);}
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],
+select,textarea{
+  width:100%;padding:12px 14px;border-radius:var(--radius-sm);
+  border:1.5px solid var(--line);background:var(--blue-50);
+  font-size:15px;color:var(--ink-900);font-family:inherit;
+  transition:border-color .18s, box-shadow .18s, background .18s;
+  min-height:48px;
+}
+textarea{min-height:96px;resize:vertical;}
+select{appearance:none;-webkit-appearance:none;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='9'><path d='M1 1l6 6 6-6' stroke='%234a5875' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:38px;
+}
+input:focus,select:focus,textarea:focus{
+  outline:none;border-color:var(--royal-500);background:var(--white);
+  box-shadow:0 0 0 4px rgba(42,95,240,.13);
+}
+input.is-invalid,select.is-invalid,textarea.is-invalid{border-color:var(--err-500);background:#fff6f6;}
+.error-msg{display:none;color:var(--err-500);font-size:12.5px;font-weight:600;align-items:center;gap:5px;}
+.error-msg.show{display:flex;}
+
+/* Radio / checkbox pill group ------------------------------------------ */
+.choice-group{display:flex;flex-wrap:wrap;gap:9px;}
+.choice-pill{position:relative;}
+.choice-pill input{position:absolute;opacity:0;width:1px;height:1px;}
+.choice-pill span{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:10px 16px;border-radius:99px;border:1.5px solid var(--line);
+  background:var(--blue-50);font-size:14px;font-weight:600;color:var(--ink-600);
+  cursor:pointer;transition:all .15s;min-height:44px;
+}
+.choice-pill input:checked + span{
+  background:var(--royal-600);border-color:var(--royal-600);color:var(--white);
+  box-shadow:0 4px 12px rgba(30,79,216,.28);
+}
+.choice-pill input:focus-visible + span{outline:3px solid var(--cyan-400);outline-offset:2px;}
+
+/* Formation cards -------------------------------------------------------*/
+.formation-limit-note{
+  display:flex;align-items:center;gap:8px;background:var(--blue-100);
+  color:var(--navy-900);font-size:13px;font-weight:600;padding:10px 14px;
+  border-radius:var(--radius-sm);margin-bottom:16px;
+}
+#formationCounter{color:var(--royal-600);}
+.formation-grid{display:grid;grid-template-columns:1fr;gap:12px;}
+@media(min-width:560px){.formation-grid{grid-template-columns:1fr 1fr;}}
+.formation-card{
+  position:relative;border:1.5px solid var(--line);border-radius:var(--radius-md);
+  background:var(--blue-50);padding:16px 16px 16px 52px;cursor:pointer;
+  transition:border-color .18s, background .18s, transform .18s, box-shadow .18s;
+}
+.formation-card:hover{border-color:var(--royal-400);transform:translateY(-2px);box-shadow:var(--shadow-sm);}
+.formation-card input{position:absolute;opacity:0;width:1px;height:1px;}
+.formation-card .fc-check{
+  position:absolute;top:16px;left:16px;width:22px;height:22px;border-radius:7px;
+  border:2px solid var(--ink-400);background:var(--white);
+  display:flex;align-items:center;justify-content:center;transition:all .15s;
+}
+.formation-card .fc-check svg{width:13px;height:13px;opacity:0;transition:opacity .15s;}
+.formation-card .fc-icon{font-size:22px;margin-bottom:6px;display:block;}
+.formation-card .fc-name{font-weight:700;font-size:15px;color:var(--navy-900);margin-bottom:3px;}
+.formation-card .fc-desc{font-size:12.5px;color:var(--ink-600);line-height:1.4;}
+.formation-card.is-selected{
+  border-color:var(--royal-600);background:linear-gradient(155deg,var(--blue-100),var(--white));
+  box-shadow:0 6px 18px rgba(30,79,216,.16);
+}
+.formation-card.is-selected .fc-check{background:var(--royal-600);border-color:var(--royal-600);}
+.formation-card.is-selected .fc-check svg{opacity:1;}
+.formation-card.is-disabled{opacity:.45;pointer-events:none;}
+
+/* File upload ------------------------------------------------------------*/
+.upload-box{
+  border:1.5px dashed var(--line);border-radius:var(--radius-md);
+  background:var(--blue-50);padding:18px;text-align:center;cursor:pointer;transition:all .18s;
+}
+.upload-box:hover{border-color:var(--royal-400);background:var(--blue-100);}
+.upload-box input{position:absolute;width:1px;height:1px;opacity:0;}
+.upload-box .up-icon{font-size:26px;margin-bottom:6px;}
+.upload-box .up-text{font-size:13.5px;font-weight:600;color:var(--navy-900);}
+.upload-box .up-sub{font-size:11.5px;color:var(--ink-400);margin-top:2px;}
+.upload-preview{
+  display:none;align-items:center;gap:12px;margin-top:10px;padding:10px 12px;
+  border-radius:var(--radius-sm);background:var(--blue-100);border:1px solid var(--line);
+}
+.upload-preview.show{display:flex;}
+.upload-preview img{width:46px;height:46px;object-fit:cover;border-radius:8px;flex:none;}
+.upload-preview .up-file-icon{
+  width:46px;height:46px;border-radius:8px;background:var(--royal-600);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;
+}
+.upload-preview .up-meta{flex:1;min-width:0;}
+.upload-preview .up-name{font-size:13px;font-weight:600;color:var(--navy-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.upload-preview .up-size{font-size:11.5px;color:var(--ink-400);}
+.upload-preview button{
+  border:none;background:none;color:var(--err-500);font-size:12.5px;font-weight:700;cursor:pointer;padding:6px;flex:none;
+}
+
+/* Checkbox rows (consent) ------------------------------------------------*/
+.consent-row{display:flex;align-items:flex-start;gap:11px;padding:12px 0;}
+.consent-row input{width:20px;height:20px;flex:none;margin-top:1px;accent-color:var(--royal-600);}
+.consent-row label{font-size:13.5px;color:var(--ink-900);line-height:1.5;}
+
+/* Buttons ---------------------------------------------------------------*/
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:inherit;font-weight:700;font-size:15px;border-radius:var(--radius-sm);
+  padding:13px 22px;border:none;cursor:pointer;transition:transform .12s,box-shadow .12s,background .18s;
+  min-height:48px;
+}
+.btn:active{transform:scale(.97);}
+.btn-primary{background:linear-gradient(135deg,var(--royal-600),var(--royal-400));color:#fff;box-shadow:0 8px 20px rgba(30,79,216,.30);}
+.btn-primary:hover{box-shadow:0 10px 24px rgba(30,79,216,.4);}
+.btn-primary:disabled{opacity:.55;cursor:not-allowed;box-shadow:none;}
+.btn-ghost{background:var(--blue-100);color:var(--navy-900);}
+.btn-ghost:hover{background:var(--line);}
+.btn-outline{background:#fff;color:var(--royal-600);border:1.5px solid var(--royal-500);}
+.btn-block{width:100%;}
+.btn .spinner{width:17px;height:17px;border-radius:50%;border:2.5px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .7s linear infinite;display:none;}
+.btn.is-loading .spinner{display:inline-block;}
+.btn.is-loading .btn-text{opacity:.85;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Sticky bottom nav (mobile) --------------------------------------------*/
+.form-nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  background:rgba(255,255,255,.92);backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
+  padding:12px 16px calc(12px + var(--safe-b));
+  display:flex;gap:10px;
+  box-shadow:0 -6px 20px rgba(10,28,61,.06);
+}
+.form-nav .btn{flex:1;}
+@media(min-width:720px){
+  .form-nav{position:static;background:none;backdrop-filter:none;border:none;box-shadow:none;padding:28px 0 0;max-width:720px;margin:0 auto;}
+}
+
+/* Recap -------------------------------------------------------------------*/
+.recap-block{border:1px solid var(--line);border-radius:var(--radius-md);margin-bottom:14px;overflow:hidden;}
+.recap-block h4{
+  background:var(--blue-100);padding:11px 16px;font-size:13.5px;font-weight:800;
+  color:var(--navy-900);text-transform:uppercase;letter-spacing:.04em;
+}
+.recap-rows{padding:6px 16px;}
+.recap-row{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--blue-50);font-size:13.5px;}
+.recap-row:last-child{border-bottom:none;}
+.recap-row dt{color:var(--ink-600);}
+.recap-row dd{margin:0;font-weight:600;color:var(--navy-900);text-align:right;}
+.recap-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end;}
+.recap-chips span{background:var(--royal-600);color:#fff;font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;}
+
+/* Toast / inline banner ----------------------------------------------------*/
+.banner{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--radius-sm);font-size:13.5px;margin-bottom:16px;}
+.banner-error{background:#fdeceb;color:var(--err-500);border:1px solid #f6c9c6;}
+
+/* =========================================================================
+   4. SUCCESS SCREEN
+========================================================================= */
+.success-overlay{
+  position:fixed;inset:0;background:var(--blue-50);z-index:100;
+  display:none;overflow-y:auto;padding:20px 16px 40px;
+}
+.success-overlay.show{display:block;}
+.success-card{
+  max-width:520px;margin:36px auto 0;background:#fff;border-radius:var(--radius-lg);
+  box-shadow:var(--shadow-lg);padding:36px 26px;text-align:center;
+}
+.success-icon{
+  width:76px;height:76px;border-radius:50%;margin:0 auto 18px;
+  background:linear-gradient(135deg,var(--ok-500),#33c98a);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 10px 26px rgba(31,169,113,.35);
+  animation:pop .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes pop{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+.success-icon svg{width:34px;height:34px;}
+.success-card h2{font-size:22px;margin-bottom:6px;}
+.success-card .sub{color:var(--ink-600);font-size:14px;margin-bottom:22px;}
+.receipt{
+  text-align:left;background:var(--blue-50);border:1.5px dashed var(--line);
+  border-radius:var(--radius-md);padding:18px;margin-bottom:22px;
+}
+.receipt .r-row{display:flex;justify-content:space-between;font-size:13.5px;padding:7px 0;border-bottom:1px dashed var(--line);}
+.receipt .r-row:last-child{border-bottom:none;}
+.receipt .r-row dt{color:var(--ink-600);}
+.receipt .r-row dd{margin:0;font-weight:700;color:var(--navy-900);}
+.success-actions{display:flex;flex-direction:column;gap:10px;}
+.success-actions .row2{display:flex;gap:10px;}
+.success-actions .row2 .btn{flex:1;}
+
+/* =========================================================================
+   5. UTILITIES / RESPONSIVE / ACCESSIBILITY
+========================================================================= */
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important;}}
+@media print{
+  .site-header,.form-nav,.btn{display:none !important;}
+  .success-overlay{position:static;padding:0;}
+  .receipt{border:1px solid #999;}
+}
+</style>
+</head>
+<body>
+
+<!-- =========================================================================
+     HEADER
+========================================================================= -->
+<header class="site-header">
+  <div class="header-inner">
+    <div class="brand-row">
+      <!-- LOGO: image intégrée en base64 (fichier logo Loré). Pour changer de logo,
+           remplacez uniquement la valeur de l'attribut src ci-dessous. -->
+      <div class="logo-placeholder">
+        <img src="data:image/png;base64,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" alt="Logo Loré Fondation">
+      </div>
+      <div class="brand-text">
+        <div class="eyebrow">Portail d'inscription</div>
+        <h1 id="schoolName">ÉCOLE PROFESSIONNELLE</h1>
+        <!-- ^ Changez le nom de l'école ici (id="schoolName"), ou dans le JS via CONFIG.schoolName -->
+      </div>
+    </div>
+    <div class="header-copy">
+      <h2>Formulaire d'inscription en ligne</h2>
+      <p class="tagline">Rejoignez-nous et développez vos compétences professionnelles.</p>
+      <p class="tagline" style="margin-top:6px;font-size:13px;color:var(--cyan-400);font-weight:600;">
+        Un programme de Loré Fondation · lorefondation.com
+      </p>
+    </div>
+
+    <nav class="progress-wrap" aria-label="Progression de l'inscription">
+      <div class="progress-top">
+        <span class="step-label"><span id="stepCurrent">1</span>/<span id="stepTotal">8</span> — Étape en cours</span>
+        <span class="step-name" id="stepName">Informations personnelles</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="progress-dots" id="progressDots"></div>
+    </nav>
+  </div>
+</header>
+
+<!-- =========================================================================
+     FORM
+========================================================================= -->
+<main class="form-shell">
+  <form class="card" id="registrationForm" novalidate>
+    <!-- Champ "piège à robots" (honeypot) : invisible pour un humain (voir
+         règle CSS .hp-field plus bas), mais un robot qui remplit tous les
+         champs automatiquement le remplira. S'il est rempli, le serveur
+         ignore silencieusement la soumission. Ne PAS lui donner type="hidden"
+         (certains robots ignorent les champs cachés). -->
+    <div class="hp-field" aria-hidden="true">
+      <label for="website">Ne pas remplir ce champ</label>
+      <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <div class="banner banner-error" id="globalError" role="alert" style="display:none;">
+      <span>⚠️</span><span id="globalErrorText">Veuillez corriger les champs en surbrillance avant de continuer.</span>
+    </div>
+
+    <!-- ============================= ÉTAPE 1 ============================= -->
+    <section class="step-panel is-active" data-step="1" aria-labelledby="s1h">
+      <div class="step-head">
+        <span class="step-eyebrow">Étape 1 sur 7</span>
+        <h3 id="s1h">Informations personnelles</h3>
+        <p class="step-desc">Renseignez votre identité et vos coordonnées.</p>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="field">
+          <label for="prenom">Prénom <span class="req">*</span></label>
+          <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
+          <span class="error-msg">⚠ Le prénom est obligatoire.</span>
+        </div>
+        <div class="field">
+          <label for="nomFamille">Nom de famille <span class="req">*</span></label>
+          <input type="text" id="nomFamille" name="nomFamille" required autocomplete="family-name">
+          <span class="error-msg">⚠ Le nom de famille est obligatoire.</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label for="nomComplet">Nom complet (tel qu'il apparaîtra sur vos documents) <span class="req">*</span></label>
+        <input type="text" id="nomComplet" name="nomComplet" required autocomplete="name">
+        <span class="error-msg">⚠ Le nom complet est obligatoire.</span>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label>Sexe</label>
+        <div class="choice-group" role="radiogroup" aria-label="Sexe">
+          <label class="choice-pill"><input type="radio" name="sexe" value="Masculin"><span>Masculin</span></label>
+          <label class="choice-pill"><input type="radio" name="sexe" value="Féminin"><span>Féminin</span></label>
+          <label class="choice-pill"><input type="radio" name="sexe" value="Autre"><span>Autre / Préfère ne pas préciser</span></label>
+        </div>
+        <span class="error-msg" id="err-sexe">⚠ Veuillez sélectionner une option.</span>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:16px;">
+        <div class="field">
+          <label for="dateNaissance">Date de naissance <span class="req">*</span></label>
+          <input type="date" id="dateNaissance" name="dateNaissance" required>
+          <span class="error-msg">⚠ Veuillez indiquer une date de naissance valide.</span>
+        </div>
+        <div class="field">
+          <label for="lieuNaissance">Lieu de naissance</label>
+          <input type="text" id="lieuNaissance" name="lieuNaissance">
+          <span class="error-msg">⚠ Le lieu de naissance est obligatoire.</span>
+        </div>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:16px;">
+        <div class="field">
+          <label for="nationalite">Nationalité</label>
+          <input type="text" id="nationalite" name="nationalite" value="Haïtienne">
+          <span class="error-msg">⚠ La nationalité est obligatoire.</span>
+        </div>
+        <div class="field">
+          <label for="telephone">Numéro de téléphone <span class="req">*</span></label>
+          <input type="tel" id="telephone" name="telephone" required placeholder="+509 00 00 0000" autocomplete="tel">
+          <span class="error-msg">⚠ Numéro de téléphone invalide.</span>
+        </div>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:16px;">
+        <div class="field">
+          <label for="whatsapp">WhatsApp</label>
+          <input type="tel" id="whatsapp" name="whatsapp" placeholder="+509 00 00 0000">
+          <span class="hint">Laissez vide si identique au téléphone.</span>
+        </div>
+        <div class="field">
+          <label for="email">Adresse email</label>
+          <input type="email" id="email" name="email" autocomplete="email">
+          <span class="error-msg">⚠ Adresse email invalide.</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label for="adresse">Adresse complète</label>
+        <input type="text" id="adresse" name="adresse" autocomplete="street-address">
+        <span class="error-msg">⚠ L'adresse est obligatoire.</span>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:16px;">
+        <div class="field">
+          <label for="commune">Commune / Ville</label>
+          <input type="text" id="commune" name="commune">
+          <span class="error-msg">⚠ Ce champ est obligatoire.</span>
+        </div>
+        <div class="field">
+          <label for="departement">Département / Province</label>
+          <input type="text" id="departement" name="departement">
+          <span class="error-msg">⚠ Ce champ est obligatoire.</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;max-width:100%;">
+        <label for="pays">Pays</label>
+        <input type="text" id="pays" name="pays" value="Haïti">
+        <span class="error-msg">⚠ Le pays est obligatoire.</span>
+      </div>
+    </section>
+
+    <!-- ============================= ÉTAPE 2 ============================= -->
+    <section class="step-panel" data-step="2" aria-labelledby="s2h">
+      <div class="step-head">
+        <span class="step-eyebrow">Étape 2 sur 7</span>
+        <h3 id="s2h">Pièce d'identité</h3>
+        <p class="step-desc">Ces documents servent à vérifier votre identité.</p>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="field">
+          <label for="typePiece">Type de pièce d'identité <span class="req">*</span></label>
+          <select id="typePiece" name="typePiece" required>
+            <option value="">Sélectionner…</option>
+            <option>Carte d'identification</option>
+            <option>Passeport</option>
+            <option>Acte de naissance</option>
+            <option>Autre</option>
+          </select>
+          <span class="error-msg">⚠ Veuillez choisir un type de pièce.</span>
+        </div>
+        <div class="field">
+          <label for="numeroPiece">Numéro de la pièce <span class="req">*</span></label>
+          <input type="text" id="numeroPiece" name="numeroPiece" required>
+          <span class="error-msg">⚠ Le numéro de la pièce est obligatoire.</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:18px;">
+        <label id="lbl-piece">Photo / scan de la pièce d'identité <span class="req">*</span></label>
+        <div class="upload-box" id="box-piece" tabindex="0" role="button" aria-labelledby="lbl-piece">
+          <input type="file" id="fichierPiece" name="fichierPiece" accept="image/*,.pdf" aria-label="Téléverser la pièce d'identité">
+          <div class="up-icon">📄</div>
+          <div class="up-text">Touchez pour ajouter un fichier</div>
+          <div class="up-sub">Image ou PDF — 5&nbsp;Mo maximum</div>
+        </div>
+        <div class="upload-preview" id="preview-piece">
+          <div class="up-file-icon" id="icon-piece">FILE</div>
+          <div class="up-meta"><div class="up-name" id="name-piece"></div><div class="up-size" id="size-piece"></div></div>
+          <button type="button" data-remove="piece" aria-label="Retirer le fichier">Retirer</button>
+        </div>
+        <span class="error-msg" id="err-fichierPiece">⚠ Veuillez ajouter une photo ou un scan de votre pièce.</span>
+      </div>
+
+      <div class="field" style="margin-top:18px;">
+        <label id="lbl-photo">Photo d'identité (portrait)</label>
+        <div class="upload-box" id="box-photo" tabindex="0" role="button" aria-labelledby="lbl-photo">
+          <input type="file" id="fichierPhoto" name="fichierPhoto" accept="image/*" aria-label="Téléverser la photo d'identité">
+          <div class="up-icon">🪪</div>
+          <div class="up-text">Touchez pour ajouter une photo (optionnel)</div>
+          <div class="up-sub">Image — 5&nbsp;Mo maximum</div>
+        </div>
+        <div class="upload-preview" id="preview-photo">
+          <img id="img-photo" alt="Aperçu de la photo d'identité">
+          <div class="up-meta"><div class="up-name" id="name-photo"></div><div class="up-size" id="size-photo"></div></div>
+          <button type="button" data-remove="photo" aria-label="Retirer le fichier">Retirer</button>
+        </div>
+        <span class="error-msg" id="err-fichierPhoto">⚠ Veuillez ajouter une photo d'identité.</span>
+      </div>
+    </section>
+
+    <!-- ============================= ÉTAPE 3 ============================= -->
+    <section class="step-panel" data-step="3" aria-labelledby="s3h">
+      <div class="step-head">
+        <span class="step-eyebrow">Étape 3 sur 7</span>
+        <h3 id="s3h">Choix de la formation</h3>
+        <p class="step-desc">Sélectionnez la ou les formations qui vous intéressent.</p>
+      </div>
+      <div class="formation-limit-note">
+        🎯 <span>Vous pouvez choisir jusqu'à <strong id="formationMax">3</strong> formations — <span id="formationCounter">0</span> sélectionnée(s)</span>
+      </div>
+      <div class="formation-grid" id="formationGrid" role="group" aria-label="Liste des formations"></div>
+      <span class="error-msg" id="err-formations" style="margin-top:12px;">⚠ Veuillez sélectionner au moins une formation.</span>
+    </section>
+
+    <!-- ============================= ÉTAPE 4 ============================= -->
+    <section class="step-panel" data-step="4" aria-labelledby="s4h">
+      <div class="step-head">
+        <span class="step-eyebrow">Étape 4 sur 7</span>
+        <h3 id="s4h">Modalité de formation</h3>
+        <p class="step-desc">Dites-nous comment vous préférez suivre vos cours.</p>
+      </div>
+
+      <div class="field">
+        <label>Horaire selon la/les formation(s) choisie(s)</label>
+        <div id="scheduleContainer"></div>
+        <span class="hint" id="scheduleEmptyHint">Aucune formation sélectionnée à l'étape 3 — l'horaire s'affichera automatiquement ici.</span>
+      </div>
+
+      <div class="field" style="margin-top:18px;">
+        <label>Niveau</label>
+        <div class="choice-group" role="radiogroup" aria-label="Niveau">
+          <label class="choice-pill"><input type="radio" name="niveau" value="Débutant"><span>Débutant</span></label>
+          <label class="choice-pill"><input type="radio" name="niveau" value="Intermédiaire"><span>Intermédiaire</span></label>
+          <label class="choice-pill"><input type="radio" name="niveau" value="Avancé"><span>Avancé</span></label>
+        </div>
+        <span class="error-msg" id="err-niveau">⚠ Veuillez choisir un niveau.</span>
+      </div>
+
+      <div class="field" style="margin-top:18px;">
+        <label>Avez-vous déjà une expérience dans ce domaine ?</label>
+        <div class="choice-group" role="radiogroup" aria-label="Expérience">
+          <label class="choice-pill"><input type="radio" name="experience" value="Oui"><span>Oui</span></label>
+          <label class="choice-pill"><input type="radio" name="experience" value="Non"><span>Non</span></label>
+        </div>
+        <span class="error-msg" id="err-experience">⚠ Veuillez répondre à cette question.</span>
+      </div>
+
+      <div class="field" id="experienceDetailWrap" style="margin-top:16px;display:none;">
+        <label for="experienceDetail">Expliquez brièvement votre expérience</label>
+        <textarea id="experienceDetail" name="experienceDetail" placeholder="Décrivez votre expérience…"></textarea>
+      </div>
+    </section>
+
+    <!-- ============================= ÉTAPE 5 ============================= -->
+    <section class="step-panel" data-step="5" aria-labelledby="s6h">
+      <div class="step-head">
+        <span class="step-eyebrow">Étape 5 sur 7</span>
+        <h3 id="s6h">Contact d'urgence</h3>
+        <p class="step-desc">Une personne à contacter en cas de besoin.</p>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="field">
+          <label for="urgenceNom">Nom complet du contact</label>
+          <input type="text" id="urgenceNom" name="urgenceNom">
+          <span class="error-msg">⚠ Ce champ est obligatoire.</span>
+        </div>
+        <div class="field">
+          <label for="urgenceRelation">Relation avec le candidat</label>
+          <input type="text" id="urgenceRelation" name="urgenceRelation" placeholder="Ex : Mère, Frère, Ami…">
+          <span class="error-msg">⚠ Ce champ est obligatoire.</span>
+        </div>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:16px;">
+        <div class="field">
+          <label for="urgenceTel">Téléphone</label>
+          <input type="tel" id="urgenceTel" name="urgenceTel">
+          <span class="error-msg">⚠ Numéro de téléphone invalide.</span>
+        </div>
+        <div class="field">
+          <label for="urgenceWhatsapp">WhatsApp</label>
+          <input type="tel" id="urgenceWhatsapp" name="urgenceWhatsapp">
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label for="urgenceAdresse">Adresse</label>
+        <input type="text" id="urgenceAdresse" name="urgenceAdresse">
+      </div>
+    </section>
+
+    <!-- ============================= ÉTAPE 6 ============================= -->
+    <section class="step-panel" data-step="6" aria-labelledby="s7h">
+      <div class="step-head">
+        <span class="step-eyebrow">Étape 6 sur 7</span>
+        <h3 id="s7h">Informations supplémentaires</h3>
+        <p class="step-desc">Aidez-nous à mieux vous connaître.</p>
+      </div>
+
+      <div class="field">
+        <label for="commentConnu">Comment avez-vous connu notre école ?</label>
+        <select id="commentConnu" name="commentConnu">
+          <option value="">Sélectionner…</option>
+          <option>Facebook</option><option>Instagram</option><option>WhatsApp</option><option>TikTok</option>
+          <option>Ami / Famille</option><option>Ancien étudiant</option><option>Affiche / Flyer</option><option>Autre</option>
+        </select>
+        <span class="error-msg">⚠ Veuillez choisir une option.</span>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label for="pourquoi">Pourquoi souhaitez-vous suivre cette formation ?</label>
+        <textarea id="pourquoi" name="pourquoi"></textarea>
+        <span class="error-msg">⚠ Ce champ est obligatoire.</span>
+      </div>
+
+      <div class="field" style="margin-top:16px;">
+        <label for="objectifs">Quels sont vos objectifs professionnels ?</label>
+        <textarea id="objectifs" name="objectifs"></textarea>
+        <span class="error-msg">⚠ Ce champ est obligatoire.</span>
+      </div>
+    </section>
+
+    <!-- ============================= ÉTAPE 7 ============================= -->
+    <section class="step-panel" data-step="7" aria-labelledby="s8h">
+      <div class="step-head">
+        <span class="step-eyebrow">Étape 7 sur 7</span>
+        <h3 id="s8h">Paiement / inscription</h3>
+        <p class="step-desc">Dernière étape avant de finaliser votre dossier.</p>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="field">
+          <label for="typeInscription">Type d'inscription <span class="req">*</span></label>
+          <select id="typeInscription" name="typeInscription" required>
+            <option value="">Sélectionner…</option>
+            <option>Inscription complète</option>
+            <option>Frais de dossier</option>
+            <option>Paiement échelonné</option>
+          </select>
+          <span class="error-msg">⚠ Veuillez choisir un type d'inscription.</span>
+        </div>
+        <div class="field">
+          <label for="modePaiement">Mode de paiement <span class="req">*</span></label>
+          <select id="modePaiement" name="modePaiement" required>
+            <option value="">Sélectionner…</option>
+            <option>Espèces</option><option>MonCash</option><option>NatCash</option>
+            <option>Virement bancaire</option><option>Autre</option>
+          </select>
+          <span class="error-msg">⚠ Veuillez choisir un mode de paiement.</span>
+        </div>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:16px;">
+        <div class="field">
+          <label for="numeroTransaction">Numéro de transaction (optionnel)</label>
+          <input type="text" id="numeroTransaction" name="numeroTransaction">
+        </div>
+        <div class="field">
+          <label for="montantPaye">Montant payé (HTG) <span class="req">*</span></label>
+          <input type="number" id="montantPaye" name="montantPaye" min="0" step="1" required>
+          <span class="error-msg">⚠ Veuillez indiquer le montant payé.</span>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:16px;max-width:100%;">
+        <label for="datePaiement">Date du paiement <span class="req">*</span></label>
+        <input type="date" id="datePaiement" name="datePaiement" required>
+        <span class="error-msg">⚠ Veuillez indiquer la date du paiement.</span>
+      </div>
+
+      <div style="margin-top:8px;border-top:1px solid var(--line);">
+        <div class="consent-row">
+          <input type="checkbox" id="consentExact" name="consentExact">
+          <label for="consentExact">Je confirme que les informations fournies sont exactes.</label>
+        </div>
+        <div class="consent-row">
+          <input type="checkbox" id="consentConditions" name="consentConditions">
+          <label for="consentConditions">J'accepte les conditions d'inscription de l'établissement.</label>
+        </div>
+        <span class="error-msg" id="err-consent">⚠ Vous devez accepter les deux conditions pour continuer.</span>
+      </div>
+    </section>
+
+    <!-- ============================= ÉTAPE 8 — RÉCAPITULATIF ============================= -->
+    <section class="step-panel" data-step="8" aria-labelledby="s9h">
+      <div class="step-head">
+        <span class="step-eyebrow">Dernière vérification</span>
+        <h3 id="s9h">Récapitulatif de votre inscription</h3>
+        <p class="step-desc">Vérifiez vos informations avant de confirmer.</p>
+      </div>
+      <div id="recapContainer"></div>
+    </section>
+
+  </form>
+</main>
+
+<!-- =========================================================================
+     NAVIGATION (sticky en bas sur mobile)
+========================================================================= -->
+<div class="form-nav">
+  <button type="button" class="btn btn-ghost" id="btnPrev">← Précédent</button>
+  <button type="button" class="btn btn-primary btn-block" id="btnNext">Suivant →</button>
+  <button type="button" class="btn btn-primary btn-block" id="btnConfirm" style="display:none;">
+    <span class="spinner" aria-hidden="true"></span>
+    <span class="btn-text">Confirmer l'inscription</span>
+  </button>
+</div>
+
+<!-- =========================================================================
+     ÉCRAN DE SUCCÈS
+========================================================================= -->
+<div class="success-overlay" id="successOverlay" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+  <div class="success-card" id="receiptContent">
+    <div class="success-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 12.5l5 5L20 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2 id="successTitle">Inscription enregistrée avec succès !</h2>
+    <p class="sub">Votre dossier a été transmis à notre équipe d'admission.</p>
+
+    <div class="receipt">
+      <div class="r-row"><dt>N° de dossier</dt><dd id="rx-dossier">—</dd></div>
+      <div class="r-row"><dt>Candidat</dt><dd id="rx-nom">—</dd></div>
+      <div class="r-row"><dt>Formation(s)</dt><dd id="rx-formations">—</dd></div>
+      <div class="r-row"><dt>Date d'inscription</dt><dd id="rx-date">—</dd></div>
+      <div class="r-row"><dt>Statut</dt><dd id="rx-statut">En attente de validation</dd></div>
+    </div>
+
+    <div class="receipt" id="rx-account-box" style="display:none;margin-top:14px;">
+      <div style="grid-column:1/-1;font-weight:700;font-size:13px;color:var(--navy-900);margin-bottom:4px;">
+        🔑 Identifiants de connexion à l'application mobile
+      </div>
+      <div class="r-row"><dt>Identifiant (email)</dt><dd id="rx-email">—</dd></div>
+      <div class="r-row"><dt>Mot de passe</dt><dd id="rx-password">—</dd></div>
+      <div style="grid-column:1/-1;font-size:12px;color:var(--ink-600);margin-top:4px;">
+        Notez ces identifiants dès maintenant — le mot de passe ne sera plus jamais affiché. Vous pourrez le changer une fois connecté(e) dans l'application.
+      </div>
+    </div>
+
+    <div class="success-actions" data-print-hide>
+      <button type="button" class="btn btn-outline btn-block" id="btnPrint">🖨️ Télécharger / imprimer le reçu</button>
+      <div class="row2">
+        <button type="button" class="btn btn-ghost" id="btnHome">Retour à l'accueil</button>
+        <button type="button" class="btn btn-primary" id="btnWhatsapp">💬 Contacter l'école</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* =========================================================================
+   CONFIGURATION — modifiez cette section selon vos besoins
+========================================================================= */
+const CONFIG = {
+  schoolName: "ÉCOLE PROFESSIONNELLE",
+  // URL de votre fonction Edge Supabase "public-registration". Tant qu'elle
+  // n'est pas configurée (chaîne vide ou "YOUR_API_ENDPOINT"), le formulaire
+  // simule automatiquement l'envoi — pratique pour tester avant le backend.
+  // Format : https://<VOTRE-PROJET>.supabase.co/functions/v1/public-registration
+  API_URL: "https://afvqvorexojvjpjxiabu.supabase.co/functions/v1/public-registration",
+  // Clé "anon" (publique) de votre projet Supabase — Réglages du projet →
+  // API → "anon public". C'est une clé faite pour être publique, elle peut
+  // rester dans ce fichier HTML sans risque.
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmdnF2b3JleG9qdmpwanhpYWJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNjcwMzIsImV4cCI6MjA5OTY0MzAzMn0.8QTKR0NWUVesNTg58Sa-bpyfBqqVMCga-X8izf0qQzc",
+  // Numéro WhatsApp de l'école au format international sans "+" ni espaces
+  // (ex: 50912345678). Utilisé par le bouton "Contacter l'école" en fin de parcours.
+  whatsappNumber: "50900000000",
+  schoolEmail: "contact@ecole-exemple.com",
+  schoolPhone: "+509 00 00 0000",
+  // Nombre maximum de formations sélectionnables à l'étape 3.
+  maxFormations: 3,
+  // Taille maximale des fichiers, en Mo.
+  maxFileSizeMB: 5,
+  // Préfixe utilisé pour générer le numéro de dossier (ex: EP-2026-XXXXXX).
+  dossierPrefix: "EP"
+};
+
+/* Liste des formations — modifiez, ajoutez ou retirez des entrées ici.
+   `icon` accepte n'importe quel emoji ou caractère (aucune dépendance externe). */
+const FORMATIONS = [
+  { id:"cosmeto",   name:"Cosmétologie Générale",           icon:"💄", desc:"Soins esthétiques, coiffure et techniques de beauté professionnelles." },
+  { id:"serigraphie", name:"Sérigraphie Moderne",            icon:"🖨️", desc:"Impression textile et techniques de sérigraphie artisanale et industrielle." },
+  { id:"photo",     name:"Photographie",                    icon:"📷", desc:"Prise de vue, composition, retouche et gestion de studio photo." },
+  { id:"decor",     name:"Décor & Art",                     icon:"🎨", desc:"Décoration d'événements, arts visuels et design d'intérieur." },
+  { id:"ia",        name:"Intelligence Artificielle",       icon:"🤖", desc:"Bases de l'IA, automatisation et outils intelligents appliqués." },
+  { id:"bureautique", name:"Informatique Bureautique",       icon:"🖥️", desc:"Word, Excel, PowerPoint et outils numériques essentiels." },
+  { id:"makeup",    name:"Makeup & Application de Lace",    icon:"💅", desc:"Maquillage professionnel et pose de lace front / perruques." },
+  { id:"anglais",   name:"Anglais",                         icon:"🗣️", desc:"Communication professionnelle et conversationnelle en anglais." },
+  { id:"designgraph", name:"Design Graphique",               icon:"🖌️", desc:"Identité visuelle, mise en page et création graphique numérique." },
+  { id:"marketing", name:"Marketing Digital",               icon:"📈", desc:"Réseaux sociaux, publicité en ligne et stratégie de contenu." },
+  { id:"entrepreneuriat", name:"Entrepreneuriat",            icon:"🚀", desc:"Créer, structurer et développer sa propre entreprise." },
+  { id:"comptabilite", name:"Comptabilité",                  icon:"🧾", desc:"Gestion financière, tenue de livres et comptabilité de base." },
+  { id:"gestion",   name:"Gestion des Entreprises",          icon:"🏢", desc:"Management, organisation et pilotage d'entreprise." }
+];
+
+/* Grille horaire par formation — modifiez librement les jours et horaires.
+   `type` vaut "semaine" (cours de 3h00 pm à 5h00 pm) ou "weekend" (10h00 am
+   à 3h00 pm). Une formation absente de cette liste affichera un message
+   invitant à confirmer l'horaire avec l'administration. */
+const SCHEDULES = {
+  cosmeto:      { days:["Lundi","Mardi","Mercredi"], type:"semaine" },
+  decor:        { days:["Mardi","Jeudi"],             type:"semaine" },
+  serigraphie:  { days:["Mardi"],                     type:"semaine" },
+  makeup:       { days:["Lundi","Mercredi"],          type:"semaine" },
+  bureautique:  { days:["Lundi","Mercredi","Vendredi"], type:"semaine" },
+  photo:        { days:["Jeudi"],                     type:"semaine" },
+  anglais:      { days:["Vendredi"],                  type:"semaine" },
+  ia:           { days:["Samedi ou Dimanche"],        type:"weekend" }
+};
+const SCHEDULE_LABEL = {
+  semaine: "3h00 pm – 5h00 pm (en semaine)",
+  weekend: "10h00 am – 3h00 pm (weekend)"
+};
+
+/* =========================================================================
+   ÉTAT DE L'APPLICATION
+========================================================================= */
+const state = {
+  step: 1,
+  totalSteps: 7, // + étape 8 = récapitulatif
+  files: { piece:null, photo:null },
+  selectedFormations: []
+};
+
+const stepNames = {
+  1:"Informations personnelles", 2:"Pièce d'identité", 3:"Choix de la formation",
+  4:"Modalité de formation", 5:"Contact d'urgence",
+  6:"Informations supplémentaires", 7:"Paiement / inscription"
+};
+
+const form = document.getElementById("registrationForm");
+document.getElementById("schoolName").textContent = CONFIG.schoolName;
+document.getElementById("stepTotal").textContent = state.totalSteps;
+document.getElementById("formationMax").textContent = CONFIG.maxFormations;
+
+/* =========================================================================
+   INITIALISATION DES CARTES DE FORMATION
+========================================================================= */
+const formationGrid = document.getElementById("formationGrid");
+FORMATIONS.forEach(f=>{
+  const label = document.createElement("label");
+  label.className = "formation-card";
+  label.setAttribute("for","fm-"+f.id);
+  label.innerHTML = `
+    <input type="checkbox" id="fm-${f.id}" name="formations" value="${f.id}">
+    <span class="fc-check" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none"><path d="M2 8.5l4 4 8-8" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="fc-icon" aria-hidden="true">${f.icon}</span>
+    <span class="fc-name">${f.name}</span>
+    <span class="fc-desc">${f.desc}</span>`;
+  formationGrid.appendChild(label);
+});
+
+function updateFormationState(){
+  const checked = Array.from(formationGrid.querySelectorAll("input:checked"));
+  state.selectedFormations = checked.map(c=>c.value);
+  document.getElementById("formationCounter").textContent = checked.length;
+  const atLimit = checked.length >= CONFIG.maxFormations;
+  formationGrid.querySelectorAll(".formation-card").forEach(card=>{
+    const input = card.querySelector("input");
+    card.classList.toggle("is-selected", input.checked);
+    card.classList.toggle("is-disabled", atLimit && !input.checked);
+  });
+  renderSchedule();
+}
+formationGrid.addEventListener("change", updateFormationState);
+
+/* Affiche à l'étape 4 l'horaire correspondant à chaque formation choisie
+   à l'étape 3 (grille fixe définie dans SCHEDULES, non modifiable par
+   l'utilisateur). */
+function renderSchedule(){
+  const container = document.getElementById("scheduleContainer");
+  const emptyHint = document.getElementById("scheduleEmptyHint");
+  if(!container) return;
+
+  if(state.selectedFormations.length === 0){
+    container.innerHTML = "";
+    emptyHint.style.display = "block";
+    return;
+  }
+  emptyHint.style.display = "none";
+
+  container.innerHTML = state.selectedFormations.map(id=>{
+    const f = FORMATIONS.find(x=>x.id===id);
+    const sched = SCHEDULES[id];
+    const daysText = sched ? sched.days.join(", ") : "Horaire à confirmer avec l'administration";
+    const timeText = sched ? SCHEDULE_LABEL[sched.type] : "";
+    return `<div class="recap-block" style="margin-bottom:10px;">
+      <div class="recap-rows">
+        <div class="recap-row">
+          <dt>${f.icon} ${f.name}</dt>
+          <dd>${daysText}${timeText ? " · " + timeText : ""}</dd>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* =========================================================================
+   ÉTAPE 4 — afficher/masquer le détail d'expérience
+========================================================================= */
+form.querySelectorAll('input[name="experience"]').forEach(r=>{
+  r.addEventListener("change", ()=>{
+    document.getElementById("experienceDetailWrap").style.display =
+      (r.value === "Oui" && r.checked) ? "block" : "none";
+  });
+});
+
+/* =========================================================================
+   TÉLÉVERSEMENT DE FICHIERS
+   Compatible navigateurs mobiles et WebView React Native/Expo standard
+   (input file natif — aucune API navigateur non supportée n'est utilisée).
+========================================================================= */
+function setupUpload(key, inputId, boxId, previewId){
+  const input = document.getElementById(inputId);
+  const box = document.getElementById(boxId);
+  const preview = document.getElementById(previewId);
+
+  box.addEventListener("click", ()=> input.click());
+  box.addEventListener("keydown", e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); input.click(); }});
+
+  input.addEventListener("change", ()=>{
+    const file = input.files && input.files[0];
+    const errEl = document.getElementById("err-"+inputId);
+    if(!file) return;
+
+    const maxBytes = CONFIG.maxFileSizeMB * 1024 * 1024;
+    if(file.size > maxBytes){
+      if(errEl){ errEl.textContent = `⚠ Fichier trop volumineux (max ${CONFIG.maxFileSizeMB} Mo).`; errEl.classList.add("show"); }
+      input.value = "";
+      return;
+    }
+    if(errEl) errEl.classList.remove("show");
+
+    state.files[key] = file;
+    preview.classList.add("show");
+    document.getElementById("name-"+key).textContent = file.name;
+    document.getElementById("size-"+key).textContent = (file.size/1024/1024).toFixed(2) + " Mo";
+
+    if(key === "photo" && file.type.startsWith("image/")){
+      const reader = new FileReader();
+      reader.onload = e => { document.getElementById("img-photo").src = e.target.result; };
+      reader.readAsDataURL(file);
+    }
+    if(key === "piece"){
+      const iconEl = document.getElementById("icon-piece");
+      if(file.type === "application/pdf"){ iconEl.textContent = "PDF"; }
+      else { iconEl.textContent = "IMG"; }
+    }
+  });
+}
+setupUpload("piece","fichierPiece","box-piece","preview-piece");
+setupUpload("photo","fichierPhoto","box-photo","preview-photo");
+
+document.querySelectorAll("[data-remove]").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const key = btn.getAttribute("data-remove");
+    state.files[key] = null;
+    document.getElementById("preview-"+key).classList.remove("show");
+    document.getElementById("fichier"+(key==="piece"?"Piece":"Photo")).value = "";
+  });
+});
+
+/* =========================================================================
+   VALIDATION
+========================================================================= */
+function showFieldError(field, show){
+  const wrap = field.closest(".field") || field.closest(".choice-group")?.parentElement;
+  if(!wrap) return;
+  field.classList && field.classList.toggle("is-invalid", show);
+  const err = wrap.querySelector(".error-msg");
+  if(err) err.classList.toggle("show", show);
+}
+
+function validateStep(step){
+  let valid = true;
+  const panel = form.querySelector(`.step-panel[data-step="${step}"]`);
+  if(!panel) return true;
+
+  // Champs texte / select / date / number requis
+  panel.querySelectorAll("input[required][type=text], input[required][type=email], input[required][type=tel], input[required][type=date], input[required][type=number], select[required], textarea[required]").forEach(f=>{
+    let ok = f.value.trim() !== "";
+    if(ok && f.type === "email"){ ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value); }
+    if(ok && f.type === "tel"){ ok = f.value.replace(/[^0-9]/g,"").length >= 8; }
+    showFieldError(f, !ok);
+    if(!ok) valid = false;
+  });
+
+  // Groupes radio requis
+  const radioGroups = {};
+  panel.querySelectorAll('input[type=radio][required]').forEach(r=> radioGroups[r.name]=true);
+  Object.keys(radioGroups).forEach(name=>{
+    const group = panel.querySelectorAll(`input[name="${name}"]`);
+    const checked = Array.from(group).some(r=>r.checked);
+    const errEl = document.getElementById("err-"+name);
+    if(errEl) errEl.classList.toggle("show", !checked);
+    if(!checked) valid = false;
+  });
+
+  // Étape 2 : seule la pièce d'identité (scan) est obligatoire.
+  // La photo d'identité (portrait) reste facultative.
+  if(step === 2){
+    document.getElementById("err-fichierPhoto").classList.remove("show");
+    if(!state.files.piece){ document.getElementById("err-fichierPiece").classList.add("show"); valid = false; }
+  }
+
+  // Étape 3, étape 8 : la sélection de formation et les cases de
+  // consentement sont facultatives — seuls les 6 champs suivants sont
+  // obligatoires dans ce formulaire : prénom, nom, nom complet,
+  // pièce d'identité, numéro de téléphone, date de naissance.
+
+  const globalError = document.getElementById("globalError");
+  globalError.style.display = valid ? "none" : "flex";
+  return valid;
+}
+
+/* =========================================================================
+   NAVIGATION ENTRE ÉTAPES
+========================================================================= */
+const progressDots = document.getElementById("progressDots");
+for(let i=1;i<=state.totalSteps;i++){
+  const dot = document.createElement("span");
+  dot.dataset.step = i;
+  progressDots.appendChild(dot);
+}
+
+function renderStep(){
+  form.querySelectorAll(".step-panel").forEach(p=>{
+    p.classList.toggle("is-active", Number(p.dataset.step) === state.step);
+  });
+
+  const isRecap = state.step === 8;
+  document.getElementById("btnPrev").style.visibility = state.step === 1 ? "hidden" : "visible";
+  document.getElementById("btnNext").style.display = isRecap ? "none" : "flex";
+  document.getElementById("btnConfirm").style.display = isRecap ? "flex" : "none";
+  document.getElementById("btnNext").textContent = state.step === state.totalSteps ? "Vérifier mon inscription →" : "Suivant →";
+
+  if(!isRecap){
+    document.getElementById("stepCurrent").textContent = state.step;
+    document.getElementById("stepName").textContent = stepNames[state.step];
+    document.getElementById("progressFill").style.width = (state.step/state.totalSteps*100)+"%";
+  } else {
+    document.getElementById("stepName").textContent = "Récapitulatif";
+    document.getElementById("progressFill").style.width = "100%";
+    buildRecap();
+  }
+
+  progressDots.querySelectorAll("span").forEach(dot=>{
+    const s = Number(dot.dataset.step);
+    dot.classList.toggle("is-done", s < state.step);
+    dot.classList.toggle("is-current", s === state.step);
+  });
+
+  document.getElementById("globalError").style.display = "none";
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+document.getElementById("btnNext").addEventListener("click", ()=>{
+  if(!validateStep(state.step)) return;
+  state.step = Math.min(state.step+1, 8);
+  renderStep();
+});
+document.getElementById("btnPrev").addEventListener("click", ()=>{
+  state.step = Math.max(state.step-1, 1);
+  renderStep();
+});
+
+/* =========================================================================
+   RÉCAPITULATIF
+========================================================================= */
+function val(id){ const el = document.getElementById(id); return el ? (el.value || "—") : "—"; }
+// Comme val(), mais renvoie une chaîne vide (au lieu de "—") si le champ
+// est vide — nécessaire pour les champs FACULTATIFS dont la valeur est
+// utilisée par la logique serveur (ex : "email" vide → le serveur bascule
+// automatiquement sur le numéro de téléphone pour créer le compte).
+function valOrEmpty(id){ const el = document.getElementById(id); return el ? el.value.trim() : ""; }
+function radioVal(name){ const el = form.querySelector(`input[name="${name}"]:checked`); return el ? el.value : "—"; }
+
+function buildRecap(){
+  const formationNames = state.selectedFormations
+    .map(id => FORMATIONS.find(f=>f.id===id))
+    .filter(Boolean);
+
+  const container = document.getElementById("recapContainer");
+  container.innerHTML = `
+    <div class="recap-block">
+      <h4>Informations personnelles</h4>
+      <div class="recap-rows">
+        <div class="recap-row"><dt>Nom complet</dt><dd>${val("nomComplet")}</dd></div>
+        <div class="recap-row"><dt>Sexe</dt><dd>${radioVal("sexe")}</dd></div>
+        <div class="recap-row"><dt>Date de naissance</dt><dd>${val("dateNaissance")}</dd></div>
+        <div class="recap-row"><dt>Téléphone</dt><dd>${val("telephone")}</dd></div>
+        <div class="recap-row"><dt>Email</dt><dd>${val("email")}</dd></div>
+        <div class="recap-row"><dt>Adresse</dt><dd>${val("adresse")}, ${val("commune")}</dd></div>
+      </div>
+    </div>
+
+    <div class="recap-block">
+      <h4>Pièce d'identité</h4>
+      <div class="recap-rows">
+        <div class="recap-row"><dt>Type</dt><dd>${val("typePiece")}</dd></div>
+        <div class="recap-row"><dt>Numéro</dt><dd>${val("numeroPiece")}</dd></div>
+        <div class="recap-row"><dt>Documents</dt><dd>${state.files.piece ? "✓ Pièce" : "—"} · ${state.files.photo ? "✓ Photo" : "—"}</dd></div>
+      </div>
+    </div>
+
+    <div class="recap-block">
+      <h4>Formation(s) choisie(s)</h4>
+      <div class="recap-rows"><div class="recap-row" style="align-items:center;">
+        <dt>${formationNames.length} sélection(s)</dt>
+        <dd><div class="recap-chips">${formationNames.map(f=>`<span>${f.icon} ${f.name}</span>`).join("")}</div></dd>
+      </div></div>
+    </div>
+
+    <div class="recap-block">
+      <h4>Modalités</h4>
+      <div class="recap-rows">
+        ${formationNames.map(f=>{
+          const sched = SCHEDULES[f.id];
+          const daysText = sched ? sched.days.join(", ") : "À confirmer avec l'administration";
+          const timeText = sched ? SCHEDULE_LABEL[sched.type] : "";
+          return `<div class="recap-row"><dt>${f.icon} ${f.name}</dt><dd>${daysText}${timeText ? " · " + timeText : ""}</dd></div>`;
+        }).join("")}
+        <div class="recap-row"><dt>Niveau</dt><dd>${radioVal("niveau")}</dd></div>
+      </div>
+    </div>
+
+    <div class="recap-block">
+      <h4>Paiement</h4>
+      <div class="recap-rows">
+        <div class="recap-row"><dt>Mode</dt><dd>${val("modePaiement")}</dd></div>
+        <div class="recap-row"><dt>Montant payé</dt><dd>${val("montantPaye")} HTG</dd></div>
+        <div class="recap-row"><dt>Date</dt><dd>${val("datePaiement")}</dd></div>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================================================================
+   SOUMISSION DU FORMULAIRE
+   ---------------------------------------------------------------------
+   NOTE DE SÉCURITÉ : cette validation côté client (HTML5 + JavaScript)
+   AMÉLIORE l'expérience utilisateur mais NE REMPLACE PAS une validation
+   côté serveur. Le backend DOIT re-valider systématiquement chaque champ,
+   chaque fichier et chaque règle métier avant tout enregistrement — ne
+   jamais faire confiance aux données envoyées par le frontend.
+========================================================================= */
+function generateDossierNumber(){
+  const year = new Date().getFullYear();
+  const rand = Math.floor(100000 + Math.random()*900000);
+  return `${CONFIG.dossierPrefix}-${year}-${rand}`;
+}
+
+function buildPayload(){
+  return {
+    registrationId: generateDossierNumber(),
+    createdAt: new Date().toISOString(),
+    status: "pending",
+    paymentStatus: "unpaid",
+    selectedFormations: state.selectedFormations,
+    personalInfo:{
+      prenom: val("prenom"), nomFamille: val("nomFamille"), nomComplet: val("nomComplet"),
+      sexe: radioVal("sexe"), dateNaissance: val("dateNaissance"), lieuNaissance: val("lieuNaissance"),
+      nationalite: val("nationalite"), telephone: val("telephone"), whatsapp: val("whatsapp"),
+      email: valOrEmpty("email"), adresse: val("adresse"), commune: val("commune"),
+      departement: val("departement"), pays: val("pays")
+    },
+    identity:{
+      typePiece: val("typePiece"), numeroPiece: val("numeroPiece")
+      // Les fichiers eux-mêmes (state.files.piece / state.files.photo) doivent être
+      // envoyés séparément en multipart/form-data vers votre API — voir commentaire
+      // dans submitRegistration() ci-dessous.
+    },
+    // "education" retiré du formulaire (informations académiques non
+    // collectées) — clé conservée vide pour compatibilité avec l'architecture
+    // API d'origine, au cas où vous souhaiteriez la réactiver plus tard.
+    education:{},
+    schedule:{
+      // Horaire calculé automatiquement à partir de la grille fixe (SCHEDULES)
+      // selon la ou les formations choisies à l'étape 3 — non modifiable par le candidat.
+      formations: state.selectedFormations.map(id=>{
+        const f = FORMATIONS.find(x=>x.id===id);
+        const sched = SCHEDULES[id];
+        return {
+          id, name: f ? f.name : id,
+          days: sched ? sched.days : [],
+          horaire: sched ? SCHEDULE_LABEL[sched.type] : "À confirmer avec l'administration"
+        };
+      }),
+      niveau: radioVal("niveau"), experience: radioVal("experience"),
+      experienceDetail: val("experienceDetail")
+    },
+    emergencyContact:{
+      nom: val("urgenceNom"), relation: val("urgenceRelation"),
+      telephone: val("urgenceTel"), whatsapp: val("urgenceWhatsapp"), adresse: val("urgenceAdresse")
+    },
+    additionalInfo:{
+      commentConnu: val("commentConnu"), pourquoi: val("pourquoi"), objectifs: val("objectifs")
+    },
+    payment:{
+      typeInscription: val("typeInscription"), modePaiement: val("modePaiement"),
+      numeroTransaction: val("numeroTransaction"), montantPaye: val("montantPaye"),
+      datePaiement: val("datePaiement")
+    },
+    documents:[
+      state.files.piece ? { field:"fichierPiece", name: state.files.piece.name, type: state.files.piece.type, size: state.files.piece.size } : null,
+      state.files.photo ? { field:"fichierPhoto", name: state.files.photo.name, type: state.files.photo.type, size: state.files.photo.size } : null
+    ].filter(Boolean)
+  };
+}
+
+// Envoie le dossier à la fonction Edge Supabase "public-registration"
+// (voir supabase/functions/public-registration/index.ts dans le projet
+// de l'application). Tant que CONFIG.API_URL n'est pas configuré, la
+// fonction simule automatiquement une réponse réussie — pratique pour
+// tester la mise en page du formulaire avant que le backend soit prêt.
+async function submitRegistration(data){
+  if(!CONFIG.API_URL || CONFIG.API_URL === "YOUR_API_ENDPOINT"){
+    // ---- MODE SIMULATION (aucun backend connecté pour l'instant) ----
+    await new Promise(res => setTimeout(res, 1200));
+    return { ok:true, registrationId: data.registrationId, simulated:true };
+  }
+
+  // ---- MODE RÉEL ----
+  // La fonction Edge attend une requête "multipart/form-data" avec :
+  //   - un champ "payload"      → le dossier complet, en JSON (texte)
+  //   - un champ "fichierPiece" → le fichier de la pièce d'identité (optionnel)
+  //   - un champ "fichierPhoto" → le fichier de la photo d'identité (optionnel)
+  //   - un champ "website"      → le piège à robots (doit rester vide)
+  const fd = new FormData();
+  fd.append("payload", JSON.stringify(data));
+  fd.append("website", (document.getElementById("website")||{}).value || ""); // honeypot — vide chez un humain
+  if(state.files.piece) fd.append("fichierPiece", state.files.piece);
+  if(state.files.photo) fd.append("fichierPhoto", state.files.photo);
+
+  const headers = {};
+  // La clé "anon" est nécessaire pour passer la passerelle Supabase, même
+  // quand la fonction est déployée avec --no-verify-jwt (accès public).
+  if(CONFIG.SUPABASE_ANON_KEY && CONFIG.SUPABASE_ANON_KEY !== "YOUR_SUPABASE_ANON_KEY"){
+    headers["apikey"] = CONFIG.SUPABASE_ANON_KEY;
+    headers["Authorization"] = "Bearer " + CONFIG.SUPABASE_ANON_KEY;
+  }
+
+  const response = await fetch(CONFIG.API_URL, { method:"POST", headers, body: fd });
+  let result;
+  try{ result = await response.json(); }
+  catch(e){ throw new Error("Réponse invalide du serveur (" + response.status + ")."); }
+
+  if(!response.ok || result.ok === false){
+    throw new Error(result.error || ("Erreur serveur : " + response.status));
+  }
+  return result;
+}
+
+document.getElementById("btnConfirm").addEventListener("click", async ()=>{
+  const btn = document.getElementById("btnConfirm");
+  btn.classList.add("is-loading");
+  btn.disabled = true;
+
+  const payload = buildPayload();
+
+  try{
+    const result = await submitRegistration(payload);
+    showSuccess(payload, result);
+  }catch(err){
+    const globalError = document.getElementById("globalError");
+    document.getElementById("globalErrorText").textContent =
+      "⚠ Une erreur est survenue lors de l'envoi. Veuillez réessayer. (" + err.message + ")";
+    globalError.style.display = "flex";
+    window.scrollTo({top:0, behavior:"smooth"});
+  }finally{
+    btn.classList.remove("is-loading");
+    btn.disabled = false;
+  }
+});
+
+/* =========================================================================
+   ÉCRAN DE SUCCÈS
+========================================================================= */
+function showSuccess(payload, result){
+  document.getElementById("rx-dossier").textContent = result.registrationId || payload.registrationId;
+  document.getElementById("rx-nom").textContent = payload.personalInfo.nomComplet;
+  const formationNames = payload.selectedFormations
+    .map(id => FORMATIONS.find(f=>f.id===id)?.name).filter(Boolean).join(", ");
+  document.getElementById("rx-formations").textContent = formationNames || "—";
+  document.getElementById("rx-date").textContent = new Date(payload.createdAt).toLocaleDateString("fr-FR",{year:"numeric",month:"long",day:"numeric"});
+
+  const accountBox = document.getElementById("rx-account-box");
+  if(result.email && result.password){
+    document.getElementById("rx-email").textContent = result.email;
+    document.getElementById("rx-password").textContent = result.password;
+    accountBox.style.display = "";
+  } else {
+    accountBox.style.display = "none";
+  }
+
+  document.getElementById("successOverlay").classList.add("show");
+}
+
+document.getElementById("btnPrint").addEventListener("click", ()=> window.print());
+document.getElementById("btnHome").addEventListener("click", ()=>{
+  document.getElementById("successOverlay").classList.remove("show");
+  document.getElementById("rx-account-box").style.display = "none";
+  form.reset();
+  state.step = 1;
+  state.files = { piece:null, photo:null };
+  state.selectedFormations = [];
+  document.querySelectorAll(".upload-preview").forEach(p=>p.classList.remove("show"));
+  updateFormationState();
+  renderStep();
+});
+document.getElementById("btnWhatsapp").addEventListener("click", ()=>{
+  const dossier = document.getElementById("rx-dossier").textContent;
+  const msg = encodeURIComponent(`Bonjour, je viens de m'inscrire (dossier ${dossier}) et j'aimerais avoir plus d'informations.`);
+  window.open(`https://wa.me/${CONFIG.whatsappNumber}?text=${msg}`, "_blank");
+});
+
+/* =========================================================================
+   DÉMARRAGE
+========================================================================= */
+updateFormationState();
+renderStep();
+
+})();
+</script>
+</body>
+</html>

@@ -8,6 +8,7 @@ import {
 import ConfirmModal from "./ConfirmModal";
 import { useFileUpload } from "./useFileUpload";
 import type { BlogPost, BlogCategory } from "./types";
+import { safeTextToHtml } from "@/lib/text";
 
 const CATEGORIES: { id: BlogCategory; label: string; emoji: string }[] = [
   { id: "actualites",    label: "Actualités",       emoji: "📢" },
@@ -274,7 +275,7 @@ export default function BlogPanel() {
             </span>
             <h1 className="font-display text-3xl font-extrabold text-lore-ink dark:text-white mt-4 mb-3 leading-tight">{form.title || "Titre de l'article"}</h1>
             {form.excerpt && <p className="text-lore-ink/70 dark:text-white/70 border-l-4 border-lore-blue pl-4 mb-6 font-medium">{form.excerpt}</p>}
-            <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: form.content.replace(/\n/g, "<br/>") }} />
+            <div className="prose dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: safeTextToHtml(form.content) }} />
             {form.tags.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2">
                 {form.tags.map(t => <span key={t} className="rounded-full bg-lore-dark/5 dark:bg-white/5 px-3 py-1 text-xs text-lore-ink/60 dark:text-white/60">#{t}</span>)}

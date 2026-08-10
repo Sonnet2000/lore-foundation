@@ -8,6 +8,7 @@ import {
   Play, ChevronLeft, ChevronRight, MessageCircle, FileText, Download,
 } from "lucide-react";
 import type { Project } from "@/app/admin/_components/types";
+import { safeTextToHtml } from "@/lib/text";
 import { siteInfo } from "@/lib/data";
 
 export default function ProjetClient({ project }: { project: Project }) {
@@ -110,7 +111,7 @@ export default function ProjetClient({ project }: { project: Project }) {
               prose-a:text-lore-blue prose-ul:text-lore-ink/75 dark:prose-ul:text-white/70
               prose-li:marker:text-lore-blue prose-strong:text-lore-ink dark:prose-strong:text-white
               prose-blockquote:border-lore-blue prose-blockquote:bg-lore-blue/5 prose-blockquote:rounded-r-xl"
-              dangerouslySetInnerHTML={{ __html: project.description.replace(/\n/g, "<br/>") }} />
+              dangerouslySetInnerHTML={{ __html: safeTextToHtml(project.description) }} />
           </div>
 
           {/* Sidebar */}
