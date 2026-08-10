@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, GraduationCap, Clock3, Sparkles, PlayCircle, ClipboardCheck, ShieldCheck } from "lucide-react";
 import type { CourseRow } from "@/lib/school";
+import { courseFeeSummary } from "@/lib/course-fees";
 
 const FADE_UP = {
   hidden: { opacity: 0, y: 24 },
@@ -144,7 +145,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
                     <p className="flex items-center gap-1.5 text-xs text-lore-ink/50 dark:text-white/50">
                       <Clock3 className="h-3.5 w-3.5" />
                       {course.duration || "Dire pa presize"}
-                      {course.price ? ` · ${course.price}` : ""}
+                      {courseFeeSummary(course) ? ` · ${courseFeeSummary(course)}` : ""}
                     </p>
                     {(course.schedule || course.entry_fee) && (
                       <div className="flex flex-wrap gap-1.5">

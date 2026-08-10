@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
 import WelcomeScreen from "@/components/WelcomeScreen";
@@ -23,6 +24,12 @@ import { getActiveAnnouncement, hasPublishedSeminars } from "@/lib/site-content"
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+// Paj akèy la pa t gen okenn URL kanonik deklare — se sa ki te fè Google
+// wè l kòm "paj an doub" ant lorefondation.com ak www.lorefondation.com.
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default async function Home() {
   const [announcement, showSeminaires] = await Promise.all([

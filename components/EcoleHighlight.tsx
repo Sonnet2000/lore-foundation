@@ -3,7 +3,7 @@ import Image from "next/image";
 import { GraduationCap, Clock3, ArrowRight } from "lucide-react";
 import AnimatedSection from "@/components/ui/AnimatedSection";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { listPublishedCourses } from "@/lib/school";
+import { listPublishedCourses, courseFeeSummary } from "@/lib/school";
 
 export default async function EcoleHighlight() {
   const courses = (await listPublishedCourses()).slice(0, 3);
@@ -59,7 +59,7 @@ export default async function EcoleHighlight() {
                   <p className="flex items-center gap-1.5 text-xs text-lore-ink/50 dark:text-white/50">
                     <Clock3 className="h-3.5 w-3.5" />
                     {course.duration || "Dire pa presize"}
-                    {course.price ? ` · ${course.price}` : ""}
+                    {courseFeeSummary(course) ? ` · ${courseFeeSummary(course)}` : ""}
                   </p>
                   {course.description && (
                     <p className="line-clamp-2 text-sm text-lore-ink/60 dark:text-white/60">{course.description}</p>

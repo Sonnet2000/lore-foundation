@@ -1,5 +1,6 @@
 import "server-only";
 import { getSupabase } from "@/lib/supabase";
+export { isFreeCoursePrice, isCourseFullyFree, courseFeeSummary } from "@/lib/course-fees";
 
 export type CourseFormat = "online" | "in_person" | "hybrid";
 
@@ -89,11 +90,6 @@ export type SubmissionRow = {
   graded_at: string | null;
 };
 
-/** Detèmine si yon pri kou vle di "gratis" (menm lojik ak paj enskripsyon an). */
-export function isFreeCoursePrice(price: string) {
-  const p = (price || "").trim().toLowerCase();
-  return !p || /gratis|gratuit|free|0 htg|0\$/.test(p);
-}
 
 /** Tout kou piblik yo, san enfo sou okenn elèv (pou paj piblik /ecole). */
 export async function listPublishedCourses() {

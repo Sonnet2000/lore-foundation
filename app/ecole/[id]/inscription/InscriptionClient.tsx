@@ -10,6 +10,7 @@ import {
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import GoogleButton from "@/components/account/GoogleButton";
 import type { CourseRow, EnrollmentRow } from "@/lib/school";
+import { isFreeCoursePrice as isFreeCourse, isCourseFullyFree, courseFeeSummary } from "@/lib/course-fees";
 
 type PaymentMethod = {
   id: string;
@@ -19,21 +20,6 @@ type PaymentMethod = {
   details: string;
   instructions: string;
 };
-
-function isFreeCourse(price: string) {
-  const p = price.trim().toLowerCase();
-  return !p || /gratis|gratuit|free|0 htg|0\$/.test(p);
-}
-
-// Kou a totalman gratis SÈLMAN si okenn nan 3 frè yo pa defini —
-// pa jis "Frè patisipasyon" a apa.
-function isCourseFullyFree(course: CourseRow) {
-  return (
-    isFreeCourse(course.registration_fee) &&
-    isFreeCourse(course.price) &&
-    isFreeCourse(course.materials_fee)
-  );
-}
 
 type Step = "loading" | "account" | "awaiting-confirmation" | "payment" | "status";
 
@@ -313,7 +299,7 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
             <h1 className="font-display text-base font-bold text-lore-ink dark:text-white">{course.title}</h1>
             <p className="text-xs text-lore-ink/50 dark:text-white/50">
               {course.duration || "Dire pa presize"}
-              {course.price ? ` · ${course.price}` : isCourseFullyFree(course) ? " · Gratis" : ""}
+              {courseFeeSummary(course) ? ` · ${courseFeeSummary(course)}` : isCourseFullyFree(course) ? " · Gratis" : ""}
             </p>
             {(course.schedule || course.entry_fee) && (
               <div className="mt-1.5 flex flex-wrap gap-1.5">

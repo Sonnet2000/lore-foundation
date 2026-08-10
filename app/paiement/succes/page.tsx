@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 
-export const metadata: Metadata = { title: "Paiement confirmé — Loré Foundation" };
+export const metadata: Metadata = {
+  title: "Paiement confirmé — Loré Foundation",
+  // Paj tranzitwa apre yon peman — pa gen kontni itil pou rechèch,
+  // e li pa dwe parèt nan rezilta Google.
+  robots: { index: false, follow: false },
+};
 
 export default function PaiementSuccesPage() {
   return (

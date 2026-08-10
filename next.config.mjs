@@ -62,6 +62,25 @@ const securityHeaders = [
 const nextConfig = {
   reactStrictMode: true,
 
+  // ── Inpoze YON SÈL domèn kanonik (www.lorefondation.com) ──────────────
+  // San sa a, Google wè "lorefondation.com" ak "www.lorefondation.com"
+  // kòm de sit diferan ak menm kontni (kontni doub), san okenn nan yo pa
+  // deklare kòm URL kanonik la. Sa te egzakteman kòz pwoblèm nan Search
+  // Console: "Page en double sans URL canonique sélectionnée par
+  // l'utilisateur". Redireksyon sa a (308, pèmanan) mande Google — ak nenpòt
+  // navigatè — pou l ale sou www.lorefondation.com chak fwa yon moun rive
+  // sou domèn apex la (san "www").
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "lorefondation.com" }],
+        destination: "https://www.lorefondation.com/:path*",
+        permanent: true,
+      },
+    ];
+  },
+
   // Anpeche cache navigasyon (Link) la kenbe vye done sou paj dinamik yo
   // (egzanp: /ecole apre yon nouvo kou fèk ajoute nan admin).
   experimental: {
