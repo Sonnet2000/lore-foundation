@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/ecole-portail/server";
 
 export async function GET() {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // Pa gen bezwen filtre manyèlman selon wòl la — RLS deja fè sa:
   // admin/staff wè tout, yon etidyan wè sèlman kou li enskri ladan yo.

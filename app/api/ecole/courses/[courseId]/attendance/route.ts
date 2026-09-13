@@ -10,7 +10,7 @@ export async function GET(request: NextRequest, { params }: { params: { courseId
   const date = searchParams.get("date");
   if (!date) return NextResponse.json({ error: "date obligatwa (YYYY-MM-DD)." }, { status: 400 });
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const [{ data: session }, { data: enrollments }, { data: records }] = await Promise.all([
     supabase.from("attendance_sessions").select("cutoff_time").eq("course_id", params.courseId).eq("date", date).maybeSingle(),
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest, { params }: { params: { courseI
     return NextResponse.json({ error: "date ak records obligatwa." }, { status: 400 });
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   await supabase
     .from("attendance_sessions")

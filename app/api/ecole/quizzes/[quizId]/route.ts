@@ -3,7 +3,7 @@ import { createClient } from "@/lib/ecole-portail/server";
 import { requireAdmin } from "@/lib/ecole-portail/guards";
 
 export async function GET(_request: NextRequest, { params }: { params: { quizId: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const { data: quiz, error } = await supabase
     .from("quiz_exams")
@@ -27,7 +27,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { quizId
   if (error) return error;
 
   const { is_published } = await request.json();
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error: dbError } = await supabase
     .from("quiz_exams")
     .update({ is_published })

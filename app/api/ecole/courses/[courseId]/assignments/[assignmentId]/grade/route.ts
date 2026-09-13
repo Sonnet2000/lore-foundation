@@ -15,7 +15,7 @@ export async function POST(
     return NextResponse.json({ error: "student_id ak score obligatwa." }, { status: 400 });
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // RLS (grades_teacher_manage) verifye deja ke moun k ap ekri a se
   // reyèlman pwofesè kou sa a — si se pa li, upsert la ap echwe.

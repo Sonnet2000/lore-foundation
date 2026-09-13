@@ -14,7 +14,7 @@ export async function POST(request: NextRequest, { params }: { params: { courseI
     return NextResponse.json({ error: "title ak file_path obligatwa." }, { status: 400 });
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error: dbError } = await supabase
     .from("course_documents")
     .insert({ course_id: params.courseId, title, file_path, file_size: file_size ?? null, uploaded_by: user!.id })

@@ -6,7 +6,7 @@ export async function GET(_request: NextRequest, { params }: { params: { courseI
   const { user, profile } = await getEcoleProfile();
   if (!user) return NextResponse.json({ error: "Ou dwe konekte." }, { status: 401 });
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const [{ data: course, error: courseError }, { data: modules }, { data: documents }, { data: assignments }] =
     await Promise.all([

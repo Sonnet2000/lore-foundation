@@ -1,29 +1,25 @@
-import { createServerClient, type CookieOptions } from "@supabase/ssr";
+import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
-export function createClient() {
-  const cookieStore = cookies();
+export async function createClient() {
+  const cookieStore = await cookies();
 
   return createServerClient(
     process.env.NEXT_PUBLIC_ECOLE_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_ECOLE_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value;
+        getAll() {
+          return cookieStore.getAll();
         },
-        set(name: string, value: string, options: CookieOptions) {
+        setAll(cookiesToSet) {
           try {
-            cookieStore.set({ name, value, ...options });
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options);
+            });
           } catch {
-            // Server Component san Route Handler — middleware jere refresh la
-          }
-        },
-        remove(name: string, options: CookieOptions) {
-          try {
-            cookieStore.set({ name, value: "", ...options });
-          } catch {
-            // menm rezon ak anwo a
+            // Rele soti nan yon Server Component pi — pa gen dwa ekri
+            // cookie la a, men middleware la deja rafrechi sesyon an.
           }
         },
       },
@@ -46,7 +42,7 @@ export interface EcoleProfile {
 // Li wòl REYÈL la nan tab "profiles" app mobil la — PA yon tab "ecole_*"
 // apa. Yon sèl idantite pou mobil AK web.
 export async function getEcoleProfile(): Promise<{ user: { id: string; email: string | null } | null; profile: EcoleProfile | null }> {
-  const supabase = createClient();
+  const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();

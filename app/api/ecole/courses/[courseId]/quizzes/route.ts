@@ -3,7 +3,7 @@ import { createClient } from "@/lib/ecole-portail/server";
 import { requireAdmin } from "@/lib/ecole-portail/guards";
 
 export async function GET(_request: NextRequest, { params }: { params: { courseId: string } }) {
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error } = await supabase
     .from("quiz_exams")
     .select("id, kind, title, is_published, mode")
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest, { params }: { params: { courseI
   const { title, description, seconds_per_question } = await request.json();
   if (!title) return NextResponse.json({ error: "Tit kiz la obligatwa." }, { status: 400 });
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data, error: dbError } = await supabase
     .from("quiz_exams")
     .insert({

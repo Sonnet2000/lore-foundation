@@ -6,7 +6,7 @@ export async function GET(_request: NextRequest, { params }: { params: { courseI
   const { error } = await requireStaff();
   if (error) return error;
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { data: enrollments, error: dbError } = await supabase
     .from("enrollments")
     .select("student_id")

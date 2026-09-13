@@ -11,7 +11,7 @@ export async function POST(request: NextRequest, { params }: { params: { quizId:
     return NextResponse.json({ error: "question_text, options (min 2) ak correct_index obligatwa." }, { status: 400 });
   }
 
-  const supabase = createClient();
+  const supabase = await createClient();
   const { count } = await supabase
     .from("quiz_questions")
     .select("id", { count: "exact", head: true })
