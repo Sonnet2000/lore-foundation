@@ -21,6 +21,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+build.log
+
+# nòt tanporè ak valè anviwonman (pa dwe rive sou Git)
+ENV-A-AJOUTE-DANS-ENV-LOCAL.txt
 
 # local env files
 .env*.local

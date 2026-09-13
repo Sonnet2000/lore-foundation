@@ -19,14 +19,22 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
     <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
       {/* ── Header sticky ───────────────────────────────────────────── */}
       <div className="relative z-10 border-b border-lore-dark/5 bg-white/90 backdrop-blur-md dark:border-white/5 dark:bg-lore-night/90">
-        <div className="mx-auto flex max-w-5xl items-center gap-4 px-5 py-4">
-          <Link href="/" className="text-lore-ink/50 hover:text-lore-ink dark:text-white/50 dark:hover:text-white transition-colors">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <div>
-            <p className="font-display font-bold text-lore-ink dark:text-white">École</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-5 py-4">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="text-lore-ink/50 hover:text-lore-ink dark:text-white/50 dark:hover:text-white transition-colors">
+              <ArrowLeft className="h-5 w-5" />
+            </Link>
+            <div>
+              <p className="font-display font-bold text-lore-ink dark:text-white">École</p>
+              <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+            </div>
           </div>
+          <Link
+            href="/ecole/portail/login"
+            className="rounded-full border border-lore-ink/15 px-4 py-2 text-xs font-semibold text-lore-ink transition-colors hover:bg-lore-ink/5 dark:border-white/15 dark:text-white dark:hover:bg-white/10"
+          >
+            Déjà inscrit ? Mon espace →
+          </Link>
         </div>
       </div>
 
