@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
 import EcoleNav from "@/components/ecole-portail/EcoleNav";
 
+const theme = { navy: "#0B1F3B", royal: "#1E4FD8", sky: "#EAF1FF" };
+
 export default function EcoleLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-screen bg-lore-cream text-lore-ink dark:bg-lore-night dark:text-white">
+    <div className="min-h-screen" style={{ backgroundColor: theme.sky, color: theme.navy }}>
       <EcoleNav />
       {children}
     </div>

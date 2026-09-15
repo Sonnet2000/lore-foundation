@@ -13,7 +13,7 @@ const FADE_UP = {
 };
 
 export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
-  const enrollHref = (courseId: string) => `/ecole/${courseId}/inscription`;
+  const enrollHref = (_courseId: string) => `/ecole/inscription-en-ligne.html`;
 
   return (
     <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
@@ -108,7 +108,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
             </p>
           </div>
           <a
-            href="/inscription-generale.html"
+            href="/ecole/inscription-en-ligne.html"
             className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-lore-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-lore-blue/90"
           >
             Enskripsyon Jeneral
