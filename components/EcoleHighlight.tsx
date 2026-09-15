@@ -77,13 +77,13 @@ export default async function EcoleHighlight() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <Link
-            href="/ecole"
+          <a
+            href="https://lore-school-web.vercel.app"
             className="btn-gold focus-ring inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform hover:scale-[1.02]"
           >
             Voir toutes les formations
             <ArrowRight className="h-4 w-4" />
-          </Link>
+          </a>
         </div>
       </div>
     </section>

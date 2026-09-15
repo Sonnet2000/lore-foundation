@@ -315,11 +315,11 @@ export default function AProposClient() {
                 nos clients.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 mt-2">
-                <Link href="/ecole"
+                <a href="https://lore-school-web.vercel.app"
                   className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-bold text-lore-blue hover:bg-white/90 transition-colors">
                   Découvrir l&apos;École
                   <ArrowRight className="h-4 w-4" />
-                </Link>
+                </a>
                 <Link href="/partenaire"
                   className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-semibold text-white hover:bg-white/20 transition-colors backdrop-blur-sm">
                   <Heart className="h-4 w-4" />
