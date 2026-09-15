@@ -1,7 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE, verifySessionToken } from "@/lib/auth";
 import { refreshSupabaseSession } from "@/lib/supabase/middleware";
-import { protectEcolePortail } from "@/lib/ecole-portail/middleware";
 
 const ACCOUNT_PUBLIC_PATHS = [
   "/compte/connexion",
@@ -86,10 +85,6 @@ export async function middleware(request: NextRequest) {
     return handleAccount(request);
   }
 
-  if (pathname.startsWith("/ecole/portail")) {
-    return protectEcolePortail(request);
-  }
-
   if (isLoginPage || isLoginApi || isPublicApi) {
     return NextResponse.next();
   }
@@ -108,6 +103,5 @@ export const config = {
     "/compte/:path*",
     "/api/account/:path*",
     "/auth/:path*",
-    "/ecole/portail/:path*",
   ],
 };

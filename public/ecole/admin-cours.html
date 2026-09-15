@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestion des Cours — Loré Fondation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" onerror="this.remove()">
+<style>
+:root{
+  --navy-950:#061229; --navy-900:#0a1c3d;
+  --royal-600:#1e4fd8; --royal-500:#2a5ff0;
+  --cyan-400:#22d3ee;
+  --white:#ffffff;
+  --ink-900:#0c1830; --ink-600:#4a5875; --ink-400:#8593ad;
+  --line:#dbe6f7; --blue-50:#f4f8ff; --blue-100:#eaf1ff;
+  --ok-500:#1fa971; --err-500:#e0473f;
+  --radius-sm:10px; --radius-md:16px; --radius-lg:24px;
+  --shadow-sm:0 2px 8px rgba(10,28,61,.06);
+  --shadow-md:0 8px 24px rgba(10,28,61,.10);
+  --font-display:'Sora','Segoe UI',system-ui,sans-serif;
+  --font-body:'Inter','Segoe UI',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);color:var(--ink-900);background:var(--blue-50);line-height:1.5;min-height:100vh}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;color:var(--navy-900)}
+button,input,select,textarea{font-family:inherit;font-size:inherit}
+.wrap{max-width:920px;margin:0 auto;padding:0 24px}
+.hidden{display:none!important}
+
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--navy-950),var(--navy-900));padding:24px}
+.login-card{background:#fff;border-radius:var(--radius-lg);padding:36px 32px;max-width:380px;width:100%;box-shadow:var(--shadow-md)}
+.login-card h2{font-size:19px;margin-bottom:6px}
+.login-card p.sub{color:var(--ink-600);font-size:13.5px;margin-bottom:22px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-600);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;padding:11px 13px;border:1.5px solid var(--line);border-radius:var(--radius-sm);font-size:14px}
+.field textarea{resize:vertical;min-height:70px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--royal-500)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 20px;border-radius:999px;font-weight:700;font-size:13.5px;border:none;cursor:pointer}
+.btn-royal{background:var(--royal-600);color:#fff;width:100%}
+.btn-royal:hover{background:var(--royal-500)}
+.btn-block{width:100%}
+.btn-outline{background:transparent;border:1.5px solid var(--line);color:var(--ink-900)}
+.btn-sm{padding:7px 14px;font-size:12.5px}
+.btn-danger{background:#fdecea;color:var(--err-500)}
+.err-box{background:#fdecea;color:var(--err-500);border:1px solid #f6c6c2;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;margin-bottom:14px}
+.ok-box{background:#e9f9f1;color:var(--ok-500);border:1px solid #bfe9d3;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;margin-bottom:14px}
+
+.app-header{background:linear-gradient(160deg,var(--navy-950),var(--navy-900));color:#fff;padding:18px 0}
+.app-header .row{display:flex;align-items:center;justify-content:space-between}
+.app-header b{font-size:14.5px}
+.app-header span{font-size:12px;color:rgba(255,255,255,.6);display:block}
+.app-main{padding:30px 0 60px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow-sm);margin-bottom:24px}
+.panel h3{font-size:16px;margin-bottom:16px}
+.checkbox-row{display:flex;align-items:center;gap:8px;font-size:13.5px;margin-bottom:14px}
+
+.course-row{border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:10px}
+.course-row .r-top{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
+.course-row .r-top b{font-size:14.5px}
+.course-row .r-top .badges{display:flex;gap:6px;align-items:center}
+.badge{font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px}
+.badge-pub{background:#e9f9f1;color:var(--ok-500)}
+.badge-draft{background:#fdf3e3;color:#b8790a}
+.course-row .r-actions{display:flex;gap:8px;margin-top:14px}
+.edit-area{display:none;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.edit-area.open{display:block}
+
+.doc-uploader{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.doc-uploader input[type=text]{flex:1;min-width:160px;padding:9px 11px;border:1.5px solid var(--line);border-radius:var(--radius-sm);font-size:13px}
+.doc-list{margin-top:10px;display:grid;gap:6px}
+.doc-list .d-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:13px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:8px 12px}
+.doc-list a{color:var(--royal-600);font-weight:600}
+
+/* ══ Responsive ══ */
+@media(max-width:640px){
+  .wrap{padding:0 16px}
+  .login-card{padding:28px 22px}
+  .field-row{grid-template-columns:1fr}
+  .app-header .row{flex-wrap:wrap;gap:10px}
+  .app-header span{word-break:break-word}
+  .panel{padding:18px}
+  .course-row .r-actions{flex-wrap:wrap}
+  .course-row .r-top{flex-wrap:wrap;gap:8px}
+  .doc-uploader{flex-direction:column;align-items:stretch}
+  .doc-uploader input[type=file]{width:100%}
+  .doc-uploader button{width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <h2>Gestion des Cours — Loré Fondation</h2>
+    <p class="sub">Connectez-vous avec un compte Admin ou Staff pour gérer les cours.</p>
+    <div class="err-box hidden" id="loginErr"></div>
+    <form id="loginForm">
+      <div class="field"><label>E-mail</label><input type="email" id="loginEmail" required></div>
+      <div class="field"><label>Mot de passe</label><input type="password" id="loginPass" required></div>
+      <button type="submit" class="btn btn-royal" id="loginBtn">Se connecter</button>
+    </form>
+  </div>
+</div>
+
+<div class="hidden" id="deniedScreen">
+  <div class="login-screen">
+    <div class="login-card">
+      <h2>Accès refusé</h2>
+      <p class="sub">Le compte connecté (<span id="deniedEmail"></span>) n'a pas les droits Admin/Staff. Contactez un administrateur si c'est une erreur.</p>
+      <button class="btn btn-outline btn-block" id="deniedLogout">Se déconnecter</button>
+    </div>
+  </div>
+</div>
+
+<div class="hidden" id="appShell">
+  <header class="app-header">
+    <div class="wrap row">
+      <div><b>Gestion des Cours</b><span id="whoText">—</span></div>
+      <button class="btn btn-outline btn-sm" id="logoutBtn">Se déconnecter</button>
+    </div>
+  </header>
+  <main class="app-main">
+    <div class="wrap">
+
+      <div class="panel">
+        <h3 id="formTitle">Créer un nouveau cours</h3>
+        <div class="err-box hidden" id="formErr"></div>
+        <div class="ok-box hidden" id="formOk"></div>
+        <form id="courseForm">
+          <input type="hidden" id="editingId">
+          <div class="field"><label>Nom du cours *</label><input type="text" id="f-name" required></div>
+          <div class="field-row">
+            <div class="field"><label>Filière</label><select id="f-program"></select></div>
+            <div class="field"><label>Code (optionnel)</label><input type="text" id="f-code"></div>
+          </div>
+          <div class="field"><label>Description courte</label><textarea id="f-description"></textarea></div>
+          <div class="field"><label>Contenu / programme détaillé (optionnel)</label><textarea id="f-content"></textarea></div>
+          <div class="field"><label>Lien vidéo principal (YouTube, Vimeo, etc.)</label><input type="url" id="f-video" placeholder="https://"></div>
+          <div class="field-row">
+            <div class="field"><label>Durée (ex: 3 mois)</label><input type="text" id="f-duration"></div>
+            <div class="field"><label>Horaire (ex: Lundi/Mercredi)</label><input type="text" id="f-schedule"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Prix total (gourdes)</label><input type="number" step="0.01" id="f-price"></div>
+            <div class="field"><label>Frais d'entrée (gourdes)</label><input type="number" step="0.01" id="f-entryfee"></div>
+          </div>
+          <div class="field"><label>Type de frais</label>
+            <select id="f-feetype"><option value="total">Total fixe</option><option value="monthly">Par mois</option><option value="quarterly">Par trimestre</option></select>
+          </div>
+          <div class="checkbox-row"><input type="checkbox" id="f-published" checked><label for="f-published">Publié (apparaît dans le catalogue et l'application)</label></div>
+          <div style="display:flex;gap:10px">
+            <button type="submit" class="btn btn-royal" id="saveBtn">Créer le cours</button>
+            <button type="button" class="btn btn-outline hidden" id="cancelEditBtn">Annuler la modification</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>Cours existants</h3>
+        <div id="coursesList">Chargement...</div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL = "https://afvqvorexojvjpjxiabu.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmdnF2b3JleG9qdmpwanhpYWJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNjcwMzIsImV4cCI6MjA5OTY0MzAzMn0.8QTKR0NWUVesNTg58Sa-bpyfBqqVMCga-X8izf0qQzc";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const loginScreen = document.getElementById("loginScreen");
+const deniedScreen = document.getElementById("deniedScreen");
+const appShell = document.getElementById("appShell");
+function escapeHtml(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+function publicDocUrl(path){ return `${SUPABASE_URL}/storage/v1/object/public/course-documents/${path}`; }
+
+document.getElementById("loginForm").addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  const btn = document.getElementById("loginBtn");
+  const errBox = document.getElementById("loginErr");
+  errBox.classList.add("hidden");
+  btn.disabled = true; btn.textContent = "Connexion...";
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPass").value;
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  btn.disabled = false; btn.textContent = "Se connecter";
+  if(error){ errBox.textContent = "E-mail ou mot de passe incorrect."; errBox.classList.remove("hidden"); return; }
+  await afterLogin();
+});
+document.getElementById("logoutBtn").addEventListener("click", async ()=>{ await supabase.auth.signOut(); location.reload(); });
+document.getElementById("deniedLogout").addEventListener("click", async ()=>{ await supabase.auth.signOut(); location.reload(); });
+
+let currentUser = null;
+let programsCache = [];
+
+async function afterLogin(){
+  const { data:{ session } } = await supabase.auth.getSession();
+  if(!session) return;
+  currentUser = session.user;
+  const { data: profile } = await supabase.from("profiles").select("full_name, role").eq("id", currentUser.id).maybeSingle();
+  const role = profile?.role || "student";
+  loginScreen.classList.add("hidden");
+  if(role !== "admin" && role !== "staff"){
+    document.getElementById("deniedEmail").textContent = currentUser.email;
+    deniedScreen.classList.remove("hidden");
+    return;
+  }
+  document.getElementById("whoText").textContent = `${profile?.full_name || currentUser.email} · ${role}`;
+  appShell.classList.remove("hidden");
+  await loadPrograms();
+  await loadCourses();
+}
+
+async function loadPrograms(){
+  const { data, error } = await supabase.from("programs").select("id,name").order("name");
+  programsCache = data || [];
+  const sel = document.getElementById("f-program");
+  sel.innerHTML = `<option value="">— Aucune filière —</option>` + programsCache.map(p => `<option value="${p.id}">${escapeHtml(p.name)}</option>`).join("");
+  if(error) console.warn(error.message);
+}
+
+/* ══ Formulaire créer / éditer ══ */
+const form = document.getElementById("courseForm");
+const formErr = document.getElementById("formErr");
+const formOk = document.getElementById("formOk");
+
+function resetForm(){
+  form.reset();
+  document.getElementById("editingId").value = "";
+  document.getElementById("f-feetype").value = "total";
+  document.getElementById("f-published").checked = true;
+  document.getElementById("formTitle").textContent = "Créer un nouveau cours";
+  document.getElementById("saveBtn").textContent = "Créer le cours";
+  document.getElementById("cancelEditBtn").classList.add("hidden");
+}
+document.getElementById("cancelEditBtn").addEventListener("click", resetForm);
+
+function fillFormForEdit(c){
+  document.getElementById("editingId").value = c.id;
+  document.getElementById("f-name").value = c.name || "";
+  document.getElementById("f-program").value = c.program_id || "";
+  document.getElementById("f-code").value = c.code || "";
+  document.getElementById("f-description").value = c.description || "";
+  document.getElementById("f-content").value = c.content || "";
+  document.getElementById("f-video").value = c.video_url || "";
+  document.getElementById("f-duration").value = c.duration_label || "";
+  document.getElementById("f-schedule").value = c.schedule_label || "";
+  document.getElementById("f-price").value = c.price ?? "";
+  document.getElementById("f-entryfee").value = c.entry_fee ?? "";
+  document.getElementById("f-feetype").value = c.fee_type || "total";
+  document.getElementById("f-published").checked = !!c.is_published;
+  document.getElementById("formTitle").textContent = `Modifier : ${c.name}`;
+  document.getElementById("saveBtn").textContent = "Enregistrer les modifications";
+  document.getElementById("cancelEditBtn").classList.remove("hidden");
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+form.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  formErr.classList.add("hidden"); formOk.classList.add("hidden");
+  const editingId = document.getElementById("editingId").value;
+  const payload = {
+    name: document.getElementById("f-name").value.trim(),
+    program_id: document.getElementById("f-program").value || null,
+    code: document.getElementById("f-code").value.trim() || null,
+    description: document.getElementById("f-description").value.trim() || null,
+    content: document.getElementById("f-content").value.trim() || null,
+    video_url: document.getElementById("f-video").value.trim() || null,
+    duration_label: document.getElementById("f-duration").value.trim() || null,
+    schedule_label: document.getElementById("f-schedule").value.trim() || null,
+    price: document.getElementById("f-price").value ? Number(document.getElementById("f-price").value) : null,
+    entry_fee: document.getElementById("f-entryfee").value ? Number(document.getElementById("f-entryfee").value) : null,
+    fee_type: document.getElementById("f-feetype").value,
+    is_published: document.getElementById("f-published").checked,
+  };
+  if(!payload.name){ formErr.textContent = "Le nom du cours est obligatoire."; formErr.classList.remove("hidden"); return; }
+
+  let error;
+  if(editingId){
+    ({ error } = await supabase.from("courses").update(payload).eq("id", editingId));
+  } else {
+    ({ error } = await supabase.from("courses").insert(payload));
+  }
+  if(error){ formErr.textContent = error.message; formErr.classList.remove("hidden"); return; }
+  formOk.textContent = editingId ? "Cours mis à jour." : "Cours créé.";
+  formOk.classList.remove("hidden");
+  resetForm();
+  await loadCourses();
+});
+
+/* ══ Liste des cours ══ */
+const openRows = new Set();
+async function loadCourses(){
+  const listEl = document.getElementById("coursesList");
+  const { data: courses, error } = await supabase.from("courses").select("*").order("name");
+  if(error){ listEl.innerHTML = `<p style="color:var(--err-500);font-size:13px">${escapeHtml(error.message)}</p>`; return; }
+  if(!courses || !courses.length){ listEl.innerHTML = `<p style="font-size:13px;color:var(--ink-400)">Aucun cours pour le moment.</p>`; return; }
+
+  listEl.innerHTML = courses.map(c => `
+    <div class="course-row" data-id="${c.id}">
+      <div class="r-top">
+        <b>${escapeHtml(c.name)}</b>
+        <span class="badges">
+          <span class="badge ${c.is_published ? "badge-pub" : "badge-draft"}">${c.is_published ? "Publié" : "Brouillon"}</span>
+        </span>
+      </div>
+      <div class="edit-area" id="edit-${c.id}">
+        <div class="r-actions">
+          <button class="btn btn-outline btn-sm" data-action="edit">✏️ Modifier les infos</button>
+          <button class="btn btn-outline btn-sm" data-action="toggle-pub">${c.is_published ? "Retirer du catalogue" : "Publier le cours"}</button>
+          <button class="btn btn-danger btn-sm" data-action="delete">🗑️ Supprimer</button>
+        </div>
+        <h4 style="font-size:12.5px;text-transform:uppercase;color:var(--ink-400);margin-top:16px">Documents et vidéos (PDF/vidéo)</h4>
+        <div class="doc-list" id="doclist-${c.id}">Chargement...</div>
+        <div class="doc-uploader">
+          <input type="text" placeholder="Titre du document (ex: Module 1 - Vidéo)" id="doctitle-${c.id}">
+          <input type="file" id="docfile-${c.id}" accept=".pdf,video/*">
+          <button type="button" class="btn btn-royal btn-sm" data-action="upload" style="width:auto">⬆️ Téléverser</button>
+        </div>
+      </div>
+    </div>
+  `).join("");
+
+  courses.forEach(c => {
+    const row = document.querySelector(`.course-row[data-id="${c.id}"]`);
+    row.querySelector(".r-top").addEventListener("click", () => toggleRow(c));
+    row.querySelector('[data-action="edit"]').addEventListener("click", (ev)=>{ ev.stopPropagation(); fillFormForEdit(c); });
+    row.querySelector('[data-action="toggle-pub"]').addEventListener("click", async (ev)=>{
+      ev.stopPropagation();
+      await supabase.from("courses").update({ is_published: !c.is_published }).eq("id", c.id);
+      await loadCourses();
+    });
+    row.querySelector('[data-action="delete"]').addEventListener("click", async (ev)=>{
+      ev.stopPropagation();
+      if(!confirm(`Supprimer définitivement le cours "${c.name}" ? Cette action est irréversible.`)) return;
+      await supabase.from("courses").delete().eq("id", c.id);
+      await loadCourses();
+    });
+    row.querySelector('[data-action="upload"]').addEventListener("click", (ev)=>{ ev.stopPropagation(); uploadDocument(c.id); });
+  });
+
+  openRows.forEach(id => {
+    const area = document.getElementById(`edit-${id}`);
+    if(area){ area.classList.add("open"); loadDocuments(id); }
+  });
+}
+
+function toggleRow(c){
+  const area = document.getElementById(`edit-${c.id}`);
+  const isOpen = area.classList.toggle("open");
+  if(isOpen){ openRows.add(c.id); loadDocuments(c.id); }
+  else { openRows.delete(c.id); }
+}
+
+async function loadDocuments(courseId){
+  const el = document.getElementById(`doclist-${courseId}`);
+  const { data: docs, error } = await supabase.from("course_documents").select("*").eq("course_id", courseId).order("created_at");
+  if(error){ el.innerHTML = `<p style="color:var(--err-500);font-size:12.5px">${escapeHtml(error.message)}</p>`; return; }
+  if(!docs || !docs.length){ el.innerHTML = `<p style="font-size:12.5px;color:var(--ink-400)">Aucun document pour le moment.</p>`; return; }
+  el.innerHTML = docs.map(d => `
+    <div class="d-row">
+      <a href="${publicDocUrl(d.file_path)}" target="_blank" rel="noopener">${/\.(mp4|webm|mov|m4v)$/i.test(d.file_path) ? "🎬" : "📄"} ${escapeHtml(d.title)}</a>
+      <button class="btn btn-danger btn-sm" data-doc-id="${d.id}" data-path="${d.file_path}">Supprimer</button>
+    </div>
+  `).join("");
+  el.querySelectorAll("button[data-doc-id]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if(!confirm("Supprimer ce document ?")) return;
+      await supabase.storage.from("course-documents").remove([btn.dataset.path]);
+      await supabase.from("course_documents").delete().eq("id", btn.dataset.docId);
+      await loadDocuments(courseId);
+    });
+  });
+}
+
+async function uploadDocument(courseId){
+  const titleInput = document.getElementById(`doctitle-${courseId}`);
+  const fileInput = document.getElementById(`docfile-${courseId}`);
+  const title = titleInput.value.trim();
+  const file = fileInput.files[0];
+  if(!title || !file){ alert("Indiquez un titre ET choisissez un fichier avant de téléverser."); return; }
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+  const path = `${courseId}/${Date.now()}_${safeName}`;
+  const { error: upErr } = await supabase.storage.from("course-documents").upload(path, file, { contentType: file.type || undefined });
+  if(upErr){ alert("Erreur de téléversement : " + upErr.message); return; }
+  const { error: dbErr } = await supabase.from("course_documents").insert({
+    course_id: courseId, title, file_path: path, file_size: file.size, uploaded_by: currentUser.id
+  });
+  if(dbErr){ alert("Erreur d'enregistrement : " + dbErr.message); return; }
+  titleInput.value = ""; fileInput.value = "";
+  await loadDocuments(courseId);
+}
+
+(async function init(){
+  const { data:{ session } } = await supabase.auth.getSession();
+  if(session) await afterLogin();
+})();
+</script>
+</body>
+</html>

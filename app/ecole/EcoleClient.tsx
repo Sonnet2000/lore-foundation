@@ -29,12 +29,12 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
               <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
             </div>
           </div>
-          <Link
-            href="/ecole/portail/login"
+          <a
+            href="/ecole/espas-elev.html"
             className="rounded-full border border-lore-ink/15 px-4 py-2 text-xs font-semibold text-lore-ink transition-colors hover:bg-lore-ink/5 dark:border-white/15 dark:text-white dark:hover:bg-white/10"
           >
             Déjà inscrit ? Mon espace →
-          </Link>
+          </a>
         </div>
       </div>
 

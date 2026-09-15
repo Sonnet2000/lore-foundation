@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espace Étudiant — Loré Fondation</title>
+<meta name="description" content="Espace Étudiant — Loré Fondation, Centre de Formation en Informatique. Connectez-vous pour accéder à vos cours.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" onerror="this.remove()">
+<style>
+:root{
+  --navy-950:#061229; --navy-900:#0a1c3d; --navy-800:#102a56;
+  --royal-600:#1e4fd8; --royal-500:#2a5ff0;
+  --cyan-400:#22d3ee; --cyan-300:#67e3f5;
+  --gold-400:#d9b45c;
+  --white:#ffffff;
+  --ink-900:#0c1830; --ink-600:#4a5875; --ink-400:#8593ad;
+  --line:#dbe6f7; --blue-50:#f4f8ff; --blue-100:#eaf1ff;
+  --ok-500:#1fa971; --err-500:#e0473f;
+  --radius-sm:10px; --radius-md:16px; --radius-lg:24px;
+  --shadow-sm:0 2px 8px rgba(10,28,61,.06);
+  --shadow-md:0 8px 24px rgba(10,28,61,.10);
+  --font-display:'Sora','Segoe UI',system-ui,sans-serif;
+  --font-body:'Inter','Segoe UI',system-ui,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);color:var(--ink-900);background:var(--blue-50);line-height:1.55;min-height:100vh}
+h1,h2,h3,h4{font-family:var(--font-display);font-weight:800;color:var(--navy-900)}
+a{color:inherit}
+button,input,select{font-family:inherit;font-size:inherit}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+.hidden{display:none!important}
+
+/* Connexion */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,var(--navy-950),var(--navy-900) 60%,#0d2450);padding:24px}
+.login-card{background:#fff;border-radius:var(--radius-lg);padding:36px 32px;max-width:380px;width:100%;box-shadow:var(--shadow-md)}
+.login-card .brand{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.login-card .brand img{height:38px;width:38px}
+.login-card .brand b{font-family:var(--font-display);font-size:15px;color:var(--navy-900)}
+.login-card h2{font-size:20px;margin-bottom:6px}
+.login-card p.sub{color:var(--ink-600);font-size:13.5px;margin-bottom:22px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-600);margin-bottom:6px}
+.field input{width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:var(--radius-sm);font-size:14.5px}
+.field input:focus{outline:none;border-color:var(--royal-500)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 22px;border-radius:999px;font-weight:700;font-size:14px;border:none;cursor:pointer;transition:transform .15s,opacity .15s;width:100%}
+.btn:active{transform:scale(.97)}
+.btn-royal{background:var(--royal-600);color:#fff}
+.btn-royal:hover{background:var(--royal-500)}
+.btn-royal:disabled{opacity:.6;cursor:default}
+.btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink-900);width:auto;padding:9px 16px}
+.err-box{background:#fdecea;color:var(--err-500);border:1px solid #f6c6c2;border-radius:var(--radius-sm);padding:10px 14px;font-size:13px;margin-bottom:14px}
+.hint-link{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--ink-600)}
+.hint-link a{color:var(--royal-600);font-weight:700}
+
+/* Structure de l'application */
+.app-header{background:linear-gradient(160deg,var(--navy-950),var(--navy-900));color:#fff;padding:20px 0}
+.app-header .row{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.app-header .who{display:flex;align-items:center;gap:12px}
+.app-header .avatar{width:42px;height:42px;border-radius:50%;background:var(--royal-600);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px}
+.app-header .who b{font-size:15px}
+.app-header .who span{font-size:12px;color:rgba(255,255,255,.6)}
+.app-main{padding:34px 0 60px}
+.section-title{font-size:20px;margin-bottom:4px}
+.section-sub{color:var(--ink-600);font-size:13.5px;margin-bottom:24px}
+.empty-state{background:#fff;border:1px dashed var(--line);border-radius:var(--radius-md);padding:40px;text-align:center;color:var(--ink-600)}
+
+/* Cartes de cours */
+.course-grid{display:grid;gap:18px}
+.course-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);overflow:hidden}
+.course-card .c-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:20px 22px;cursor:pointer}
+.course-card .c-head h3{font-size:16.5px}
+.course-card .c-head .c-tag{display:inline-block;font-size:11px;font-weight:700;color:var(--royal-600);background:var(--blue-100);padding:3px 10px;border-radius:999px;margin-top:6px}
+.course-card .chev{transition:transform .2s;color:var(--ink-400)}
+.course-card.open .chev{transform:rotate(180deg)}
+.course-card .c-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.course-card.open .c-body{max-height:2400px}
+.c-body-inner{padding:0 22px 22px;border-top:1px solid var(--line)}
+.c-body-inner p.desc{color:var(--ink-600);font-size:14px;margin:16px 0}
+.video-wrap{position:relative;padding-top:56.25%;background:var(--navy-950);border-radius:var(--radius-sm);overflow:hidden;margin-bottom:18px}
+.video-wrap iframe,.video-wrap video{position:absolute;inset:0;width:100%;height:100%;border:0}
+.video-link{display:inline-flex;align-items:center;gap:8px;color:var(--royal-600);font-weight:700;font-size:13.5px;margin-bottom:18px}
+h4.subhead{font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);margin:18px 0 10px}
+.module-item{border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px}
+.module-item b{font-size:13.5px;color:var(--navy-900)}
+.module-item .m-when{font-size:11.5px;color:var(--ink-400);float:right}
+.module-item p{font-size:12.5px;color:var(--ink-600);margin-top:4px}
+.doc-list{display:grid;gap:8px}
+.doc-item{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:var(--radius-sm);padding:11px 14px;text-decoration:none;color:var(--ink-900);font-size:13.5px;font-weight:600}
+.doc-item:hover{border-color:var(--royal-500)}
+.doc-item .d-ico{font-size:17px}
+
+/* ══ Responsive ══ */
+@media(max-width:640px){
+  .wrap{padding:0 16px}
+  .login-card{padding:28px 22px}
+  .app-header .row{flex-wrap:wrap;gap:10px}
+  .app-header .who{min-width:0}
+  .app-header .who b{font-size:13.5px;word-break:break-word}
+  .app-header .who span{font-size:11px;word-break:break-all}
+  .app-header .avatar{width:36px;height:36px;font-size:14px;flex-shrink:0}
+  .section-title{font-size:18px}
+  .course-card .c-head{padding:16px}
+  .course-card .c-head h3{font-size:15px}
+  .c-body-inner{padding:0 16px 18px}
+  .module-item .m-when{float:none;display:inline-block;margin-bottom:4px}
+  .video-wrap{margin-bottom:14px}
+}
+@media(max-width:380px){
+  .app-header .who span{max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ ÉCRAN DE CONNEXION ══ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="brand"><img src="logo.png" alt="Loré Fondation"><b>LORÉ FONDATION</b></div>
+    <h2>Espace Étudiant</h2>
+    <p class="sub">Connectez-vous avec le même e-mail et mot de passe que ceux utilisés dans l'application mobile Loré Fondation.</p>
+    <div class="err-box hidden" id="loginErr"></div>
+    <form id="loginForm">
+      <div class="field"><label for="loginEmail">E-mail</label><input type="email" id="loginEmail" required autocomplete="username"></div>
+      <div class="field"><label for="loginPass">Mot de passe</label><input type="password" id="loginPass" required autocomplete="current-password"></div>
+      <button type="submit" class="btn btn-royal" id="loginBtn">Se connecter</button>
+    </form>
+    <span class="hint-link">Pas encore de compte? <a href="inscription-en-ligne.html">Inscrivez-vous ici</a></span>
+  </div>
+</div>
+
+<!-- ══ ESPACE ÉTUDIANT (après connexion) ══ -->
+<div class="hidden" id="appShell">
+  <header class="app-header">
+    <div class="wrap row">
+      <div class="who">
+        <div class="avatar" id="avatarInitial">?</div>
+        <div><b id="studentName">—</b><br><span id="studentEmail">—</span></div>
+      </div>
+      <button class="btn btn-ghost" id="logoutBtn">Se déconnecter</button>
+    </div>
+  </header>
+  <main class="app-main">
+    <div class="wrap">
+      <h2 class="section-title">Mes cours</h2>
+      <p class="section-sub" id="courseCountText">Chargement...</p>
+      <div id="courseGrid" class="course-grid"></div>
+    </div>
+  </main>
+</div>
+
+<script type="module">
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+const SUPABASE_URL = "https://afvqvorexojvjpjxiabu.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmdnF2b3JleG9qdmpwanhpYWJ1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQwNjcwMzIsImV4cCI6MjA5OTY0MzAzMn0.8QTKR0NWUVesNTg58Sa-bpyfBqqVMCga-X8izf0qQzc";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const loginScreen = document.getElementById("loginScreen");
+const appShell = document.getElementById("appShell");
+const loginForm = document.getElementById("loginForm");
+const loginErr = document.getElementById("loginErr");
+const loginBtn = document.getElementById("loginBtn");
+
+function showError(msg){ loginErr.textContent = msg; loginErr.classList.remove("hidden"); }
+function escapeHtml(s){ return String(s ?? "").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m])); }
+function publicDocUrl(path){ return `${SUPABASE_URL}/storage/v1/object/public/course-documents/${path}`; }
+function isVideoFile(path){ return /\.(mp4|webm|mov|m4v)$/i.test(path); }
+
+function toEmbedUrl(url){
+  if(!url) return null;
+  try{
+    const u = new URL(url);
+    if(u.hostname.includes("youtube.com")){
+      const id = u.searchParams.get("v");
+      if(id) return `https://www.youtube.com/embed/${id}`;
+      const parts = u.pathname.split("/").filter(Boolean);
+      if(parts[0] === "embed") return url;
+      if(parts[0] === "live" && parts[1]) return `https://www.youtube.com/embed/${parts[1]}`;
+    }
+    if(u.hostname.includes("youtu.be")){
+      const id = u.pathname.replace("/", "");
+      if(id) return `https://www.youtube.com/embed/${id}`;
+    }
+    if(u.hostname.includes("vimeo.com")){
+      const id = u.pathname.split("/").filter(Boolean).pop();
+      if(id) return `https://player.vimeo.com/video/${id}`;
+    }
+  }catch(e){ /* pas une URL valide, on retombe sur un simple lien */ }
+  return null;
+}
+
+loginForm.addEventListener("submit", async (e)=>{
+  e.preventDefault();
+  loginErr.classList.add("hidden");
+  loginBtn.disabled = true; loginBtn.textContent = "Connexion...";
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPass").value;
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  loginBtn.disabled = false; loginBtn.textContent = "Se connecter";
+  if(error){
+    showError(error.message.includes("Invalid") ? "E-mail ou mot de passe incorrect." : error.message);
+    return;
+  }
+  await afterLogin();
+});
+
+document.getElementById("logoutBtn").addEventListener("click", async ()=>{
+  await supabase.auth.signOut();
+  location.reload();
+});
+
+async function afterLogin(){
+  const { data:{ session } } = await supabase.auth.getSession();
+  if(!session){ return; }
+  const user = session.user;
+
+  const { data: profile } = await supabase.from("profiles").select("full_name").eq("id", user.id).maybeSingle();
+  const name = profile?.full_name || user.email;
+  document.getElementById("studentName").textContent = name;
+  document.getElementById("studentEmail").textContent = user.email;
+  document.getElementById("avatarInitial").textContent = (name || "?").trim().charAt(0).toUpperCase();
+
+  loginScreen.classList.add("hidden");
+  appShell.classList.remove("hidden");
+
+  await loadCourses(user.id);
+}
+
+async function loadCourses(userId){
+  const grid = document.getElementById("courseGrid");
+  const countText = document.getElementById("courseCountText");
+  const { data: enrollments, error } = await supabase
+    .from("enrollments")
+    .select("course_id, courses(id,name,description,video_url,duration_label,schedule_label,is_published,program:programs(name,color,icon))")
+    .eq("student_id", userId);
+
+  if(error){
+    countText.textContent = "Une erreur est survenue lors du chargement des cours. Essayez de rafraîchir la page.";
+    return;
+  }
+  const courses = (enrollments || []).map(e => e.courses).filter(Boolean);
+  if(!courses.length){
+    countText.textContent = "Vous n'êtes inscrit(e) à aucun cours pour le moment.";
+    grid.innerHTML = `<div class="empty-state">Aucun cours n'est encore associé à votre compte. Contactez Loré Fondation si vous pensez qu'il s'agit d'une erreur.</div>`;
+    return;
+  }
+  countText.textContent = `${courses.length} cours associé(s) à votre compte.`;
+  grid.innerHTML = courses.map(c => `
+    <div class="course-card" data-course-id="${c.id}">
+      <div class="c-head">
+        <div>
+          <h3>${escapeHtml(c.name)}</h3>
+          ${c.program ? `<span class="c-tag">${escapeHtml(c.program.name)}</span>` : ""}
+        </div>
+        <span class="chev">▾</span>
+      </div>
+      <div class="c-body"><div class="c-body-inner">
+        <p class="desc">${escapeHtml(c.description || "")}</p>
+        <div class="video-slot" data-video="${encodeURIComponent(c.video_url || "")}"></div>
+        <h4 class="subhead">Programme du cours</h4>
+        <div class="module-slot">Chargement...</div>
+        <h4 class="subhead">Documents et vidéos</h4>
+        <div class="doc-slot">Chargement...</div>
+      </div></div>
+    </div>
+  `).join("");
+
+  document.querySelectorAll(".course-card").forEach(card => {
+    card.querySelector(".c-head").addEventListener("click", () => onCardToggle(card));
+  });
+}
+
+const loadedCourses = new Set();
+async function onCardToggle(card){
+  card.classList.toggle("open");
+  const courseId = card.dataset.courseId;
+  if(!card.classList.contains("open") || loadedCourses.has(courseId)) return;
+  loadedCourses.add(courseId);
+
+  // Vidéo principale du cours
+  const videoSlot = card.querySelector(".video-slot");
+  const rawUrl = decodeURIComponent(videoSlot.dataset.video || "");
+  if(rawUrl){
+    const embed = toEmbedUrl(rawUrl);
+    videoSlot.innerHTML = embed
+      ? `<div class="video-wrap"><iframe src="${embed}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`
+      : `<a class="video-link" href="${rawUrl}" target="_blank" rel="noopener">▶ Voir la vidéo du cours</a>`;
+  } else {
+    videoSlot.innerHTML = "";
+  }
+
+  // Modules (programme du cours)
+  const { data: modules } = await supabase
+    .from("course_modules")
+    .select("*")
+    .eq("course_id", courseId)
+    .order("month_number", { ascending:true })
+    .order("order_index", { ascending:true });
+  const moduleSlot = card.querySelector(".module-slot");
+  moduleSlot.innerHTML = (modules && modules.length)
+    ? modules.map(m => `<div class="module-item"><span class="m-when">Mois ${m.month_number}</span><b>${escapeHtml(m.title)}</b>${m.description ? `<p>${escapeHtml(m.description)}</p>` : ""}</div>`).join("")
+    : `<p style="font-size:13px;color:var(--ink-400)">Le programme détaillé n'est pas encore publié pour ce cours.</p>`;
+
+  // Documents / vidéos supplémentaires
+  const { data: docs } = await supabase
+    .from("course_documents")
+    .select("*")
+    .eq("course_id", courseId)
+    .order("created_at", { ascending:true });
+  const docSlot = card.querySelector(".doc-slot");
+  if(docs && docs.length){
+    docSlot.innerHTML = `<div class="doc-list">` + docs.map(d => {
+      const url = publicDocUrl(d.file_path);
+      const icon = isVideoFile(d.file_path) ? "🎬" : "📄";
+      return `<a class="doc-item" href="${url}" target="_blank" rel="noopener"><span class="d-ico">${icon}</span>${escapeHtml(d.title)}</a>`;
+    }).join("") + `</div>`;
+  } else {
+    docSlot.innerHTML = `<p style="font-size:13px;color:var(--ink-400)">Aucun document n'est disponible pour ce cours pour le moment.</p>`;
+  }
+}
+
+/* Reprise de session si déjà connecté (ex: retour sur la page) */
+(async function init(){
+  const { data:{ session } } = await supabase.auth.getSession();
+  if(session) await afterLogin();
+})();
+</script>
+</body>
+</html>
