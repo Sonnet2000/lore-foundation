@@ -13,7 +13,7 @@ const FADE_UP = {
 };
 
 export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
-  const enrollHref = (_courseId: string) => `/ecole/inscription-en-ligne.html`;
+  const enrollHref = (_courseId: string) => `https://lore-school-web.vercel.app/inscription-en-ligne.html`;
 
   return (
     <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
@@ -30,7 +30,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
             </div>
           </div>
           <a
-            href="/ecole/espas-elev.html"
+            href="https://lore-school-web.vercel.app/espas-elev.html"
             className="rounded-full border border-lore-ink/15 px-4 py-2 text-xs font-semibold text-lore-ink transition-colors hover:bg-lore-ink/5 dark:border-white/15 dark:text-white dark:hover:bg-white/10"
           >
             Déjà inscrit ? Mon espace →
@@ -108,7 +108,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
             </p>
           </div>
           <a
-            href="/ecole/inscription-en-ligne.html"
+            href="https://lore-school-web.vercel.app/inscription-en-ligne.html"
             className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-lore-blue px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-lore-blue/90"
           >
             Enskripsyon Jeneral
