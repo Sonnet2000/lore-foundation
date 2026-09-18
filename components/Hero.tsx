@@ -191,7 +191,7 @@ export default function Hero() {
               <path d="M45 30L52 36L56 28" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <a
-              href="https://lore-school-web.vercel.app"
+              href="https://school.lorefondation.com"
               className="btn-gold focus-ring group inline-flex w-full items-center justify-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform duration-200 hover:scale-105 sm:w-auto"
             >
               Découvrir l&apos;École

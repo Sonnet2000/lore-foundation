@@ -117,7 +117,7 @@ export default function DashboardView({
           <div className="rounded-2xl bg-white/[0.03] p-8 text-center ring-1 ring-white/10">
             <p className="text-white/60">Aucune activité pour le moment.</p>
             <div className="mt-4 flex flex-wrap justify-center gap-3">
-              <a href="https://lore-school-web.vercel.app" className="btn-gold rounded-full px-5 py-2.5 text-sm font-bold">
+              <a href="https://school.lorefondation.com" className="btn-gold rounded-full px-5 py-2.5 text-sm font-bold">
                 Découvrir l&apos;École
               </a>
               <Link

@@ -65,7 +65,7 @@ export default async function EcoleHighlight() {
                     <p className="line-clamp-2 text-sm text-lore-ink/60 dark:text-white/60">{course.description}</p>
                   )}
                   <Link
-                    href={`https://lore-school-web.vercel.app/inscription-en-ligne.html`}
+                    href={`https://inscription.lorefondation.com`}
                     className="focus-ring mt-auto inline-flex w-fit items-center gap-1.5 text-sm font-semibold text-lore-emerald hover:text-lore-emerald-dark dark:text-lore-emerald-light"
                   >
                     S&apos;inscrire <ArrowRight className="h-3.5 w-3.5" />
@@ -78,7 +78,7 @@ export default async function EcoleHighlight() {
 
         <div className="mt-10 flex justify-center">
           <a
-            href="https://lore-school-web.vercel.app"
+            href="https://school.lorefondation.com"
             className="btn-gold focus-ring inline-flex items-center gap-2 rounded-full px-7 py-3.5 text-sm font-bold transition-transform hover:scale-[1.02]"
           >
             Voir toutes les formations
