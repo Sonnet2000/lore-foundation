@@ -2,6 +2,57 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Loré Fondation — design tokens ─── */
+:root {
+  --royal: #1b46c2;
+  --royal-700: #1638a0;
+  --navy: #0b1f4b;
+  --navy-900: #081636;
+  --ivory: #fbf8f1;
+  --sky-50: #f2f7ff;
+  --sky-100: #e6effd;
+  --gold: #d9a520;
+  --ink-soft: rgba(11, 31, 75, 0.7);
+  --rule: rgba(27, 70, 194, 0.14);
+}
+
+/* Cahier : lignes d'écriture + marge, très discrètes */
+.bg-notebook {
+  background-color: var(--ivory);
+  background-image:
+    linear-gradient(to right, transparent 0, transparent 47px, rgba(217, 165, 32, 0.35) 47px, rgba(217, 165, 32, 0.35) 48px, transparent 48px),
+    repeating-linear-gradient(to bottom, transparent 0, transparent 35px, var(--rule) 35px, var(--rule) 36px);
+}
+@media (max-width: 640px) {
+  .bg-notebook { background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 35px, var(--rule) 35px, var(--rule) 36px); }
+}
+.bg-grid-sky {
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+/* Entrée de page : une seule séquence orchestrée (hero) */
+@keyframes lore-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.lore-rise { animation: lore-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }
+.lore-rise-2 { animation-delay: 0.12s; }
+.lore-rise-3 { animation-delay: 0.24s; }
+
+/* Boutons */
+.btn-royal {
+  background: var(--royal); color: #fff;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-royal:hover { background: var(--royal-700); box-shadow: 0 10px 24px -10px rgba(27, 70, 194, 0.7); }
+.btn-royal:active { transform: translateY(1px); }
+.btn-outline-navy {
+  border: 1.5px solid var(--navy); color: var(--navy);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.btn-outline-navy:hover { background: var(--navy); color: #fff; }
+.focus-royal:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
 /* ─── Google Fonts import ─── */
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
 
@@ -265,3 +316,6 @@ html.dark .card-lift:hover {
     scroll-behavior: auto !important;
   }
 }
+
+.skip-link { position: absolute; left: 1rem; top: -4rem; z-index: 100; background: var(--navy); color: #fff; padding: .75rem 1rem; border-radius: .5rem; }
+.skip-link:focus { top: 1rem; }

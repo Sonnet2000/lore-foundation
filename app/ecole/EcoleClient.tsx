@@ -26,7 +26,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
             </Link>
             <div>
               <p className="font-display font-bold text-lore-ink dark:text-white">École</p>
-              <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+              <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation</p>
             </div>
           </div>
           <a
@@ -57,7 +57,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
               Aprann yon metye, transfòme lavi w
             </h1>
             <p className="max-w-2xl text-sm text-white/70 sm:text-base">
-              Loré Foundation ofri fòmasyon pratik nan devlopman web, sekirite enfòmatik, design
+              Loré Fondation ofri fòmasyon pratik nan devlopman web, sekirite enfòmatik, design
               grafik ak plis ankò, dirèkteman isit nan Cap-Haïtien. Enskri epi swiv devwa ou yo
               tou dwat sou platfòm nan.
             </p>
@@ -82,7 +82,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
             {
               icon: ShieldCheck,
               title: "Enskripsyon verifye",
-              text: "Chak demand enskripsyon pase nan men ekip Loré Foundation anvan aksè louvri.",
+              text: "Chak demand enskripsyon pase nan men ekip Loré Fondation anvan aksè louvri.",
             },
           ].map(({ icon: Icon, title, text }) => (
             <div key={title} className="flex flex-col items-center gap-3 text-center">
@@ -192,7 +192,7 @@ export default function EcoleClient({ courses }: { courses: CourseRow[] }) {
             Plis pase fòmasyon
           </span>
           <h2 className="mt-4 font-display text-2xl font-bold text-lore-ink dark:text-white">
-            Loré Foundation ofri plis lòt sèvis tou
+            Loré Fondation ofri plis lòt sèvis tou
           </h2>
           <p className="mt-3 text-sm text-lore-ink/60 dark:text-white/60">
             Devlopman lojisyèl, design grafik, enpresyon, dépannage enfòmatik ak plis ankò —

@@ -192,7 +192,7 @@ export default function SignupForm() {
         </button>
 
         <p className="text-center text-xs text-white/35">
-          En créant un compte, vous acceptez d&apos;être contacté par Loré Foundation au sujet de votre activité (cours, séminaires).
+          En créant un compte, vous acceptez d&apos;être contacté par Loré Fondation au sujet de votre activité (cours, séminaires).
         </p>
       </form>
     </div>

@@ -94,7 +94,7 @@ const SUPPORT_WAYS = [
     color: "from-pink-400/15 to-pink-300/10 border-pink-400/30",
     iconBg: "bg-pink-400/15 text-pink-600 dark:text-pink-300",
     highlight: false,
-    description: "Parlez de Loré Foundation autour de vous, sur vos réseaux sociaux.",
+    description: "Parlez de Loré Fondation autour de vous, sur vos réseaux sociaux.",
     detail: "La visibilité est un soutien précieux — chaque partage compte.",
     number: null,
     action: "Suivre sur réseaux",
@@ -243,7 +243,7 @@ export default function SoutenirClient() {
           </Link>
           <div>
             <p className="font-display font-bold text-lore-ink dark:text-white">Soutenir nos projets</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation</p>
           </div>
         </div>
       </div>
@@ -259,7 +259,7 @@ export default function SoutenirClient() {
             Chaque geste compte
           </h1>
           <p className="max-w-2xl text-lore-ink/60 dark:text-white/60 text-base md:text-lg leading-relaxed">
-            Que ce soit 500 HTG ou votre temps, votre contribution aide Loré Foundation à former
+            Que ce soit 500 HTG ou votre temps, votre contribution aide Loré Fondation à former
             des jeunes, renforcer des communautés et construire un avenir meilleur pour Haïti.
             <strong className="block mt-2 text-lore-ink dark:text-white">
               Les contributions anonymes sont acceptées et respectées.

@@ -47,7 +47,7 @@ export default function BlogArticleClient({ post }: { post: BlogPost }) {
   }
 
   return (
-    <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
+    <div className="min-h-screen bg-ivory">
 
       {/* Header sticky */}
       <div className="relative z-10 border-b border-lore-dark/5 bg-white/90 backdrop-blur-md dark:border-white/5 dark:bg-lore-night/90">
@@ -111,7 +111,7 @@ export default function BlogArticleClient({ post }: { post: BlogPost }) {
           }
           <div>
             <p className="font-semibold text-sm text-lore-ink dark:text-white">{post.author_name}</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation</p>
           </div>
         </div>
 

@@ -78,6 +78,11 @@ const nextConfig = {
         destination: "https://www.lorefondation.com/:path*",
         permanent: true,
       },
+      // URL kout/ansyen pou politik konfidansyalite a (egzanp: lyen ki ka deja
+      // anrejistre nan Play Console). Yon sèl vrè paj = pa gen kontni an doub pou Google.
+      { source: "/privacy", destination: "/politique-de-confidentialite", permanent: true },
+      { source: "/privacy.html", destination: "/politique-de-confidentialite", permanent: true },
+      { source: "/politique-de-confidentialite.html", destination: "/politique-de-confidentialite", permanent: true },
     ];
   },
 

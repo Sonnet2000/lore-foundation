@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Plus_Jakarta_Sans } from "next/font/google";
+import { Newsreader, Figtree } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
@@ -10,55 +10,54 @@ import GoogleAnalytics from "@/components/GoogleAnalytics";
 const ADS_CLIENT = "ca-pub-7566847755875100";
 const GTM_ID = "GTM-KP8K4NL5";
 
-const bricolage = Bricolage_Grotesque({
+const display = Newsreader({
   subsets: ["latin"],
-  variable: "--font-bricolage",
-  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-display",
+  weight: ["500", "600", "700", "800"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
-const jakarta = Plus_Jakarta_Sans({
+const body = Figtree({
   subsets: ["latin"],
-  variable: "--font-jakarta",
-  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-body",
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.lorefondation.com"),
   title: {
-    default: "Loré Foundation — Formation professionnelle & services numériques",
-    template: "%s | Loré Foundation",
+    default: "Loré Fondation — Centre de formation en informatique",
+    template: "%s | Loré Fondation",
   },
   description:
-    "Loré Foundation propose des formations professionnelles (développement web, design graphique) et des services numériques pour entreprises à Cap-Haïtien : développement de sites web, logiciels de gestion, design et support technique.",
+    "Loré Fondation est un centre de formation en informatique : apprenez, développez vos compétences numériques et préparez l’avenir. Bibliothèque numérique, examens en ligne, espace étudiant et inscription en ligne.",
   keywords: [
-    "Loré Foundation",
-    "formation développement web Haïti",
-    "école informatique Cap-Haïtien",
-    "développement web Haïti",
-    "design graphique Haïti",
-    "services numériques Haïti",
-    "logiciel de gestion Haïti",
-    "Cap-Haïtien",
-    "formation professionnelle Haïti",
-    "dépannage informatique Cap-Haïtien",
+    "Loré Fondation",
+    "centre de formation en informatique",
+    "formation informatique Haïti",
+    "école d’informatique Cap-Haïtien",
+    "compétences numériques",
+    "inscription en ligne",
+    "bibliothèque numérique",
+    "examens en ligne",
   ],
-  authors: [{ name: "Loré Foundation" }],
+  authors: [{ name: "Loré Fondation" }],
   icons: { icon: "/logo.png" },
   openGraph: {
-    title: "Loré Foundation — Former. Créer. Réussir.",
+    title: "Loré Fondation — Centre de formation en informatique",
     description:
-      "Formations professionnelles et services numériques (développement web, design graphique, support technique) pour particuliers et entreprises à Cap-Haïtien.",
+      "Centre de formation en informatique. L’excellence au cœur de l’impact.",
     url: "https://www.lorefondation.com",
-    siteName: "Loré Foundation",
+    siteName: "Loré Fondation",
     locale: "fr_FR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Loré Foundation — Former. Créer. Réussir.",
-    description: "Formation professionnelle et services numériques à Cap-Haïtien.",
+    title: "Loré Fondation — L’excellence au cœur de l’impact",
+    description: "Centre de formation en informatique. L’excellence au cœur de l’impact.",
   },
   robots: { index: true, follow: true },
   verification: {
@@ -77,7 +76,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`${bricolage.variable} ${jakarta.variable}`}
+      className={`${display.variable} ${body.variable}`}
       suppressHydrationWarning
     >
       <head>
@@ -120,7 +119,7 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className="bg-lore-cream font-body text-lore-ink antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">
+      <body className="bg-ivory font-body text-navy antialiased transition-colors duration-300 dark:bg-lore-night dark:text-white">
         {/* Google Tag Manager (noscript) — fallback pou navigatè san JS */}
         <noscript>
           <iframe

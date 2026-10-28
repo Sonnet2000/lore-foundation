@@ -56,7 +56,7 @@ export async function POST(_request: Request, { params }: { params: { id: string
 
   const { sent, error } = await sendBulkNotification({
     recipients: (subscribers ?? []).map((s) => s.email),
-    subject: `Loré Foundation — Nouveau séminaire : ${seminar.title}`,
+    subject: `Loré Fondation — Nouveau séminaire : ${seminar.title}`,
     html,
   });
 

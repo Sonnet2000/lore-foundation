@@ -5,8 +5,8 @@ import ManageCookiesButton from "@/components/ManageCookiesButton";
 import SiteChrome from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
-  title: "Politique de confidentialité — Loré Foundation",
-  description: "Comment Loré Foundation et l'application Loré School utilisent et protègent vos données personnelles.",
+  title: "Politique de confidentialité — Loré Fondation",
+  description: "Comment Loré Fondation et l'application Loré School utilisent et protègent vos données personnelles.",
   alternates: { canonical: "/politique-de-confidentialite" },
 };
 
@@ -67,7 +67,7 @@ export default function PolitiqueConfidentialitePage() {
           </Link>
           <div>
             <p className="font-display font-bold text-lore-ink dark:text-white">Politique de confidentialité</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation</p>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export default function PolitiqueConfidentialitePage() {
             Politique de confidentialité
           </h1>
           <p className="mt-3 text-lore-ink/60 dark:text-white/60">
-            Cette page explique quelles données Loré Foundation et l&apos;application mobile Loré School collectent, comment elles sont utilisées, et comment vous pouvez les gérer.
+            Cette page explique quelles données Loré Fondation et l&apos;application mobile Loré School collectent, comment elles sont utilisées, et comment vous pouvez les gérer.
           </p>
         </div>
 

@@ -167,7 +167,7 @@ export default function PaymentMethodsPanel() {
           <Field label="Nom affiché *">
             <input value={form.label}
               onChange={e => setForm(f => ({ ...f, label: e.target.value }))}
-              placeholder="ex: MonCash Loré Foundation"
+              placeholder="ex: MonCash Loré Fondation"
               className={INPUT} />
           </Field>
 

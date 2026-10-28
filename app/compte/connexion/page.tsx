@@ -13,7 +13,7 @@ export default function LoginPage() {
   return (
     <AuthShell
       title="Connexion"
-      subtitle="Accédez à votre espace membre Loré Foundation"
+      subtitle="Accédez à votre espace membre Loré Fondation"
       footer={
         <>
           Pas encore de compte ?{" "}

@@ -21,10 +21,10 @@ export default function AuthShell({
       <div className="relative z-10 w-full max-w-md">
         <Link href="/" className="mb-8 flex items-center justify-center gap-2.5">
           <span className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10">
-            <Image src="/logo.png" alt="Loré Foundation" fill className="object-contain p-1.5" />
+            <Image src="/logo.png" alt="Loré Fondation" fill className="object-contain p-1.5" />
           </span>
           <span className="font-display text-lg font-bold tracking-tight text-white">
-            Loré Foundation
+            Loré Fondation
           </span>
         </Link>
 

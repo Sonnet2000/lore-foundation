@@ -37,9 +37,9 @@ export default async function AccountDashboardLayout({ children }: { children: R
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3.5 sm:px-8">
           <Link href="/" className="flex items-center gap-2.5">
             <span className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-white/10 ring-1 ring-white/10">
-              <Image src="/logo.png" alt="Loré Foundation" fill className="object-contain p-1" />
+              <Image src="/logo.png" alt="Loré Fondation" fill className="object-contain p-1" />
             </span>
-            <span className="hidden font-display text-base font-bold text-white sm:inline">Loré Foundation</span>
+            <span className="hidden font-display text-base font-bold text-white sm:inline">Loré Fondation</span>
           </Link>
 
           <div className="flex items-center gap-2.5">

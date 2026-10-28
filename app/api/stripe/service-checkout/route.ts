@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Antre yon montan valab." }, { status: 400 });
     }
 
-    const subject = (body.subject ?? "Service Loré Foundation").toString().trim().slice(0, 200) || "Service Loré Foundation";
+    const subject = (body.subject ?? "Service Loré Fondation").toString().trim().slice(0, 200) || "Service Loré Fondation";
     const fullName = (body.full_name ?? "").toString().trim().slice(0, 120) || "Client";
     const email = (body.email ?? "").toString().trim().slice(0, 254);
 
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
             unit_amount: Math.round(amountUsd * 100),
             product_data: {
               name: subject,
-              description: `Loré Foundation · De : ${fullName}`,
+              description: `Loré Fondation · De : ${fullName}`,
               images: [`${origin}/logo.png`],
             },
           },

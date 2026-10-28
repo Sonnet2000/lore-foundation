@@ -21,10 +21,10 @@ export default function ThemeToggle({ className = "" }: ThemeToggleProps) {
       type="button"
       onClick={() => setTheme(isDark ? "light" : "dark")}
       aria-label={isDark ? "Activer le mode clair" : "Activer le mode sombre"}
-      className={`focus-ring relative flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-white/5 text-white transition-colors hover:bg-white/10 ${className}`}
+      className={`focus-ring relative flex h-10 w-10 items-center justify-center rounded-full border border-lore-ink/10 bg-white text-lore-ink transition-colors hover:bg-lore-ink/5 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10 ${className}`}
     >
       <Sun
-        className={`absolute h-[18px] w-[18px] text-lore-gold transition-all duration-300 ${
+        className={`absolute h-[18px] w-[18px] text-amber-500 transition-all duration-300 ${
           isDark ? "scale-0 rotate-90 opacity-0" : "scale-100 rotate-0 opacity-100"
         }`}
       />

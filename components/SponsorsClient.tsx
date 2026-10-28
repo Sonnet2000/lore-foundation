@@ -132,7 +132,7 @@ export default function SponsorsClient({ sponsors }: { sponsors: PublicSponsor[]
                     Demande reçue !
                   </p>
                   <p className="text-sm text-lore-ink/60 dark:text-white/60">
-                    Merci pour votre intérêt pour un partenariat avec Loré Foundation. Notre équipe vous contactera dans les 48 heures pour en discuter.
+                    Merci pour votre intérêt pour un partenariat avec Loré Fondation. Notre équipe vous contactera dans les 48 heures pour en discuter.
                   </p>
                   <button type="button" onClick={() => setSuccess(false)}
                     className="rounded-full border border-lore-dark/10 px-5 py-2 text-sm dark:border-white/10">
@@ -173,7 +173,7 @@ export default function SponsorsClient({ sponsors }: { sponsors: PublicSponsor[]
                   </div>
                   <Field label="Mesaj (opsyonèl)">
                     <textarea value={form.message} onChange={e => setForm(f => ({ ...f, message: e.target.value }))}
-                      rows={3} placeholder="Poukisa ou vle vin sponsor Loré Foundation?" className={INPUT} />
+                      rows={3} placeholder="Poukisa ou vle vin sponsor Loré Fondation?" className={INPUT} />
                   </Field>
                   {error && <p className="text-sm text-red-500">{error}</p>}
                   <button type="button" onClick={handleSubmit} disabled={saving}

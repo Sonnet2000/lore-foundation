@@ -70,7 +70,7 @@ export default function AccountNavLink({ variant = "desktop" }: { variant?: "des
     return session ? (
       <Link
         href="/compte/tableau-de-bord"
-        className="focus-ring inline-flex items-center justify-center gap-2 rounded-full bg-white/10 py-4 text-base font-bold text-white"
+        className="focus-royal inline-flex items-center justify-center gap-2 rounded-full border border-navy/20 py-3.5 text-base font-semibold text-navy hover:bg-navy hover:text-white"
       >
         <UserRound className="h-4 w-4" />
         Mon compte
@@ -78,7 +78,7 @@ export default function AccountNavLink({ variant = "desktop" }: { variant?: "des
     ) : (
       <Link
         href="/compte/connexion"
-        className="focus-ring inline-flex items-center justify-center gap-2 rounded-full bg-white/10 py-4 text-base font-bold text-white"
+        className="focus-royal inline-flex items-center justify-center gap-2 rounded-full border border-navy/20 py-3.5 text-base font-semibold text-navy hover:bg-navy hover:text-white"
       >
         <UserRound className="h-4 w-4" />
         Connexion
@@ -90,7 +90,7 @@ export default function AccountNavLink({ variant = "desktop" }: { variant?: "des
     return (
       <Link
         href="/compte/tableau-de-bord"
-        className="focus-ring flex items-center gap-2 rounded-full p-1 pr-3 ring-1 ring-white/10 transition-colors hover:ring-white/25"
+        className="focus-royal flex items-center gap-2 rounded-full p-1 pr-3 ring-1 ring-navy/15 transition-colors hover:ring-royal/50"
         aria-label="Mon compte"
       >
         {session.avatarUrl ? (
@@ -102,7 +102,7 @@ export default function AccountNavLink({ variant = "desktop" }: { variant?: "des
             {session.displayName.slice(0, 1).toUpperCase()}
           </div>
         )}
-        <span className="max-w-[9rem] truncate text-sm font-medium text-white/85">{session.displayName}</span>
+        <span className="max-w-[9rem] truncate text-sm font-medium text-navy">{session.displayName}</span>
       </Link>
     );
   }
@@ -110,7 +110,7 @@ export default function AccountNavLink({ variant = "desktop" }: { variant?: "des
   return (
     <Link
       href="/compte/connexion"
-      className="focus-ring inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium text-white/75 ring-1 ring-white/10 transition-colors hover:text-white hover:ring-white/25"
+      className="focus-royal inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium text-navy/80 ring-1 ring-navy/15 transition-colors hover:text-royal hover:ring-royal/50"
     >
       <UserRound className="h-4 w-4" />
       Connexion

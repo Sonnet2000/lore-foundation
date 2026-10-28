@@ -110,7 +110,7 @@ export const whyChooseUs: WhyCard[] = [
     description:
       "Des formations pratiques en développement web, design et compétences numériques, données par des professionnels du métier.",
     extendedDescription:
-      "Loré Foundation forme des étudiants et des professionnels aux métiers du numérique les plus demandés. Chaque cours combine cours théoriques, exercices pratiques et devwa suivis sur notre plateforme, avec un accompagnement personnalisé jusqu'à l'obtention des compétences visées. Nos formateurs sont des praticiens actifs, pas seulement des enseignants.",
+      "Loré Fondation forme des étudiants et des professionnels aux métiers du numérique les plus demandés. Chaque cours combine cours théoriques, exercices pratiques et devwa suivis sur notre plateforme, avec un accompagnement personnalisé jusqu'à l'obtention des compétences visées. Nos formateurs sont des praticiens actifs, pas seulement des enseignants.",
     features: [
       "Cours de développement web et logiciel",
       "Formation en design graphique et création visuelle",
@@ -142,7 +142,7 @@ export const whyChooseUs: WhyCard[] = [
     description:
       "Un vrai suivi client, pas juste une livraison — nous restons disponibles avant, pendant et après chaque projet.",
     extendedDescription:
-      "Chez Loré Foundation, chaque client et chaque étudiant bénéficie d'un accompagnement personnalisé. Nous prenons le temps de comprendre les besoins réels, de proposer des solutions adaptées au contexte local, et de rester disponibles pour le support technique, les mises à jour et les questions après la livraison d'un projet ou la fin d'une formation.",
+      "Chez Loré Fondation, chaque client et chaque étudiant bénéficie d'un accompagnement personnalisé. Nous prenons le temps de comprendre les besoins réels, de proposer des solutions adaptées au contexte local, et de rester disponibles pour le support technique, les mises à jour et les questions après la livraison d'un projet ou la fin d'une formation.",
     features: [
       "Support technique réactif par WhatsApp et téléphone",
       "Accompagnement personnalisé pour chaque projet",
@@ -279,7 +279,7 @@ export const testimonials: Testimonial[] = [
     name: "Marie-Ange Joseph",
     role: "Propriétaire, Boutique en ligne",
     quote:
-      "L'équipe de Loré Foundation a développé mon site de vente en ligne de A à Z. Le résultat est professionnel et mes clients adorent la facilité d'utilisation. Un vrai partenaire pour mon commerce.",
+      "L'équipe de Loré Fondation a développé mon site de vente en ligne de A à Z. Le résultat est professionnel et mes clients adorent la facilité d'utilisation. Un vrai partenaire pour mon commerce.",
     initials: "MJ",
   },
   {
@@ -293,7 +293,7 @@ export const testimonials: Testimonial[] = [
     name: "Farah Delorme",
     role: "Directrice, École primaire",
     quote:
-      "Loré Foundation a conçu notre plateforme de gestion scolaire et formé notre personnel à son utilisation. Le support technique est toujours rapide et disponible.",
+      "Loré Fondation a conçu notre plateforme de gestion scolaire et formé notre personnel à son utilisation. Le support technique est toujours rapide et disponible.",
     initials: "FD",
   },
 ];
@@ -335,21 +335,21 @@ export const socialLinks = [
 ];
 
 export const navLinks = [
-  { label: "Accueil",      href: "/#accueil" },
-  { label: "À propos",     href: "/a-propos" },
-  { label: "École",        href: "https://school.lorefondation.com" },
-  { label: "Services",     href: "/#services" },
-  { label: "Projets",      href: "/projects" },
-  { label: "Blog",         href: "/blog" },
-  { label: "Contact",      href: "/#contact" },
+  { label: "Accueil",               href: "/" },
+  { label: "À propos",              href: "/a-propos" },
+  { label: "Formations",            href: "/#formations" },
+  { label: "Vie académique",        href: "/#vie-academique" },
+  { label: "Bibliothèque",          href: "https://library.lorefondation.com", external: true },
+  { label: "Plateformes numériques", href: "/#plateformes" },
+  { label: "Contact",               href: "/#contact" },
 ];
 
 export const siteInfo = {
-  name: "Loré Foundation",
-  slogan: "L'excellence au service de votre réussite",
-  tagline: "Former, Créer, Réussir",
+  name: "Loré Fondation",
+  slogan: "L’excellence au cœur de l’impact",
+  tagline: "L’excellence au cœur de l’impact",
   mission:
-    "Former les talents numériques de demain et accompagner les entreprises et organisations haïtiennes avec des services professionnels de qualité : développement web, design graphique et bien plus.",
+    "Loré Fondation est un centre de formation en informatique : un espace pour apprendre, développer ses compétences numériques et préparer l’avenir, au service d’Haïti.",
   phones: ["+509 41 55 9094", "+509 34 82 3501"],
   address: "Cap-Haïtien, Nord, Haïti",
   email: "contact@lorefoundation.com",

@@ -103,7 +103,7 @@ export default function AProposClient() {
           </Link>
           <div>
             <p className="font-display font-bold text-lore-ink dark:text-white">À propos</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation</p>
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@ export default function AProposClient() {
             </span>
             <h1 className="font-display text-4xl font-extrabold text-white md:text-5xl lg:text-6xl leading-tight">
               À propos de<br />
-              <span className="text-gradient-gold">Loré Foundation</span>
+              <span className="text-gradient-gold">Loré Fondation</span>
             </h1>
             <p className="max-w-2xl text-lg text-white/70 leading-relaxed">
               Former. Créer. Réussir.
@@ -153,7 +153,7 @@ export default function AProposClient() {
                 </h2>
               </div>
               <p className="text-lore-ink/70 dark:text-white/70 leading-relaxed">
-                Loré Foundation est née d&apos;une conviction profonde : personne ne devrait être privé
+                Loré Fondation est née d&apos;une conviction profonde : personne ne devrait être privé
                 d&apos;opportunités professionnelles simplement parce qu&apos;il manque de formation,
                 de ressources ou d&apos;accompagnement technique de qualité.
               </p>
@@ -164,7 +164,7 @@ export default function AProposClient() {
                 services numériques pour répondre à des besoins concrets.
               </p>
               <p className="text-lore-ink/70 dark:text-white/70 leading-relaxed">
-                Aujourd&apos;hui, Loré Foundation forme des étudiants aux métiers du numérique et
+                Aujourd&apos;hui, Loré Fondation forme des étudiants aux métiers du numérique et
                 accompagne des entreprises et organisations locales avec des services professionnels :
                 développement web, design graphique, sérigraphie et support technique.
               </p>
@@ -174,7 +174,7 @@ export default function AProposClient() {
             <div className="relative aspect-[4/3] w-full overflow-hidden rounded-3xl border border-lore-dark/5 dark:border-white/5 shadow-xl">
               <Image
                 src="/hero-portrait.jpg"
-                alt="Équipe Loré Foundation"
+                alt="Équipe Loré Fondation"
                 fill
                 className="object-cover object-top"
               />
@@ -310,7 +310,7 @@ export default function AProposClient() {
                 Chaque projet mérite un travail bien fait
               </h2>
               <p className="max-w-2xl text-white/70 leading-relaxed">
-                Chez Loré Foundation, nous travaillons chaque jour pour transformer les idées en
+                Chez Loré Fondation, nous travaillons chaque jour pour transformer les idées en
                 projets concrets et les compétences en carrières — pour nos étudiants comme pour
                 nos clients.
               </p>
@@ -327,7 +327,7 @@ export default function AProposClient() {
                 </Link>
               </div>
               <p className="mt-4 font-display text-sm font-semibold text-white/50 italic">
-                « Loré Foundation — Former. Créer. Réussir. »
+                « Loré Fondation — Former. Créer. Réussir. »
               </p>
             </div>
           </div>

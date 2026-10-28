@@ -6,8 +6,8 @@ import { listPublishedProjects } from "@/lib/projects";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Nos Projets — Loré Foundation",
-  description: "Découvrez et financez les projets de Loré Foundation en Haïti. Éducation, numérique, leadership et engagement communautaire.",
+  title: "Nos Projets — Loré Fondation",
+  description: "Découvrez et financez les projets de Loré Fondation en Haïti. Éducation, numérique, leadership et engagement communautaire.",
   alternates: { canonical: "/projects" },
 };
 export default async function ProjetsPage() {

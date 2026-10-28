@@ -13,60 +13,33 @@ export default function SectionHeading({
   align = "center",
   light = false,
 }: SectionHeadingProps) {
+  const center = align === "center";
   return (
-    <div
-      className={`flex flex-col gap-5 ${
-        align === "center" ? "items-center text-center" : "items-start text-left"
-      }`}
-    >
-      {/* Eyebrow with animated gold line */}
-      <div className={`flex items-center gap-3 ${align === "center" ? "justify-center" : ""}`}>
-        <span
-          className="block h-px w-8 origin-left"
-          style={{
-            background: light
-              ? "linear-gradient(90deg, rgba(212,175,55,0.8), rgba(212,175,55,0.2))"
-              : "linear-gradient(90deg, #d4af37, rgba(212,175,55,0.2))",
-          }}
-        />
-        <span
-          className={`text-xs font-bold uppercase tracking-[0.25em] ${
-            light ? "text-lore-gold" : "text-lore-emerald dark:text-lore-emerald-light"
-          }`}
-        >
-          {eyebrow}
-        </span>
-        <span
-          className="block h-px w-8 origin-right"
-          style={{
-            background: light
-              ? "linear-gradient(90deg, rgba(212,175,55,0.2), rgba(212,175,55,0.8))"
-              : "linear-gradient(90deg, rgba(212,175,55,0.2), #d4af37)",
-          }}
-        />
-      </div>
+    <div className={`flex flex-col gap-4 ${center ? "items-center text-center" : "items-start text-left"}`}>
+      {/* Etikèt an fòm grenn */}
+      <span
+        className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] ${
+          light
+            ? "bg-white/10 text-lore-sun ring-1 ring-white/15"
+            : "bg-lore-mint text-lore-emerald-dark dark:bg-lore-emerald/15 dark:text-lore-emerald-light"
+        }`}
+      >
+        <span className="h-1.5 w-1.5 rounded-full bg-current" aria-hidden="true" />
+        {eyebrow}
+      </span>
 
-      {/* Title */}
       <h2
-        className={`font-display font-extrabold leading-[1.1] tracking-[-0.02em] sm:text-4xl md:text-5xl ${
-          align === "center" ? "max-w-2xl text-3xl" : "max-w-xl text-3xl"
+        className={`font-display text-3xl font-extrabold leading-[1.08] tracking-[-0.03em] sm:text-4xl md:text-[2.9rem] ${
+          center ? "max-w-3xl" : "max-w-2xl"
         } ${light ? "text-white" : "text-lore-ink dark:text-white"}`}
       >
         {title}
       </h2>
 
-      {/* Optional underline accent */}
-      {align === "center" && (
-        <span
-          className="block h-0.5 w-16 rounded-full"
-          style={{ background: "linear-gradient(90deg, #d4af37, #f2d272, #d4af37)" }}
-        />
-      )}
-
       {description && (
         <p
           className={`max-w-2xl text-base leading-relaxed sm:text-lg ${
-            light ? "text-white/65" : "text-lore-ink/55 dark:text-white/55"
+            light ? "text-white/65" : "text-lore-ink/60 dark:text-white/55"
           }`}
         >
           {description}

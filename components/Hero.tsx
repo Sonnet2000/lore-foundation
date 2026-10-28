@@ -37,7 +37,7 @@ const DEFAULT_CONTENT: HeroContent = {
   headlineHighlight: "Créer.",
   headlineAfter: "Réussir.",
   description:
-    "Loré Foundation forme les talents de demain et accompagne les entreprises haïtiennes avec des services numériques professionnels — développement web, design graphique et bien plus.",
+    "Loré Fondation forme les talents de demain et accompagne les entreprises haïtiennes avec des services numériques professionnels — développement web, design graphique et bien plus.",
   mobileBadgeText: "500+ jeunes formés · 80+ projets livrés",
   floatingBadge1Title: "500+ jeunes formés",
   floatingBadge1Subtitle: "depuis notre création",
@@ -113,7 +113,7 @@ export default function Hero() {
             ) : (
               <Image
                 src={heroMedia.url}
-                alt="Équipe Loré Foundation"
+                alt="Équipe Loré Fondation"
                 fill
                 priority
                 className="object-cover object-[center_30%] sm:object-center"

@@ -10,7 +10,7 @@ function getStripe() {
 const PRESET_AMOUNTS = [10, 25, 50, 100]; // USD
 
 const PROJECTS: Record<string, string> = {
-  general:    "Fonds général Loré Foundation",
+  general:    "Fonds général Loré Fondation",
   formation:  "Formation numérique pour enseignants",
   seminaire:  "Séminaire de leadership jeunesse",
   bourses:    "Bourses scolaires pour jeunes",
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
             unit_amount: Math.round(amountUsd * 100),
             product_data: {
               name: `Don — ${project}`,
-              description: `Loré Foundation · ${anonymous ? "Contribution anonyme" : `De : ${donorName}`}`,
+              description: `Loré Fondation · ${anonymous ? "Contribution anonyme" : `De : ${donorName}`}`,
               images: [`${origin}/logo.png`],
             },
           },

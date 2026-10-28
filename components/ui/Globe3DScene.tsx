@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 /**
  * Globe3DScene — glòb 3D k ap tounen dousman, senbolize enpak
- * global Loré Foundation. Fèt ak wireframe fen + pwen ki reprezante
+ * global Loré Fondation. Fèt ak wireframe fen + pwen ki reprezante
  * "sit" nan mond lan (Ayiti + rejyon patenè yo mete aksan sou li),
  * plis de bag zòn (òbit) ki pase sou li tankou yon rezo enpak.
  *
@@ -98,7 +98,7 @@ function Globe({ reducedMotion }: { reducedMotion: boolean }) {
           </mesh>
         ))}
 
-        {/* Pwen enpak — vil kote Loré Foundation gen prezans oswa patenarya */}
+        {/* Pwen enpak — vil kote Loré Fondation gen prezans oswa patenarya */}
         {points.map((p, i) => (
           <mesh key={i} position={p.pos}>
             <sphereGeometry args={[0.028 * p.size, 12, 12]} />

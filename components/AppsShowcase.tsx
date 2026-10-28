@@ -18,7 +18,7 @@ export default async function AppsShowcase() {
         <SectionHeading
           eyebrow="Nos applications"
           title="Des logiciels pensés pour vous"
-          description="Découvrez toutes les applications développées par Loré Foundation. Le site détecte automatiquement votre appareil pour vous proposer le bon fichier — .exe sur ordinateur, .apk sur téléphone."
+          description="Découvrez toutes les applications développées par Loré Fondation. Le site détecte automatiquement votre appareil pour vous proposer le bon fichier — .exe sur ordinateur, .apk sur téléphone."
         />
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

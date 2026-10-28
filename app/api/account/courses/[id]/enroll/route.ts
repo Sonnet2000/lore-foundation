@@ -87,7 +87,7 @@ async function sendEnrollmentEmails({
         subject: `Demand enskripsyon w resevwa — ${course.title}`,
         html: emailLayout({
           heading: "Demand enskripsyon w resevwa",
-          body: `Bonjou${studentName ? " " + studentName : ""}, nou byen resevwa demand enskripsyon w pou kou <strong>${course.title}</strong>. Yon admin Loré Foundation ap verifye enfo peman ou yo epi ou ap resevwa yon lòt imèl depi demand lan apwouve oswa refize.`,
+          body: `Bonjou${studentName ? " " + studentName : ""}, nou byen resevwa demand enskripsyon w pou kou <strong>${course.title}</strong>. Yon admin Loré Fondation ap verifye enfo peman ou yo epi ou ap resevwa yon lòt imèl depi demand lan apwouve oswa refize.`,
           ctaLabel: "Gade estati demand mwen",
           ctaUrl: `${SITE_URL}/compte/kou`,
         }),

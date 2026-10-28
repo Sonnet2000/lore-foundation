@@ -13,7 +13,7 @@ export default function SignupPage() {
   return (
     <AuthShell
       title="Créer un compte"
-      subtitle="Rejoignez l'espace membre Loré Foundation"
+      subtitle="Rejoignez l'espace membre Loré Fondation"
       footer={
         <>
           Déjà un compte ?{" "}

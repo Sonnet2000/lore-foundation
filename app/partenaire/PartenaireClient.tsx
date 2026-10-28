@@ -46,7 +46,7 @@ const CONTRIBUTION_WAYS = [
   {
     icon: Users,
     title: "Mobiliser votre réseau",
-    description: "Parlez de Loré Foundation autour de vous et aidez-nous à toucher plus de jeunes et de communautés.",
+    description: "Parlez de Loré Fondation autour de vous et aidez-nous à toucher plus de jeunes et de communautés.",
   },
   {
     icon: Globe,
@@ -56,7 +56,7 @@ const CONTRIBUTION_WAYS = [
   {
     icon: Megaphone,
     title: "Représenter la fondation",
-    description: "Devenez ambassadeur et portez la voix de Loré Foundation dans votre région ou institution.",
+    description: "Devenez ambassadeur et portez la voix de Loré Fondation dans votre région ou institution.",
   },
   {
     icon: GraduationCap,
@@ -75,7 +75,7 @@ const BENEFITS = [
   {
     icon: Award,
     title: "Certificat de partenariat officiel",
-    description: "Recevez un certificat officiel Loré Foundation reconnaissant votre engagement.",
+    description: "Recevez un certificat officiel Loré Fondation reconnaissant votre engagement.",
   },
   {
     icon: Megaphone,
@@ -90,7 +90,7 @@ const BENEFITS = [
   {
     icon: Globe,
     title: "Co-branding sur nos projets",
-    description: "Associez votre image aux projets et réalisations de Loré Foundation.",
+    description: "Associez votre image aux projets et réalisations de Loré Fondation.",
   },
   {
     icon: BookOpen,
@@ -182,7 +182,7 @@ export default function PartenaireClient() {
           </Link>
           <div>
             <p className="font-display font-bold text-lore-ink dark:text-white">Devenir Partenaire</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation</p>
           </div>
         </div>
       </div>
@@ -198,7 +198,7 @@ export default function PartenaireClient() {
             Construisons l&apos;avenir <span className="text-lore-blue">ensemble</span>
           </h1>
           <p className="max-w-2xl text-lore-ink/60 dark:text-white/60 text-base md:text-lg leading-relaxed">
-            En devenant partenaire de Loré Foundation, vous rejoignez un mouvement qui transforme
+            En devenant partenaire de Loré Fondation, vous rejoignez un mouvement qui transforme
             concrètement des vies à travers l&apos;éducation, la formation et l&apos;engagement communautaire en Haïti.
             Chaque forme de soutien compte et amplifie notre impact collectif.
           </p>
@@ -234,7 +234,7 @@ export default function PartenaireClient() {
             Comment pouvez-vous contribuer ?
           </h2>
           <p className="text-sm text-lore-ink/50 dark:text-white/50 mb-8">
-            Il existe plusieurs façons de collaborer avec Loré Foundation — choisissez ce qui vous correspond.
+            Il existe plusieurs façons de collaborer avec Loré Fondation — choisissez ce qui vous correspond.
           </p>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {CONTRIBUTION_WAYS.map((way) => (
@@ -258,7 +258,7 @@ export default function PartenaireClient() {
             Ce que vous gagnez en tant que partenaire
           </h2>
           <p className="text-sm text-lore-ink/50 dark:text-white/50 mb-8">
-            Un partenariat avec Loré Foundation, c&apos;est aussi une reconnaissance concrète de votre engagement.
+            Un partenariat avec Loré Fondation, c&apos;est aussi une reconnaissance concrète de votre engagement.
           </p>
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {BENEFITS.map((b) => (
@@ -292,7 +292,7 @@ export default function PartenaireClient() {
                   Candidature reçue !
                 </h3>
                 <p className="max-w-sm text-sm text-lore-ink/60 dark:text-white/60">
-                  Merci pour votre intérêt à rejoindre Loré Foundation. Notre équipe examinera
+                  Merci pour votre intérêt à rejoindre Loré Fondation. Notre équipe examinera
                   votre demande et vous contactera très prochainement.
                 </p>
                 <div className="flex gap-3">

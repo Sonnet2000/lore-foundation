@@ -6,7 +6,7 @@ import InscriptionClient from "./InscriptionClient";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Enskripsyon — École Loré Foundation",
+  title: "Enskripsyon — École Loré Fondation",
   robots: { index: false, follow: false },
 };
 

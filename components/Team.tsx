@@ -50,7 +50,7 @@ export default async function Team() {
           <SectionHeading
             eyebrow="Notre Équipe"
             title="Bénévoles, formateurs & ambassadeurs"
-            description="Loré Foundation est portée par des femmes et des hommes engagés — formateurs, développeurs et designers — qui croient profondément à la valeur d'un travail bien fait et d'un accompagnement sérieux."
+            description="Loré Fondation est portée par des femmes et des hommes engagés — formateurs, développeurs et designers — qui croient profondément à la valeur d'un travail bien fait et d'un accompagnement sérieux."
           />
         </AnimatedSection>
 

@@ -61,7 +61,7 @@ export default async function Services() {
           <SectionHeading
             eyebrow="Nos Programmes"
             title="Des actions concrètes pour changer des vies"
-            description="Chaque programme de Loré Foundation est pensé pour répondre à un besoin réel, former des compétences durables et créer un impact mesurable dans les communautés haïtiennes."
+            description="Chaque programme de Loré Fondation est pensé pour répondre à un besoin réel, former des compétences durables et créer un impact mesurable dans les communautés haïtiennes."
           />
         </AnimatedSection>
 

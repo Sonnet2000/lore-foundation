@@ -113,7 +113,7 @@ export default function EcoleLoginPage() {
           }}
         />
         <div className="relative flex h-full flex-col justify-between p-12">
-          <Image src="/logo.png" alt="Loré Foundation" width={48} height={48} className="rounded-lg" />
+          <Image src="/logo.png" alt="Loré Fondation" width={48} height={48} className="rounded-lg" />
           <div>
             <p className="font-display text-3xl font-bold leading-tight text-white">
               Bienvenue sur le portail de l&apos;École

@@ -80,7 +80,7 @@ export function emailLayout({ heading, body, ctaLabel, ctaUrl }: {
 }) {
   return `
     <div style="font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px; background: #f5f8fc;">
-      <p style="color:#9C7A1F; font-weight:700; font-size:12px; letter-spacing:0.15em; text-transform:uppercase; margin:0 0 8px;">Loré Foundation</p>
+      <p style="color:#9C7A1F; font-weight:700; font-size:12px; letter-spacing:0.15em; text-transform:uppercase; margin:0 0 8px;">Loré Fondation</p>
       <h1 style="color:#0B1F33; font-size:22px; margin:0 0 16px;">${heading}</h1>
       <p style="color:#3a4a5c; font-size:15px; line-height:1.6; margin:0 0 24px;">${body}</p>
       ${

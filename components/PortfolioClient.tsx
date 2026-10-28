@@ -18,7 +18,7 @@ export default function PortfolioClient({ items: portfolio }: { items: Portfolio
           <SectionHeading
             eyebrow="Nos Actions & Réalisations"
             title="Ce que nous avons accompli ensemble"
-            description="Chaque projet, chaque formation, chaque séminaire est une histoire de transformation. Voici quelques-unes des actions concrètes menées par Loré Foundation sur le terrain."
+            description="Chaque projet, chaque formation, chaque séminaire est une histoire de transformation. Voici quelques-unes des actions concrètes menées par Loré Fondation sur le terrain."
           />
         </AnimatedSection>
 

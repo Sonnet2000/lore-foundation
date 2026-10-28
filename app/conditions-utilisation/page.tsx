@@ -4,8 +4,8 @@ import { ArrowLeft, FileText, UserCheck, ShieldAlert, Scale, Mail } from "lucide
 import SiteChrome from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
-  title: "Conditions d'utilisation — Loré Foundation",
-  description: "Les règles d'utilisation du site Loré Foundation et de l'application mobile Loré School.",
+  title: "Conditions d'utilisation — Loré Fondation",
+  description: "Les règles d'utilisation du site Loré Fondation et de l'application mobile Loré School.",
   alternates: { canonical: "/conditions-utilisation" },
 };
 
@@ -13,7 +13,7 @@ const SECTIONS = [
   {
     icon: FileText,
     title: "Objet",
-    body: "Ces conditions régissent l'utilisation du site lorefondation.com ainsi que de l'application mobile Loré School, éditée par Loré Foundation. En créant un compte ou en utilisant nos services, vous acceptez ces conditions.",
+    body: "Ces conditions régissent l'utilisation du site lorefondation.com ainsi que de l'application mobile Loré School, éditée par Loré Fondation. En créant un compte ou en utilisant nos services, vous acceptez ces conditions.",
   },
   {
     icon: UserCheck,
@@ -28,7 +28,7 @@ const SECTIONS = [
   {
     icon: Scale,
     title: "Propriété et responsabilité",
-    body: "Les contenus du site et de l'application (textes, logo, design) appartiennent à Loré Foundation, sauf mention contraire. Nous mettons tout en œuvre pour assurer la fiabilité de nos services, mais ne garantissons pas une disponibilité continue et ne pouvons être tenus responsables des dommages indirects liés à leur utilisation.",
+    body: "Les contenus du site et de l'application (textes, logo, design) appartiennent à Loré Fondation, sauf mention contraire. Nous mettons tout en œuvre pour assurer la fiabilité de nos services, mais ne garantissons pas une disponibilité continue et ne pouvons être tenus responsables des dommages indirects liés à leur utilisation.",
   },
   {
     icon: Mail,
@@ -48,7 +48,7 @@ export default function ConditionsUtilisationPage() {
           </Link>
           <div>
             <p className="font-display font-bold text-lore-ink dark:text-white">Conditions d&apos;utilisation</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation</p>
           </div>
         </div>
       </div>

@@ -105,7 +105,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-3 border-b border-black/5 dark:border-white/5 px-6 py-5">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-lore-blue text-white text-sm font-bold">LF</div>
           <div>
-            <p className="font-display font-bold text-sm text-lore-ink dark:text-white">Loré Foundation</p>
+            <p className="font-display font-bold text-sm text-lore-ink dark:text-white">Loré Fondation</p>
             <p className="text-[10px] text-lore-ink/40 dark:text-white/40">Administration</p>
           </div>
         </div>
@@ -142,7 +142,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between border-b border-black/5 dark:border-white/5 px-5 py-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-lore-blue text-white text-xs font-bold">LF</div>
-                <p className="font-display font-bold text-sm text-lore-ink dark:text-white">Loré Foundation</p>
+                <p className="font-display font-bold text-sm text-lore-ink dark:text-white">Loré Fondation</p>
               </div>
               <button type="button" onClick={() => setSidebarOpen(false)} className="text-lore-ink/40 dark:text-white/40 text-xl">✕</button>
             </div>

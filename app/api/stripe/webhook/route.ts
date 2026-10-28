@@ -34,7 +34,7 @@ export async function POST(request: Request) {
             full_name: session.metadata?.full_name ?? "Client",
             email: session.customer_details?.email ?? session.customer_email ?? "",
             phone: "",
-            subject: session.metadata?.subject ?? "Service Loré Foundation",
+            subject: session.metadata?.subject ?? "Service Loré Fondation",
             amount: `${((session.amount_total ?? 0) / 100).toFixed(2)} ${(session.currency ?? "usd").toUpperCase()}`,
             method: "card",
             reference: session.id,

@@ -49,7 +49,7 @@ export default function LoginForm() {
         <h1 className="mt-4 text-center font-display text-xl font-bold text-white">
           Panneau d&apos;administration
         </h1>
-        <p className="mt-1 text-center text-sm text-white/50">Loré Foundation</p>
+        <p className="mt-1 text-center text-sm text-white/50">Loré Fondation</p>
 
         <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
           <div>

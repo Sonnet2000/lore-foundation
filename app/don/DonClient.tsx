@@ -179,7 +179,7 @@ export default function DonClient() {
           </Link>
           <div className="flex-1">
             <p className="font-display font-bold text-lore-ink dark:text-white">Faire un don</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation · En moins de 2 minutes</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation · En moins de 2 minutes</p>
           </div>
           <div className="flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
             <Shield className="h-3.5 w-3.5" /> Sécurisé
@@ -198,7 +198,7 @@ export default function DonClient() {
             Soutenez notre mission
           </h1>
           <p className="mt-3 text-lore-ink/60 dark:text-white/60 max-w-md mx-auto">
-            Votre don aide Loré Foundation à former des jeunes, renforcer des communautés
+            Votre don aide Loré Fondation à former des jeunes, renforcer des communautés
             et construire un avenir meilleur pour Haïti.
           </p>
         </div>

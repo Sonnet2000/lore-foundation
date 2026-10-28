@@ -57,7 +57,7 @@ export default function ProjetsClient({ initialProjects = [] }: { initialProject
           </Link>
           <div className="flex-1">
             <p className="font-display font-bold text-lore-ink dark:text-white">Nos Projets</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation · Réalisations & études de cas</p>
+            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Fondation · Réalisations & études de cas</p>
           </div>
           <a href="https://wa.me/message/QSQVE7F4WDBGF1" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 rounded-full bg-lore-blue px-4 py-2 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
             <MessageCircle className="h-4 w-4" /> Discuter d&apos;un projet
@@ -78,7 +78,7 @@ export default function ProjetsClient({ initialProjects = [] }: { initialProject
           </h1>
           <p className="mt-4 text-white/60 max-w-xl mx-auto">
             Un aperçu des formations, projets numériques et initiatives communautaires réalisés
-            par Loré Foundation à Cap-Haïtien et au-delà.
+            par Loré Fondation à Cap-Haïtien et au-delà.
           </p>
         </div>
       </div>

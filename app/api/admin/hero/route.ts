@@ -13,7 +13,7 @@ const DEFAULT_VALUE = {
   headlineHighlight: "Créer.",
   headlineAfter: "Réussir.",
   description:
-    "Loré Foundation forme les talents de demain et accompagne les entreprises haïtiennes avec des services numériques professionnels — développement web, design graphique et bien plus.",
+    "Loré Fondation forme les talents de demain et accompagne les entreprises haïtiennes avec des services numériques professionnels — développement web, design graphique et bien plus.",
   mobileBadgeText: "500+ jeunes formés · 80+ projets livrés",
   floatingBadge1Title: "500+ jeunes formés",
   floatingBadge1Subtitle: "depuis notre création",

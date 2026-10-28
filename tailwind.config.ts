@@ -9,6 +9,12 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        // ── Loré Fondation — design tokens (voir aussi :root dans globals.css) ──
+        royal: { DEFAULT: "#1B46C2", 700: "#1638A0", 600: "#1B46C2", 500: "#2F5BDB", 100: "#DCE6FB" },
+        navy: { DEFAULT: "#0B1F4B", 800: "#102A63", 900: "#081636" },
+        ivory: { DEFAULT: "#FBF8F1", 200: "#F3EEE1" },
+        sky: { 50: "#F2F7FF", 100: "#E6EFFD", 200: "#CFDFF8" },
+        gold: { DEFAULT: "#D9A520", 300: "#EBC863", 700: "#9A7410" },
         "lore-dark": "#0A3D62",
         "lore-darker": "#052238",
         "lore-deepest": "#030d18",
@@ -27,8 +33,8 @@ const config: Config = {
         "lore-night-card": "#0e1a2b",
       },
       fontFamily: {
-        display: ["var(--font-bricolage)", "sans-serif"],
-        body: ["var(--font-jakarta)", "sans-serif"],
+        display: ["var(--font-display)", "Georgia", "serif"],
+        body: ["var(--font-body)", "system-ui", "sans-serif"],
         serif: ["'Instrument Serif'", "Georgia", "serif"],
       },
       borderRadius: {

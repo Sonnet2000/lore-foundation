@@ -29,7 +29,7 @@ export default function WhyChooseUs() {
           <SectionHeading
             eyebrow="Notre Impact"
             title="Les piliers de notre engagement"
-            description="Loré Foundation agit sur trois fronts essentiels pour transformer durablement les communautés haïtiennes et préparer la prochaine génération de leaders."
+            description="Loré Fondation agit sur trois fronts essentiels pour transformer durablement les communautés haïtiennes et préparer la prochaine génération de leaders."
           />
         </AnimatedSection>
 

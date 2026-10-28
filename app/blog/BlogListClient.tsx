@@ -1,245 +1,142 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Clock, Eye, Tag, ArrowRight, BookOpen, Search } from "lucide-react";
-import type { BlogPost, BlogCategory } from "@/app/admin/_components/types";
-
-const CATEGORIES: { id: BlogCategory | "all"; label: string; emoji: string }[] = [
-  { id: "all",           label: "Tout",            emoji: "✨" },
-  { id: "actualites",    label: "Actualités",       emoji: "📢" },
-  { id: "technologie",   label: "Technologie",      emoji: "💻" },
-  { id: "education",     label: "Éducation",        emoji: "📚" },
-  { id: "ia",            label: "Intelligence IA",  emoji: "🤖" },
-  { id: "entrepreneuriat",label: "Entrepreneuriat", emoji: "🚀" },
-  { id: "leadership",    label: "Leadership",       emoji: "🌟" },
-  { id: "activites",     label: "Activités LF",     emoji: "🇭🇹" },
-];
-
-const CAT_COLORS: Record<string, string> = {
-  technologie:    "bg-blue-500/15 text-blue-600 dark:text-blue-300",
-  education:      "bg-emerald-500/15 text-emerald-600 dark:text-emerald-300",
-  ia:             "bg-purple-500/15 text-purple-600 dark:text-purple-300",
-  entrepreneuriat:"bg-amber-500/15 text-amber-600 dark:text-amber-300",
-  activites:      "bg-rose-500/15 text-rose-600 dark:text-rose-300",
-  actualites:     "bg-sky-500/15 text-sky-600 dark:text-sky-300",
-  leadership:     "bg-orange-500/15 text-orange-600 dark:text-orange-300",
-};
+import { Clock, Search, BookOpen } from "lucide-react";
+import type { BlogPost } from "@/app/admin/_components/types";
+import { BLOG_CATEGORIES, categoryLabel, normalize } from "@/lib/blog-categories";
 
 function formatDate(d: string | null) {
   if (!d) return "";
-  return new Date(d).toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
+  return new Date(d).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
-export default function BlogListClient({ initialPosts = [] }: { initialPosts?: BlogPost[] }) {
-  const [posts, setPosts]         = useState<BlogPost[]>(initialPosts);
-  const [loading, setLoading]     = useState(false);
-  const [category, setCategory]   = useState<string>("all");
-  const [search, setSearch]       = useState("");
+type Props = { initialPosts?: BlogPost[]; initialCategory?: string };
+
+export default function BlogListClient({ initialPosts = [], initialCategory = "all" }: Props) {
+  const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
+  const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState<string>(initialCategory);
+  const [search, setSearch] = useState("");
   const isFirstRun = useRef(true);
 
   useEffect(() => {
-    // Premye rendering: nou deja gen "initialPosts" ki soti nan sèvè a
-    // (kategori "all"), pa gen rezon fè yon fetch anplis pou anyen.
+    // Le premier rendu reçoit déjà les articles du serveur pour la catégorie demandée.
     if (isFirstRun.current) {
       isFirstRun.current = false;
-      if (category === "all") return;
+      if (category === initialCategory) return;
     }
     setLoading(true);
-    const url = category === "all"
-      ? "/api/blog?limit=50"
-      : `/api/blog?category=${category}&limit=50`;
+    const url = category === "all" ? "/api/blog?limit=50" : `/api/blog?category=${encodeURIComponent(category)}&limit=50`;
     fetch(url)
-      .then(r => r.json())
-      .then(d => { setPosts(d.items ?? []); setLoading(false); })
-      .catch(() => setLoading(false));
+      .then((r) => r.json())
+      .then((d) => setPosts(d.items ?? []))
+      .catch(() => setPosts([]))
+      .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category]);
 
-  const featured   = posts.filter(p => p.is_featured).slice(0, 1)[0];
-  const filtered   = posts.filter(p =>
-    !search ||
-    p.title.toLowerCase().includes(search.toLowerCase()) ||
-    p.excerpt.toLowerCase().includes(search.toLowerCase())
-  );
-  const regularPosts = filtered.filter(p => p.id !== featured?.id);
+  const filtered = useMemo(() => {
+    const terms = normalize(search).split(/\s+/).filter(Boolean);
+    if (terms.length === 0) return posts;
+    return posts.filter((p) => {
+      const hay = normalize(`${p.title} ${p.excerpt ?? ""} ${(p.tags ?? []).join(" ")}`);
+      return terms.every((t) => hay.includes(t));
+    });
+  }, [posts, search]);
+
+  const chip = (active: boolean) =>
+    `focus-royal rounded-full border px-4 py-2 text-sm font-semibold transition-colors ${
+      active ? "border-royal bg-royal text-white" : "border-royal/25 bg-white text-navy hover:border-royal hover:text-royal"
+    }`;
 
   return (
-    <div className="min-h-screen bg-lore-cream dark:bg-lore-night">
-
-      {/* Header */}
-      <div className="relative z-10 border-b border-lore-dark/5 bg-white/90 backdrop-blur-md dark:border-white/5 dark:bg-lore-night/90">
-        <div className="mx-auto flex max-w-6xl items-center gap-4 px-5 py-4">
-          <Link href="/" className="text-lore-ink/50 hover:text-lore-ink dark:text-white/50 dark:hover:text-white transition-colors">
-            <ArrowLeft className="h-5 w-5" />
-          </Link>
-          <div className="flex-1">
-            <p className="font-display font-bold text-lore-ink dark:text-white">Blog</p>
-            <p className="text-xs text-lore-ink/50 dark:text-white/50">Loré Foundation · Articles & Actualités</p>
-          </div>
-          {/* Search */}
-          <div className="relative hidden sm:block">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-lore-ink/30 dark:text-white/30" />
-            <input value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="Rechercher..."
-              className="rounded-full border border-lore-dark/10 bg-lore-cream pl-9 pr-4 py-2 text-sm text-lore-ink outline-none focus:border-lore-blue dark:border-white/10 dark:bg-white/5 dark:text-white w-48" />
-          </div>
-        </div>
-      </div>
-
-      {/* Hero */}
-      <div className="relative overflow-hidden py-16 md:py-20"
-        style={{ background: "linear-gradient(135deg, #031a4a 0%, #043C9E 60%, #0a5bc4 100%)" }}>
-        <div className="hero-grid absolute inset-0 pointer-events-none opacity-20" />
-        <div className="mx-auto max-w-6xl px-5 text-center relative z-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-semibold text-white/80 mb-4">
-            <BookOpen className="h-3.5 w-3.5" /> Savoir · Inspirer · Transformer
-          </div>
-          <h1 className="font-display text-4xl font-extrabold text-white md:text-5xl">
-            Blog Loré Foundation
+    <div className="bg-ivory">
+      <section className="bg-notebook border-b border-royal/10 px-5 pb-14 pt-12 sm:px-8 sm:pt-16 lg:px-12">
+        <div className="mx-auto max-w-7xl sm:pl-10 lg:pl-12">
+          <p className="text-sm font-semibold text-royal">Blog et actualités</p>
+          <h1 className="mt-3 max-w-3xl font-display text-4xl font-bold leading-tight tracking-tight text-navy sm:text-5xl">
+            Apprendre, comprendre, s’informer
           </h1>
-          <p className="mt-3 text-white/60 max-w-xl mx-auto">
-            Technologie, éducation, IA, entrepreneuriat et actualités de la fondation —
-            du contenu qui inspire et informe.
+          <p className="mt-4 max-w-xl text-lg text-navy/75">
+            Les articles de Loré Fondation sur l’éducation, la technologie et l’engagement pour Haïti.
           </p>
+          <form role="search" onSubmit={(e) => e.preventDefault()} className="relative mt-8 max-w-xl">
+            <label htmlFor="blog-search" className="sr-only">Rechercher un article</label>
+            <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-royal" aria-hidden="true" />
+            <input
+              id="blog-search"
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Rechercher un article…"
+              className="h-14 w-full rounded-xl border border-royal/25 bg-white pl-12 pr-4 text-base text-navy placeholder:text-navy/50 focus:border-royal focus:outline-none focus:ring-4 focus:ring-gold/40"
+            />
+          </form>
         </div>
-      </div>
+      </section>
 
-      <div className="mx-auto max-w-6xl px-5 py-10 flex flex-col gap-10">
-
-        {/* Filtres catégories */}
-        <div className="overflow-x-auto pb-2">
-          <div className="flex gap-2 min-w-max">
-            {CATEGORIES.map(cat => (
-              <button key={cat.id} type="button"
-                onClick={() => setCategory(cat.id)}
-                className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold whitespace-nowrap transition-colors ${
-                  category === cat.id
-                    ? "bg-lore-blue text-white shadow-md"
-                    : "border border-lore-dark/10 bg-white text-lore-ink/70 hover:border-lore-blue/30 dark:border-white/10 dark:bg-lore-night-surface dark:text-white/70"
-                }`}>
-                <span>{cat.emoji}</span> {cat.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Search mobile */}
-        <div className="relative sm:hidden">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-lore-ink/30 dark:text-white/30" />
-          <input value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Rechercher un article..."
-            className="w-full rounded-2xl border border-lore-dark/10 bg-white pl-9 pr-4 py-3 text-sm text-lore-ink outline-none focus:border-lore-blue dark:border-white/10 dark:bg-lore-night-surface dark:text-white" />
+      <div className="mx-auto max-w-7xl px-5 py-12 sm:px-8 lg:px-12">
+        <div role="group" aria-label="Filtrer par thème" className="flex flex-wrap gap-2">
+          <button type="button" aria-pressed={category === "all"} onClick={() => setCategory("all")} className={chip(category === "all")}>
+            Tous les thèmes
+          </button>
+          {BLOG_CATEGORIES.map((c) => (
+            <button key={c.id} type="button" aria-pressed={category === c.id} onClick={() => setCategory(c.id)} className={chip(category === c.id)}>
+              {c.label}
+            </button>
+          ))}
         </div>
 
-        {loading && (
-          <div className="flex justify-center py-20">
-            <div className="h-8 w-8 rounded-full border-2 border-lore-blue/30 border-t-lore-blue animate-spin" />
+        <p role="status" aria-live="polite" className="mt-6 text-sm text-navy/70">
+          {loading ? "Chargement…" : `${filtered.length} article${filtered.length > 1 ? "s" : ""}`}
+        </p>
+
+        {!loading && filtered.length === 0 ? (
+          <div className="mt-6 rounded-2xl border border-royal/15 bg-sky-50 p-10 text-center">
+            <BookOpen className="mx-auto h-8 w-8 text-royal" aria-hidden="true" />
+            <p className="mt-3 text-navy/80">
+              Aucun article ne correspond. Changez de thème ou effacez votre recherche.
+            </p>
           </div>
-        )}
-
-        {!loading && filtered.length === 0 && (
-          <div className="flex flex-col items-center gap-3 py-20 text-center">
-            <BookOpen className="h-12 w-12 text-lore-ink/20 dark:text-white/20" />
-            <p className="font-display font-bold text-lore-ink dark:text-white">Aucun article pour le moment</p>
-            <p className="text-sm text-lore-ink/50 dark:text-white/50">Revenez bientôt — de nouveaux contenus arrivent régulièrement.</p>
-          </div>
-        )}
-
-        {/* Article featured */}
-        {!loading && featured && category === "all" && !search && (
-          <Link href={`/blog/${featured.slug}`}
-            className="group relative overflow-hidden rounded-3xl border border-lore-dark/5 bg-white dark:border-white/5 dark:bg-lore-night-surface block hover:shadow-xl transition-shadow">
-            <div className="grid grid-cols-1 md:grid-cols-2">
-              <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[320px]">
-                {featured.cover_url
-                  ? <Image src={featured.cover_url} alt={featured.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                  : <div className="h-full w-full bg-gradient-to-br from-lore-blue/20 to-blue-400/10 flex items-center justify-center">
-                      <BookOpen className="h-16 w-16 text-lore-blue/30" />
-                    </div>
-                }
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-                <span className="absolute top-4 left-4 rounded-full bg-lore-blue px-3 py-1 text-xs font-bold text-white">
-                  ⭐ À la une
-                </span>
-              </div>
-              <div className="p-8 flex flex-col justify-center gap-4">
-                <div className="flex items-center gap-2">
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${CAT_COLORS[featured.category] ?? ""}`}>
-                    {CATEGORIES.find(c => c.id === featured.category)?.emoji} {featured.category}
-                  </span>
-                </div>
-                <h2 className="font-display text-2xl font-extrabold text-lore-ink dark:text-white leading-tight group-hover:text-lore-blue transition-colors">
-                  {featured.title}
-                </h2>
-                <p className="text-lore-ink/60 dark:text-white/60 line-clamp-3 leading-relaxed">{featured.excerpt}</p>
-                <div className="flex items-center gap-4 text-xs text-lore-ink/40 dark:text-white/40">
-                  <span className="flex items-center gap-1"><Clock className="h-3.5 w-3.5" /> {featured.read_time_minutes} min</span>
-                  <span className="flex items-center gap-1"><Eye className="h-3.5 w-3.5" /> {featured.views} vues</span>
-                  <span>{formatDate(featured.published_at)}</span>
-                </div>
-                <div className="flex items-center gap-2 text-lore-blue font-semibold text-sm">
-                  Lire l&apos;article <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </div>
-              </div>
-            </div>
-          </Link>
-        )}
-
-        {/* Grille articles */}
-        {!loading && regularPosts.length > 0 && (
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {regularPosts.map(post => (
-              <Link key={post.id} href={`/blog/${post.slug}`}
-                className="group flex flex-col overflow-hidden rounded-3xl border border-lore-dark/5 bg-white dark:border-white/5 dark:bg-lore-night-surface hover:shadow-lg transition-shadow">
-
-                {/* Cover */}
-                <div className="relative aspect-[16/9] overflow-hidden">
-                  {post.cover_url
-                    ? <Image src={post.cover_url} alt={post.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-                    : <div className="h-full w-full bg-gradient-to-br from-lore-blue/10 to-blue-400/5 flex items-center justify-center">
-                        <span className="text-4xl">{CATEGORIES.find(c => c.id === post.category)?.emoji ?? "📝"}</span>
+        ) : (
+          <ul className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filtered.map((p) => (
+              <li key={p.id}>
+                <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-royal/15 bg-white transition-[border-color,box-shadow,transform] duration-300 hover:-translate-y-1 hover:border-royal/40 hover:shadow-[0_22px_40px_-26px_rgba(27,70,194,0.5)] focus-within:border-royal motion-reduce:transform-none">
+                  <div className="relative aspect-[16/9] bg-sky-100">
+                    {p.cover_url ? (
+                      <Image src={p.cover_url} alt="" fill sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" className="object-cover" />
+                    ) : (
+                      <div className="bg-grid-sky grid h-full w-full place-items-center text-royal">
+                        <BookOpen className="h-9 w-9" aria-hidden="true" />
                       </div>
-                  }
-                  <div className="absolute top-3 left-3">
-                    <span className={`rounded-full px-2.5 py-1 text-[11px] font-bold ${CAT_COLORS[post.category] ?? "bg-lore-blue/15 text-lore-blue"}`}>
-                      {CATEGORIES.find(c => c.id === post.category)?.label ?? post.category}
-                    </span>
+                    )}
+                    <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1 bg-gold" />
                   </div>
-                </div>
-
-                {/* Contenu */}
-                <div className="flex flex-1 flex-col gap-3 p-5">
-                  <h3 className="font-display font-bold text-lore-ink dark:text-white line-clamp-2 leading-tight group-hover:text-lore-blue transition-colors">
-                    {post.title}
-                  </h3>
-                  <p className="text-sm text-lore-ink/60 dark:text-white/60 line-clamp-2 leading-relaxed flex-1">
-                    {post.excerpt}
-                  </p>
-
-                  {/* Tags */}
-                  {post.tags?.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
-                      {post.tags.slice(0, 3).map(tag => (
-                        <span key={tag} className="flex items-center gap-1 rounded-full bg-lore-dark/5 dark:bg-white/5 px-2 py-0.5 text-[10px] text-lore-ink/50 dark:text-white/50">
-                          <Tag className="h-2.5 w-2.5" />{tag}
+                  <div className="flex flex-1 flex-col p-6">
+                    <p className="text-sm font-semibold text-royal">{categoryLabel(p.category)}</p>
+                    <h2 className="mt-2 font-display text-2xl font-bold leading-snug text-navy">
+                      <Link href={`/blog/${p.slug}`} className="focus-royal rounded after:absolute after:inset-0 hover:text-royal">
+                        {p.title}
+                      </Link>
+                    </h2>
+                    {p.excerpt && <p className="mt-3 line-clamp-3 text-[0.95rem] leading-relaxed text-navy/70">{p.excerpt}</p>}
+                    <p className="mt-auto flex items-center gap-3 pt-5 text-sm text-navy/65">
+                      {p.published_at && <time dateTime={p.published_at}>{formatDate(p.published_at)}</time>}
+                      {p.read_time_minutes > 0 && (
+                        <span className="flex items-center gap-1">
+                          <Clock className="h-3.5 w-3.5" aria-hidden="true" />
+                          {p.read_time_minutes} min
                         </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Meta */}
-                  <div className="flex items-center justify-between text-xs text-lore-ink/40 dark:text-white/40 pt-2 border-t border-lore-dark/5 dark:border-white/5">
-                    <div className="flex items-center gap-3">
-                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {post.read_time_minutes} min</span>
-                      <span className="flex items-center gap-1"><Eye className="h-3 w-3" /> {post.views}</span>
-                    </div>
-                    <span>{formatDate(post.published_at)}</span>
+                      )}
+                    </p>
                   </div>
-                </div>
-              </Link>
+                </article>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </div>
     </div>

@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Désinscription — Loré Foundation</title>
+  <title>Désinscription — Loré Fondation</title>
   <style>
     body { margin:0; font-family:'Segoe UI',sans-serif; background:#f0f2f7; display:flex; align-items:center; justify-content:center; min-height:100vh; }
     .card { background:#fff; border-radius:24px; padding:48px 40px; text-align:center; max-width:400px; box-shadow:0 4px 24px rgba(0,0,0,0.08); }
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
   <div class="card">
     <div class="icon">✅</div>
     <h1>Désinscription confirmée</h1>
-    <p>Vous ne recevrez plus d'emails de Loré Foundation.<br/>Merci pour votre soutien.</p>
+    <p>Vous ne recevrez plus d'emails de Loré Fondation.<br/>Merci pour votre soutien.</p>
     <a href="https://lore-foundation.vercel.app">Retour au site</a>
   </div>
 </body>

@@ -50,7 +50,7 @@ export async function POST(request: Request) {
         cover_url:          body.cover_url || null,
         category:           body.category || "actualites",
         tags:               Array.isArray(body.tags) ? body.tags.slice(0, 10) : [],
-        author_name:        (body.author_name ?? "Loré Foundation").trim(),
+        author_name:        (body.author_name ?? "Loré Fondation").trim(),
         author_photo:       body.author_photo || null,
         is_published:       isPublished,
         is_featured:        body.is_featured === true,

@@ -1,94 +1,79 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import Navbar from "@/components/Navbar";
-import WelcomeScreen from "@/components/WelcomeScreen";
-import Hero from "@/components/Hero";
-import AppDownload from "@/components/AppDownload";
-import AppsShowcase from "@/components/AppsShowcase";
-import AdsBanner from "@/components/AdsBanner";
-import AdUnit from "@/components/AdUnit";
-import PremiumServices from "@/components/PremiumServices";
-import WhyChooseUs from "@/components/WhyChooseUs";
-import BlogBanner from "@/components/BlogBanner";
-import Services from "@/components/Services";
-import Team from "@/components/Team";
-import Portfolio from "@/components/Portfolio";
-import Seminars from "@/components/Seminars";
-import Testimonials from "@/components/Testimonials";
-import Sponsors from "@/components/Sponsors";
-import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
-import CurveDivider from "@/components/ui/CurveDivider";
+import Hero from "@/components/lore/Hero";
+import Programs from "@/components/lore/Programs";
+import StudentLife from "@/components/lore/StudentLife";
+import DigitalHub from "@/components/lore/DigitalHub";
+import Identity from "@/components/lore/Identity";
+import Anthem from "@/components/lore/Anthem";
+import MissionValues from "@/components/lore/MissionValues";
+import Faq from "@/components/lore/Faq";
+import ContactSection from "@/components/lore/ContactSection";
+import KnowledgeSearch from "@/components/lore/KnowledgeSearch";
+import KnowledgeHub from "@/components/lore/KnowledgeHub";
+import Seminars from "@/components/Seminars";
 import SectionSkeleton from "@/components/ui/SectionSkeleton";
-import { getActiveAnnouncement, hasPublishedSeminars } from "@/lib/site-content";
+import { getActiveAnnouncement } from "@/lib/site-content";
+import { getKnowledge } from "@/lib/knowledge";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-// Paj akèy la pa t gen okenn URL kanonik deklare — se sa ki te fè Google
-// wè l kòm "paj an doub" ant lorefondation.com ak www.lorefondation.com.
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
+const SCHEMA = {
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  name: "Loré Fondation",
+  description: "Centre de formation en informatique. L’excellence au cœur de l’impact.",
+  url: "https://lorefondation.com",
+  logo: "https://lorefondation.com/logo.png",
+  slogan: "L’excellence au cœur de l’impact",
+  address: { "@type": "PostalAddress", addressLocality: "Cap-Haïtien", addressCountry: "HT" },
+};
+
 export default async function Home() {
-  const [announcement, showSeminaires] = await Promise.all([
-    getActiveAnnouncement(),
-    hasPublishedSeminars(),
-  ]);
+  const [announcement, knowledge] = await Promise.all([getActiveAnnouncement(), getKnowledge()]);
+  const categories = new Set(knowledge.articles.map((a) => a.category)).size;
+  // Compteurs issus de la base ; un compteur à zéro n'est pas affiché.
+  const stats = [
+    { value: knowledge.courseCount, label: knowledge.courseCount > 1 ? "formations" : "formation" },
+    { value: knowledge.articles.length, label: knowledge.articles.length > 1 ? "articles publiés" : "article publié" },
+    { value: categories, label: categories > 1 ? "thèmes" : "thème" },
+  ].filter((s) => s.value > 0);
 
   return (
-    <main>
-      <WelcomeScreen />
-      <Navbar announcement={announcement} showSeminaires={showSeminaires} />
-      <Hero />
-
-      <Suspense fallback={<SectionSkeleton />}>
-        <AppDownload />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <AppsShowcase />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <Services />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <PremiumServices />
-      </Suspense>
-      <WhyChooseUs />
-      <AdUnit slot="6310810361" className="py-10" />
-      <BlogBanner />
-      <Suspense fallback={<SectionSkeleton />}>
-        <Team />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <Portfolio />
-      </Suspense>
-      <Suspense fallback={null}>
-        <AdsBanner />
-      </Suspense>
-      <Suspense fallback={<SectionSkeleton />}>
-        <Seminars />
-      </Suspense>
-
-      <div className="relative">
-        <CurveDivider
-          colorClassName="text-lore-dark dark:text-[#051a2b]"
-          className="relative z-10 -mb-px"
-        />
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(SCHEMA) }} />
+      <Navbar announcement={announcement} />
+      <main id="contenu">
+        <Hero />
+        <KnowledgeSearch items={knowledge.items} stats={stats} />
         <Suspense fallback={<SectionSkeleton />}>
-          <Testimonials />
+          <Programs />
         </Suspense>
-        <CurveDivider flip className="relative z-10 -mt-px" />
-      </div>
-
-      <Suspense fallback={null}>
-        <Sponsors />
-      </Suspense>
-      <Contact />
+        <KnowledgeHub articles={knowledge.articles} />
+        <StudentLife />
+        {/* Annonces / séminaires publiés : la section n'apparaît que s'il y en a. */}
+        <Suspense fallback={null}>
+          <Seminars />
+        </Suspense>
+        <DigitalHub />
+        <Identity />
+        <Anthem />
+        <MissionValues />
+        <Faq />
+        <Suspense fallback={<SectionSkeleton />}>
+          <ContactSection />
+        </Suspense>
+      </main>
       <Suspense fallback={null}>
         <Footer />
       </Suspense>
-    </main>
+    </>
   );
 }

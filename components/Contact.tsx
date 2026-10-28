@@ -35,7 +35,7 @@ export default function Contact() {
     const message = formData.get("message") as string;
 
     const lines = [
-      `Bonjour Loré Foundation, je m'appelle ${name}.`,
+      `Bonjour Loré Fondation, je m'appelle ${name}.`,
       service ? `Objet : ${service}` : "",
       message ? `Message : ${message}` : "",
       email ? `Email : ${email}` : "",

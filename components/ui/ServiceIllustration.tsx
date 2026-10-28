@@ -10,7 +10,7 @@ type ServiceIllustrationProps = {
  * Branded illustration banner shown at the top of the "En savoir plus"
  * panels: a glowing badge for the main service icon, two smaller satellite
  * icons representing related capabilities, and a few twinkling sparkles —
- * all drawn from the existing Loré Foundation visual language so no external
+ * all drawn from the existing Loré Fondation visual language so no external
  * image assets are required.
  */
 export default function ServiceIllustration({

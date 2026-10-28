@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
-const SYSTEM_CONTEXT = `Tu es un rédacteur professionnel pour le blog de Loré Foundation, une fondation haïtienne basée à Cap-Haïtien dont la mission est : "Améliorer la vie des gens à travers l'éducation, la formation digitale, le développement des jeunes, le leadership, l'innovation et l'action communautaire." Slogan : "Former. Inspirer. Transformer."
+const SYSTEM_CONTEXT = `Tu es un rédacteur professionnel pour le blog de Loré Fondation, une fondation haïtienne basée à Cap-Haïtien dont la mission est : "Améliorer la vie des gens à travers l'éducation, la formation digitale, le développement des jeunes, le leadership, l'innovation et l'action communautaire." Slogan : "Former. Inspirer. Transformer."
 
 Le blog couvre deux types de contenu :
-1. Des articles sur les activités et programmes propres à Loré Foundation
+1. Des articles sur les activités et programmes propres à Loré Fondation
 2. Des articles d'actualité et d'analyse sur le monde — technologie, intelligence artificielle, éducation, entrepreneuriat, innovation sociale — basés sur des informations RÉELLES ET RÉCENTES, qui informent et inspirent les lecteurs.`;
 
 const WRITING_RULES = `Règles impératives :
@@ -14,7 +14,7 @@ const WRITING_RULES = `Règles impératives :
 - Utilise des listes à puces quand pertinent
 - Évite le jargon technique inutile — écris pour un public large et curieux
 - Longueur : 600 à 1000 mots
-- Le dernier paragraphe peut être une réflexion, une conclusion, ou (si pertinent) une invitation à découvrir Loré Foundation — selon ce qui convient naturellement au sujet`;
+- Le dernier paragraphe peut être une réflexion, une conclusion, ou (si pertinent) une invitation à découvrir Loré Fondation — selon ce qui convient naturellement au sujet`;
 
 function getApiKey() {
   const key = process.env.GEMINI_API_KEY;
@@ -75,7 +75,7 @@ export async function POST(request: Request) {
     // ── ÉTAPE 2 : Rédaction structurée de l'article en JSON ──
     const writingPrompt = topic
       ? `${SYSTEM_CONTEXT}\n\n${WRITING_RULES}\n\n${researchNotes ? `Voici des informations récentes et vérifiées trouvées par recherche web :\n${researchNotes}\n\nÉcris maintenant un article de blog complet sur "${topic}"${category ? ` (catégorie : ${category})` : ""} en te basant sur ces informations.` : `Écris un article de blog sur "${topic}"${category ? ` (catégorie : ${category})` : ""}.`}`
-      : `${SYSTEM_CONTEXT}\n\n${WRITING_RULES}\n\n${researchNotes ? `Voici des informations récentes et vérifiées trouvées par recherche web :\n${researchNotes}\n\nÉcris maintenant un article de blog complet basé sur ces informations d'actualité.` : `Choisis un sujet pertinent lié à l'éducation, la technologie ou Loré Foundation et écris un article complet.`}`;
+      : `${SYSTEM_CONTEXT}\n\n${WRITING_RULES}\n\n${researchNotes ? `Voici des informations récentes et vérifiées trouvées par recherche web :\n${researchNotes}\n\nÉcris maintenant un article de blog complet basé sur ces informations d'actualité.` : `Choisis un sujet pertinent lié à l'éducation, la technologie ou Loré Fondation et écris un article complet.`}`;
 
     const jsonFormatInstruction = `\n\nRéponds UNIQUEMENT avec un objet JSON valide, sans aucun texte avant ou après, sans balises markdown \`\`\`json, au format exact suivant :
 {

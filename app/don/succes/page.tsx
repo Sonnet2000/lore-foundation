@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CheckCircle2, Heart, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Don confirmé — Loré Foundation",
+  title: "Don confirmé — Loré Fondation",
   robots: { index: false, follow: false },
 };
 
@@ -32,7 +32,7 @@ export default function DonSuccesPage() {
         </div>
 
         <p className="text-lore-ink/60 dark:text-white/60 leading-relaxed">
-          Votre contribution va directement aider Loré Foundation à former des jeunes,
+          Votre contribution va directement aider Loré Fondation à former des jeunes,
           renforcer des communautés et construire un avenir meilleur pour Haïti.
           Un reçu a été envoyé à votre adresse email si vous l&apos;avez fournie.
         </p>
@@ -43,7 +43,7 @@ export default function DonSuccesPage() {
             Partagez notre mission
           </p>
           <p className="mt-1 text-xs text-lore-ink/60 dark:text-white/60">
-            Parlez de Loré Foundation autour de vous et aidez-nous à toucher encore plus de personnes.
+            Parlez de Loré Fondation autour de vous et aidez-nous à toucher encore plus de personnes.
           </p>
         </div>
 

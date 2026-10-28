@@ -510,7 +510,7 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
                           {proofUrl && <FileText className="h-3.5 w-3.5 text-lore-gold-dark dark:text-lore-gold-light" />}
                         </div>
                         <p className="text-[11px] text-lore-ink/40 dark:text-white/40">
-                          Ou ka tou peye kach nan biwo Loré Foundation lan epi mande yon resi nan men yon admin — resi a ap voye ba w pa imèl tou.
+                          Ou ka tou peye kach nan biwo Loré Fondation lan epi mande yon resi nan men yon admin — resi a ap voye ba w pa imèl tou.
                         </p>
                       </div>
                     )}
@@ -548,7 +548,7 @@ export default function InscriptionClient({ course }: { course: CourseRow }) {
                 <Clock3 className="h-10 w-10 text-amber-500" />
                 <h2 className="font-display text-lg font-bold text-lore-ink dark:text-white">Demand ou an atant</h2>
                 <p className="max-w-sm text-sm text-lore-ink/60 dark:text-white/60">
-                  Yon admin Loré Foundation ap verifye demand ou an talè. Ou ap resevwa aksè depi li apwouve.
+                  Yon admin Loré Fondation ap verifye demand ou an talè. Ou ap resevwa aksè depi li apwouve.
                 </p>
                 <Link href="/compte/kou" className="focus-ring mt-2 text-sm font-semibold text-lore-blue hover:underline">
                   Gade estati kou m yo

@@ -37,7 +37,7 @@ const emptyForm = {
   cover_url:          "",
   category:           "actualites" as BlogCategory,
   tags:               [] as string[],
-  author_name:        "Loré Foundation",
+  author_name:        "Loré Fondation",
   author_photo:       "",
   is_published:       false,
   is_featured:        false,
@@ -360,7 +360,7 @@ export default function BlogPanel() {
             {/* Auteur */}
             <Field label="Nom de l'auteur">
               <input value={form.author_name} onChange={e => setForm(f => ({ ...f, author_name: e.target.value }))}
-                placeholder="Loré Foundation" className={INPUT} />
+                placeholder="Loré Fondation" className={INPUT} />
             </Field>
 
             {/* Tags */}
@@ -482,7 +482,7 @@ export default function BlogPanel() {
             </div>
             <p className="font-display font-bold text-lore-ink dark:text-white">Aucun article pour le moment</p>
             <p className="text-sm text-lore-ink/50 dark:text-white/50 max-w-xs">
-              Créez votre premier article pour alimenter le blog de Loré Foundation.
+              Créez votre premier article pour alimenter le blog de Loré Fondation.
             </p>
             <button type="button" onClick={startNew}
               className="rounded-full bg-lore-blue px-6 py-2.5 text-sm font-bold text-white hover:bg-lore-blue/90 transition-colors">
@@ -638,7 +638,7 @@ export default function BlogPanel() {
 
                   <div className="rounded-xl bg-blue-500/5 border border-blue-500/15 px-4 py-3 text-xs text-lore-ink/60 dark:text-white/60">
                     💡 L&apos;IA peut écrire sur des sujets d&apos;actualité, de technologie, d&apos;éducation
-                    ou directement sur Loré Foundation, et cherchera automatiquement une image de
+                    ou directement sur Loré Fondation, et cherchera automatiquement une image de
                     couverture pertinente. Important : l&apos;IA n&apos;a pas accès à l&apos;actualité
                     en temps réel — vérifiez toujours les faits récents avant publication.
                   </div>

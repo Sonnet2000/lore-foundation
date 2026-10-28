@@ -3,7 +3,7 @@ import Link from "next/link";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Paiement confirmé — Loré Foundation",
+  title: "Paiement confirmé — Loré Fondation",
   // Paj tranzitwa apre yon peman — pa gen kontni itil pou rechèch,
   // e li pa dwe parèt nan rezilta Google.
   robots: { index: false, follow: false },

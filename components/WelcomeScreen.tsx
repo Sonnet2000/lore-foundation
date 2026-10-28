@@ -73,7 +73,7 @@ export default function WelcomeScreen() {
               <span className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 sm:h-20 sm:w-20">
                 <Image
                   src="/logo.png"
-                  alt="Loré Foundation"
+                  alt="Loré Fondation"
                   fill
                   className="object-contain p-3"
                   priority

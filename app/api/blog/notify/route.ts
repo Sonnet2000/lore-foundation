@@ -62,7 +62,7 @@ export async function POST(request: Request) {
         },
         body: JSON.stringify(
           batch.map(email => ({
-            from:    "Loré Foundation <blog@lorefoundation.com>",
+            from:    "Loré Fondation <blog@lorefoundation.com>",
             to:      [email],
             subject: `📖 Nouvel article : ${post.title}`,
             html:    buildEmailHtml(post, articleUrl, email),
@@ -105,7 +105,7 @@ function buildEmailHtml(
         <!-- Header -->
         <tr><td style="background:linear-gradient(135deg,#031a4a 0%,#043C9E 100%);padding:32px 40px;text-align:center;">
           <p style="margin:0;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.6);">
-            Blog Loré Foundation
+            Blog Loré Fondation
           </p>
           <p style="margin:8px 0 0;font-size:11px;color:rgba(255,255,255,0.4);">
             L'excellence au cœur de l'impact 🇭🇹
@@ -137,7 +137,7 @@ function buildEmailHtml(
         <!-- Footer -->
         <tr><td style="background:#f8fafc;padding:24px 40px;text-align:center;border-top:1px solid #e2e8f0;">
           <p style="margin:0;font-size:12px;color:#94a3b8;">
-            Vous recevez cet email car vous êtes abonné à Loré Foundation.<br/>
+            Vous recevez cet email car vous êtes abonné à Loré Fondation.<br/>
             <a href="${unsubUrl}" style="color:#043C9E;text-decoration:none;">Se désabonner</a>
             &nbsp;·&nbsp;
             <a href="${SITE_URL}" style="color:#043C9E;text-decoration:none;">Visiter le site</a>

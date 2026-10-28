@@ -60,7 +60,7 @@ export default function BlogBanner() {
               Derniers articles
             </h2>
             <p className="mt-2 text-white/50 text-sm max-w-md">
-              Technologie, éducation, IA et actualités de Loré Foundation — du contenu
+              Technologie, éducation, IA et actualités de Loré Fondation — du contenu
               qui inspire et informe la communauté haïtienne.
             </p>
           </div>

@@ -196,7 +196,7 @@ export default function HeroPanel() {
             rows={3}
             value={settings.description}
             onChange={(e) => field("description", e.target.value)}
-            placeholder="Loré Foundation forme les talents de demain..."
+            placeholder="Loré Fondation forme les talents de demain..."
           />
         </div>
 
